@@ -117,6 +117,19 @@ private struct DiskHistoryChart: View {
     let range: DiskHistoryRange
     let now: Date
 
+    private var lineGradient: LinearGradient {
+        let domain = timeDomain
+        let span = domain.upperBound.timeIntervalSince(domain.lowerBound)
+        let first = samples.map(\.date).min() ?? domain.lowerBound
+        let last = samples.map(\.date).max() ?? domain.upperBound
+        // Keep the gradient across the actual history, even within a sparse 24-hour view.
+        let start = UnitPoint(x: first.timeIntervalSince(domain.lowerBound) / span, y: 0.5)
+        let end = UnitPoint(x: last.timeIntervalSince(domain.lowerBound) / span, y: 0.5)
+        return LinearGradient(colors: [.blue, .indigo, .purple],
+                              startPoint: first < last ? start : .leading,
+                              endPoint: first < last ? end : .trailing)
+    }
+
     private var points: [DiskChartPoint] {
         var segment = 0
         return samples.enumerated().map { index, sample in
@@ -156,11 +169,14 @@ private struct DiskHistoryChart: View {
                     LineMark(x: .value("时间", point.sample.date),
                              y: .value("剩余空间 G", Double(point.sample.availableBytes) / 1_000_000_000),
                              series: .value("连续记录", point.segment))
-                    .foregroundStyle(Color.accentColor)
+                    .interpolationMethod(.monotone)
+                    .foregroundStyle(lineGradient)
+                    .alignsMarkStylesWithPlotArea()
                     if samples.count <= 48 {
                         PointMark(x: .value("时间", point.sample.date),
                                   y: .value("剩余空间 G", Double(point.sample.availableBytes) / 1_000_000_000))
-                        .foregroundStyle(Color.accentColor)
+                        .foregroundStyle(lineGradient)
+                        .alignsMarkStylesWithPlotArea()
                         .symbolSize(12)
                     }
                 }

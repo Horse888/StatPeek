@@ -5,7 +5,7 @@
 Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共享 Scheme 均使用 StatPeek。
 当前任务完成原生 macOS 项目、本机界面验证、应用图标、Xcode 应用信息、Applications 安装，并推送到用户授权的 GitHub 公开仓库；商标核验与 App Store 上架另行处理。
 
-应用信息：StatPeek，Bundle ID `com.zyapps.StatPeek`，版本 0.2.0 / Build 3，Utilities 分类，最低 macOS 13.0。原型 `local.StatPeek` 的选择与配色在新标识首次启动时迁移，已有新偏好不覆盖。
+应用信息：StatPeek，Bundle ID `com.zyapps.StatPeek`，版本 0.2.1 / Build 4，Utilities 分类，最低 macOS 13.0。原型 `local.StatPeek` 的选择与配色在新标识首次启动时迁移，已有新偏好不覆盖。
 
 图标：深蓝底板、两排彩色状态指示，见 `icon-design.md`；AppIcon 资源包含 macOS 标准 16–1024 像素尺寸。
 
@@ -39,7 +39,7 @@ Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共
 - 全部记录持续保存在本机 Application Support 的 SQLite 数据库，不自动删除，不上传网络；时间、卷标识、原始字节数均保存。重启沿用上次记录与下次到期时间。
 - 未运行/休眠期间不伪造记录；重启或唤醒时若已到期，补采一条当下真实值。比较文字使用真实上次记录时间，不声称间隔总是恰好五分钟。
 - 换卷或时钟回退时建立新比较基准；读取/写入失败明确提示，保留历史，不将失败保存为零。差值不足可显示精度时提示变化小于 0.1G，不显示虚假的正负 0.0G。
-- 曲线提供 24 小时、7 天和全部范围。全量数据保留；绘图可以保留端点及局部极值进行降采样，避免多年数据绘图卡顿。只有一条记录时显示真实单点及等待提示，无虚构趋势。
+- 曲线提供 24 小时、7 天和全部范围。采用保持单调性的平滑三次插值，线条从蓝经靛蓝渐变至紫；渐变与整个绘图区对齐，真实采样点保留。全量数据保留；绘图可以保留端点及局部极值进行降采样，避免多年数据绘图卡顿。只有一条记录时显示真实单点及等待提示，无虚构趋势。
 - 保留现有两行状态栏、配色、勾选和开机启动项。状态栏全部指标采用字母 D/C/M/G，避免小 SF Symbol 难以辨认。
 - 颜色选择改为连续长胶囊，均分六种颜色；根据最新要求，选中段中央显示直径 18 点的小圆玻璃标记（macOS 26+ 原生 NSGlassEffectView），圆内附加勾号；保持六段长色条，无大型胶囊选中按钮。较旧系统使用高光兼容样式，保留键盘焦点、颜色名称与选择状态的辅助功能。
 - UI 范围：页签与记录页、设置浮层底色的可读性、六段胶囊配色；状态栏维持 107 点目标。先完成持久化和虚拟时钟测试，再构建、实际界面/重启验证，更新 Applications 与现有授权的 GitHub 交付。
@@ -86,3 +86,6 @@ Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共
 - [Apple NSPopover](https://developer.apple.com/documentation/appkit/nspopover)
 
 - [Apple SMAppService.mainApp](https://developer.apple.com/documentation/servicemanagement/smappservice/mainapp)
+
+- [Apple 平滑单调插值](https://developer.apple.com/documentation/charts/interpolationmethod/monotone)
+- [Apple 图表渐变对齐](https://developer.apple.com/documentation/charts/chartcontent/alignsmarkstyleswithplotarea%28_%3A%29)

@@ -20,7 +20,7 @@ A compact macOS menu bar monitor. Selected metrics appear in two rows of colored
 - 设置浮层中的「开机自动启动」使用 macOS 原生登录启动项；勾选后在当前用户登录时启动，取消即注销。默认关闭，需要系统批准或设置失败时明确提示。
 - 磁盘保留一位小数，单位使用单字母，例如 `320.8G`。
 - 后台每 5 分钟记录一次磁盘剩余空间，即使取消磁盘显示也继续记录；只保存本机，静默运行。
-- 打开「磁盘记录」查看较上次增加或减少的一位小数 G 数，以及 24 小时、7 天和全部历史曲线。记录持续保留，重启沿用历史；休眠或退出期间不伪造采样。
+- 打开「磁盘记录」查看较上次增加或减少的一位小数 G 数，以及 24 小时、7 天和全部历史曲线；曲线平滑，线条从蓝渐变至紫。记录持续保留，重启沿用历史；休眠或退出期间不伪造采样。
 - 全部取消时仍保留一个可点击图标，随时恢复显示项。
 - 无第三方运行依赖，无网络请求，无 sudo 或常驻辅助进程。
 
@@ -53,7 +53,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.2.0 / 3 |
+| Version / Build | 0.2.1 / 4 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |

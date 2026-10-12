@@ -1,0 +1,20 @@
+{
+  "version": "0.2.1",
+  "build": "4",
+  "sha256": "c2ce357df77a4397537fac982dce2d0fc7e780d8b7b9404ca7099f39ad4b92e7",
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "single_process": true,
+  "installed_process": "/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+  "signature_verification": "passed",
+  "disk_history_panel_tests_passed": 4,
+  "at": "2026-10-12T04:38:47.722289+00:00",
+  "original_selection_colors_and_login_item_preserved": true,
+  "native_history": "最近记录的剩余空间, 259.1G, 剩余空间减少 0.3G, 记录于 10-12 12:35 · 对比 10-12 12:30, 剩余空间（G）, 累计 7 条记录 · 下次 10-12 12:40, 每 5 分钟记录 · 只保存在本机，不自动弹出提示, StatPeek, 后台每 5 分钟记录 · 打开查看历史变化, 状态一瞥",
+  "actual_record_count": 7,
+  "interpolation": "monotone",
+  "gradient": "blue -> indigo -> purple, aligned across actual history",
+  "preserved_sample_points_and_volume_breaks": true
+}
