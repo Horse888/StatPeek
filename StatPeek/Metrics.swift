@@ -14,12 +14,12 @@ enum Metric: String, CaseIterable {
 }
 
 extension Metric {
-    var symbol: String {
+    var abbreviation: String {
         switch self {
-        case .disk: "internaldrive"
-        case .cpu: "cpu"
-        case .memory: "memorychip"
-        case .gpu: "display"
+        case .disk: "D"
+        case .cpu: "C"
+        case .memory: "M"
+        case .gpu: "G"
         }
     }
 

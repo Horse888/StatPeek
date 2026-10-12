@@ -19,7 +19,7 @@ final class CompactLayoutAndLoginTests: XCTestCase {
             let layout = StatusStripLayout(rows: rows, readings: readings)
             for row in rows {
                 for (column, metric) in row.enumerated() {
-                    let rightEdge = layout.origin(of: column) + StatusStripLayout.iconWidth + StatusStripLayout.iconGap
+                    let rightEdge = layout.origin(of: column) + StatusStripLayout.labelWidth + StatusStripLayout.labelGap
                         + StatusStripLayout.textWidth(metric.compact(readings[metric]))
                     XCTAssertLessThanOrEqual(rightEdge, layout.width - StatusStripLayout.sidePadding)
                     if column + 1 < row.count {

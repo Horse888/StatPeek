@@ -21,10 +21,8 @@ final class SystemSampler {
     }
 
     private func diskFree() -> String {
-        guard let values = try? FileManager.default.homeDirectoryForCurrentUser
-            .resourceValues(forKeys: [.volumeAvailableCapacityKey]),
-              let bytes = values.volumeAvailableCapacity else { return "不可用" }
-        return DiskFormatter.format(bytes: Int64(bytes))
+        guard let reading = DiskSpaceReader.read(at: Date()) else { return "不可用" }
+        return DiskFormatter.format(bytes: reading.availableBytes)
     }
 
     private func cpuUsage() -> String {

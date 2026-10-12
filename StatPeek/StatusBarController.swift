@@ -9,6 +9,7 @@ final class StatusBarController: NSObject {
     private let popover = NSPopover()
     private let settings = SettingsViewController()
     private let loginItem = LoginItemController()
+    private var diskRecording: DiskRecordingController?
     private var readings: [Metric: String] = [:]
     private var timer: Timer?
 
@@ -45,6 +46,12 @@ final class StatusBarController: NSObject {
             self.updateLoginItem()
         }
         settings.onOpenLoginSettings = { [weak self] in self?.loginItem.openSystemSettings() }
+        settings.onShowHistory = { [weak self] in
+            guard let self, let diskRecording = self.diskRecording else { return }
+            diskRecording.recordIfDue()
+            self.updateDiskHistory()
+        }
+        setUpDiskRecording()
         refresh()
         let timer = Timer(timeInterval: 2, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.refresh() }
@@ -53,6 +60,26 @@ final class StatusBarController: NSObject {
         RunLoop.main.add(timer, forMode: .common)
         RunLoop.main.add(timer, forMode: .eventTracking)
         self.timer = timer
+    }
+
+    private func setUpDiskRecording() {
+        do {
+            let store = try DiskHistoryStore(url: DiskHistoryStore.defaultURL)
+            let recording = try DiskRecordingController(store: store)
+            diskRecording = recording
+            recording.onChange = { [weak self] _ in self?.updateDiskHistory() }
+            recording.recordIfDue()
+            updateDiskHistory()
+        } catch {
+            settings.updateDiskHistory(store: nil, nextRecordingDate: nil, error: error.localizedDescription)
+        }
+    }
+
+    private func updateDiskHistory() {
+        guard let diskRecording else { return }
+        settings.updateDiskHistory(store: diskRecording.recorder.store,
+                                   nextRecordingDate: diskRecording.recorder.nextRecordingDate,
+                                   error: diskRecording.errorMessage)
     }
 
     private func refresh() {
@@ -86,6 +113,7 @@ final class StatusBarController: NSObject {
         if popover.isShown { popover.performClose(nil) }
         else {
             updateLoginItem()
+            settings.prepareToShow()
             NSApp.activate(ignoringOtherApps: true)
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
         }

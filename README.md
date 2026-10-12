@@ -2,22 +2,25 @@
 
 # StatPeek · 状态一瞥
 
-A compact macOS menu bar monitor. Selected metrics appear in two rows of colored icons and live values. Click to choose metrics and colors directly in a popover. No main window or Dock icon.
+A compact macOS menu bar monitor. Selected metrics appear in two rows of colored D/C/M/G labels and live values. Click to choose metrics and colors directly in a popover. No main window or Dock icon.
 
-一个无主窗口的 macOS 状态栏小工具。选中的设备信息直接以两行「小图标 + 数值」展示，点击后直接勾选显示项和配色。
+一个无主窗口的 macOS 状态栏小工具。选中的设备信息直接以两行「D/C/M/G 字母 + 数值」展示，点击后直接勾选显示项和配色。
 
 ![真实状态栏截图](docs/assets/statusbar.png)
 
 <img src="docs/assets/popover.png" width="340" alt="StatPeek preferences popover">
+<img src="docs/assets/disk-history.png" width="340" alt="Disk remaining-space history">
 
 ## 功能
 
 - 磁盘剩余空间、系统 CPU 使用率、内存使用率估算、GPU 使用率。
 - 状态栏持续每 2 秒刷新，浮层关闭后也继续更新，仅采样选中项。
 - 四项全选时，上行为磁盘和 CPU，下行为内存和 GPU；紧凑留白和列间隔减少菜单栏占用，刷新时保持宽度稳定。
-- 每项支持六种颜色；勾选和颜色即时生效，并在重启后恢复。
+- 每项支持六种颜色，采用连续六段长胶囊；选中段中央的小圆玻璃标记带勾号。勾选和颜色即时生效，并在重启后恢复。macOS 26+ 使用原生 Liquid Glass，较旧系统使用兼容高光样式。
 - 设置浮层中的「开机自动启动」使用 macOS 原生登录启动项；勾选后在当前用户登录时启动，取消即注销。默认关闭，需要系统批准或设置失败时明确提示。
 - 磁盘保留一位小数，单位使用单字母，例如 `320.8G`。
+- 后台每 5 分钟记录一次磁盘剩余空间，即使取消磁盘显示也继续记录；只保存本机，静默运行。
+- 打开「磁盘记录」查看较上次增加或减少的一位小数 G 数，以及 24 小时、7 天和全部历史曲线。记录持续保留，重启沿用历史；休眠或退出期间不伪造采样。
 - 全部取消时仍保留一个可点击图标，随时恢复显示项。
 - 无第三方运行依赖，无网络请求，无 sudo 或常驻辅助进程。
 
@@ -50,7 +53,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.1.1 / 2 |
+| Version / Build | 0.2.0 / 3 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |

@@ -4,8 +4,8 @@ import AppKit
 struct StatusStripLayout {
     static var font: NSFont { .monospacedDigitSystemFont(ofSize: 9, weight: .semibold) }
     static let sidePadding: CGFloat = 2
-    static let iconWidth: CGFloat = 10
-    static let iconGap: CGFloat = 2
+    static let labelWidth: CGFloat = 10
+    static let labelGap: CGFloat = 2
     static let columnGap: CGFloat = 3
     let columnWidths: [CGFloat]
 
@@ -22,7 +22,7 @@ struct StatusStripLayout {
                     widest = max(widest, Self.textWidth(text))
                 }
             }
-            widths.append(Self.iconWidth + Self.iconGap + ceil(widest))
+            widths.append(Self.labelWidth + Self.labelGap + ceil(widest))
         }
         columnWidths = widths
     }

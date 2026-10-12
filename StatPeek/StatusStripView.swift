@@ -46,12 +46,16 @@ final class StatusStripView: NSView {
                 let color = (colors[metric] ?? .neutral).nsColor
                 let x = layout.origin(of: columnIndex)
                 let y = top + CGFloat(rowIndex) * rowHeight
-                drawSymbol(metric.symbol, color: color, in: NSRect(x: x, y: y + 1, width: 10, height: 9))
+                let label = NSAttributedString(string: metric.abbreviation, attributes: [
+                    .font: NSFont.monospacedSystemFont(ofSize: 9, weight: .bold),
+                    .foregroundColor: color
+                ])
+                label.draw(at: NSPoint(x: x, y: y - 0.5))
                 let text = NSAttributedString(string: metric.compact(readings[metric]), attributes: [
                     .font: StatusStripLayout.font,
                     .foregroundColor: color
                 ])
-                text.draw(at: NSPoint(x: x + StatusStripLayout.iconWidth + StatusStripLayout.iconGap, y: y - 0.5))
+                text.draw(at: NSPoint(x: x + StatusStripLayout.labelWidth + StatusStripLayout.labelGap, y: y - 0.5))
             }
         }
     }

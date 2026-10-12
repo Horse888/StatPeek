@@ -1,0 +1,12 @@
+{
+  "at": "2026-10-12T04:27:40.732411+00:00",
+  "version": "0.2.0 (3)",
+  "small_round_marker_six_segments_verified": true,
+  "original_selection_and_colors_preserved": true,
+  "original_login_item_preserved_enabled": true,
+  "status_item_width_points": 107,
+  "native_result": "1, 1, 1, 1, 1, 已选, 未选, 未选, 未选, 未选, 未选, 未选, 已选, 未选, 未选, 未选, 未选, 未选, 未选, 已选, 未选, 未选, 未选, 未选, 未选, 未选, 已选, 未选, 未选, missing value, 107, 24",
+  "latest_timer_recorded_at": "2026-10-12T12:25:06.978484",
+  "latest_interval_seconds": 300.0758333206177,
+  "actual_record_count": 5
+}

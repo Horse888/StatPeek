@@ -9,8 +9,8 @@ settings:
     GENERATE_INFOPLIST_FILE: YES
     CODE_SIGN_STYLE: Automatic
     CODE_SIGN_IDENTITY: '-'
-    MARKETING_VERSION: '0.1.1'
-    CURRENT_PROJECT_VERSION: 2
+    MARKETING_VERSION: '0.2.0'
+    CURRENT_PROJECT_VERSION: 3
 targets:
   StatPeek:
     type: application
@@ -32,6 +32,9 @@ targets:
       - sdk: AppKit.framework
       - sdk: IOKit.framework
       - sdk: ServiceManagement.framework
+      - sdk: SwiftUI.framework
+      - sdk: Charts.framework
+      - sdk: libsqlite3.tbd
   StatPeekTests:
     type: bundle.unit-test
     platform: macOS
@@ -42,6 +45,13 @@ targets:
       - path: StatPeek/SystemSampler.swift
       - path: StatPeek/StatusStripLayout.swift
       - path: StatPeek/LoginItemController.swift
+      - path: StatPeek/DiskHistory.swift
+      - path: StatPeek/DiskHistoryStore.swift
+      - path: StatPeek/DiskHistoryViewController.swift
+    dependencies:
+      - sdk: libsqlite3.tbd
+      - sdk: SwiftUI.framework
+      - sdk: Charts.framework
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zyapps.StatPeekTests

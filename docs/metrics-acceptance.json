@@ -1,0 +1,201 @@
+[
+  {
+    "at": "2026-10-12T04:17:50.105849+00:00",
+    "check": "agent-with-one-status-item",
+    "background_only": true,
+    "status_items": 1
+  },
+  {
+    "at": "2026-10-12T04:17:50.813082+00:00",
+    "check": "all-selected",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：18.2%；内存使用率（估算）：67.4%；GPU 使用率：20.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:17:51.955100+00:00",
+    "check": "deselect-磁盘剩余空间",
+    "status": "StatPeek · CPU 使用率：21.1%；内存使用率（估算）：66.8%；GPU 使用率：9.0%",
+    "selected": [
+      0,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:17:53.114000+00:00",
+    "check": "reselect-磁盘剩余空间",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：21.1%；内存使用率（估算）：66.8%；GPU 使用率：9.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:17:54.261427+00:00",
+    "check": "deselect-CPU 使用率",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；内存使用率（估算）：66.3%；GPU 使用率：6.0%",
+    "selected": [
+      1,
+      0,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:17:55.420241+00:00",
+    "check": "reselect-CPU 使用率",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：22.1%；内存使用率（估算）：67.1%；GPU 使用率：6.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:17:56.572066+00:00",
+    "check": "deselect-内存使用率（估算）",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：22.1%；GPU 使用率：6.0%",
+    "selected": [
+      1,
+      1,
+      0,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:17:57.751690+00:00",
+    "check": "reselect-内存使用率（估算）",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：24.1%；内存使用率（估算）：65.9%；GPU 使用率：6.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:17:58.940828+00:00",
+    "check": "deselect-GPU 使用率",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：24.1%；内存使用率（估算）：65.9%",
+    "selected": [
+      1,
+      1,
+      1,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:18:00.109375+00:00",
+    "check": "reselect-GPU 使用率",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：24.5%；内存使用率（估算）：66.0%；GPU 使用率：5.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:18:00.633401+00:00",
+    "check": "color-CPU 使用率-红色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T04:18:01.147182+00:00",
+    "check": "color-GPU 使用率-紫色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T04:18:02.957516+00:00",
+    "check": "mixed-before-restart",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：23.0%",
+    "selected": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:18:04.356459+00:00",
+    "check": "real-quit-relaunch",
+    "previous_pid": "8516",
+    "new_pid": "8853"
+  },
+  {
+    "at": "2026-10-12T04:18:05.375796+00:00",
+    "check": "mixed-after-restart",
+    "status": "StatPeek · 磁盘剩余空间：258.4G；CPU 使用率：采样中…",
+    "selected": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:18:05.668237+00:00",
+    "check": "color-CPU 使用率-红色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T04:18:05.955613+00:00",
+    "check": "color-GPU 使用率-紫色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T04:18:07.611073+00:00",
+    "check": "empty-before-restart",
+    "status": "StatPeek · 未选择信息项",
+    "selected": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:18:08.992172+00:00",
+    "check": "real-quit-relaunch",
+    "previous_pid": "8853",
+    "new_pid": "8895"
+  },
+  {
+    "at": "2026-10-12T04:18:09.976608+00:00",
+    "check": "empty-after-restart",
+    "status": "StatPeek · 未选择信息项",
+    "selected": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T04:20:01.281610+00:00",
+    "check": "six-color-segments-and-restored-original-settings",
+    "native_result": "1, 1, 1, 1, 1, 已选, 未选, 未选, 未选, 未选, 未选, 未选, 已选, 未选, 未选, 未选, 未选, 未选, 未选, 已选, 未选, 未选, 未选, 未选, 未选, 未选, 已选, 未选, 未选, missing value, 107, 24"
+  }
+]
