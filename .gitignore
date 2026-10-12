@@ -1,0 +1,10 @@
+.DS_Store
+xcuserdata/
+*.xcuserstate
+.xcodebuildmcp/
+*.app
+*.xcresult
+.build/
+DerivedData/
+work/
+.env

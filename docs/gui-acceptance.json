@@ -1,0 +1,277 @@
+[
+  {
+    "at": "2026-10-12T00:49:42.486215+00:00",
+    "check": "agent-with-one-status-item",
+    "background_only": true,
+    "status_items": 1
+  },
+  {
+    "at": "2026-10-12T00:49:43.047723+00:00",
+    "check": "all-selected",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：采样中…；内存使用率（估算）：60.2%；GPU 使用率：43.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:49:43.683725+00:00",
+    "check": "live-closed",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：采样中…；内存使用率（估算）：60.2%；GPU 使用率：43.0%"
+  },
+  {
+    "at": "2026-10-12T00:49:46.242759+00:00",
+    "check": "live-closed",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：12.6%；内存使用率（估算）：60.5%；GPU 使用率：55.0%"
+  },
+  {
+    "at": "2026-10-12T00:49:48.800046+00:00",
+    "check": "live-closed",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：11.0%；内存使用率（估算）：60.5%；GPU 使用率：52.0%"
+  },
+  {
+    "at": "2026-10-12T00:49:51.349795+00:00",
+    "check": "live-closed",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：9.6%；内存使用率（估算）：60.1%；GPU 使用率：53.0%"
+  },
+  {
+    "at": "2026-10-12T00:49:52.207084+00:00",
+    "check": "live-open",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：13.0%；内存使用率（估算）：62.2%；GPU 使用率：52.0%",
+    "popover": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 312.7G, 颜色, 13.0%, 颜色, 62.2%, 颜色, 52.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T00:49:54.862589+00:00",
+    "check": "live-open",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：15.9%；内存使用率（估算）：62.7%；GPU 使用率：42.0%",
+    "popover": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 312.7G, 颜色, 15.9%, 颜色, 62.7%, 颜色, 42.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T00:49:57.512756+00:00",
+    "check": "live-open",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：17.1%；内存使用率（估算）：60.2%；GPU 使用率：53.0%",
+    "popover": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 312.7G, 颜色, 17.1%, 颜色, 60.2%, 颜色, 53.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T00:50:00.159690+00:00",
+    "check": "live-open",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：14.5%；内存使用率（估算）：60.6%；GPU 使用率：62.0%",
+    "popover": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 312.7G, 颜色, 14.5%, 颜色, 60.6%, 颜色, 62.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T00:50:01.191467+00:00",
+    "check": "deselect-磁盘剩余空间",
+    "status": "StatPeek · CPU 使用率：14.5%；内存使用率（估算）：60.6%；GPU 使用率：62.0%",
+    "selected": [
+      0,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:02.283487+00:00",
+    "check": "reselect-磁盘剩余空间",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：20.0%；内存使用率（估算）：62.8%；GPU 使用率：48.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:03.382196+00:00",
+    "check": "deselect-CPU 使用率",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；内存使用率（估算）：62.8%；GPU 使用率：48.0%",
+    "selected": [
+      1,
+      0,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:04.458331+00:00",
+    "check": "reselect-CPU 使用率",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：8.8%；内存使用率（估算）：60.5%；GPU 使用率：46.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:05.489257+00:00",
+    "check": "deselect-内存使用率（估算）",
+    "status": "StatPeek · 磁盘剩余空间：312.7G；CPU 使用率：8.8%；GPU 使用率：46.0%",
+    "selected": [
+      1,
+      1,
+      0,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:06.560109+00:00",
+    "check": "reselect-内存使用率（估算）",
+    "status": "StatPeek · 磁盘剩余空间：312.6G；CPU 使用率：20.1%；内存使用率（估算）：61.7%；GPU 使用率：46.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:07.673947+00:00",
+    "check": "deselect-GPU 使用率",
+    "status": "StatPeek · 磁盘剩余空间：312.6G；CPU 使用率：20.1%；内存使用率（估算）：61.7%",
+    "selected": [
+      1,
+      1,
+      1,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:08.756065+00:00",
+    "check": "reselect-GPU 使用率",
+    "status": "StatPeek · 磁盘剩余空间：312.6G；CPU 使用率：21.4%；内存使用率（估算）：60.7%；GPU 使用率：44.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:09.319896+00:00",
+    "check": "color-CPU 使用率-红色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T00:50:09.878195+00:00",
+    "check": "color-GPU 使用率-紫色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T00:50:11.595993+00:00",
+    "check": "mixed-before-restart",
+    "status": "StatPeek · 磁盘剩余空间：312.6G；CPU 使用率：19.6%",
+    "selected": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:12.714341+00:00",
+    "check": "real-quit-relaunch",
+    "previous_pid": "40122",
+    "new_pid": "40350"
+  },
+  {
+    "at": "2026-10-12T00:50:13.587996+00:00",
+    "check": "mixed-after-restart",
+    "status": "StatPeek · 磁盘剩余空间：312.6G；CPU 使用率：采样中…",
+    "selected": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:13.935555+00:00",
+    "check": "color-CPU 使用率-红色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T00:50:14.285392+00:00",
+    "check": "color-GPU 使用率-紫色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T00:50:16.048696+00:00",
+    "check": "empty-before-restart",
+    "status": "StatPeek · 未选择信息项",
+    "selected": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:17.116300+00:00",
+    "check": "real-quit-relaunch",
+    "previous_pid": "40350",
+    "new_pid": "40458"
+  },
+  {
+    "at": "2026-10-12T00:50:17.994487+00:00",
+    "check": "empty-after-restart",
+    "status": "StatPeek · 未选择信息项",
+    "selected": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:21.123671+00:00",
+    "check": "color-磁盘剩余空间-蓝色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T00:50:21.673491+00:00",
+    "check": "color-CPU 使用率-橙色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T00:50:22.215106+00:00",
+    "check": "color-内存使用率（估算）-紫色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T00:50:22.774563+00:00",
+    "check": "color-GPU 使用率-绿色",
+    "swatch_value": "已选"
+  },
+  {
+    "at": "2026-10-12T00:50:23.207938+00:00",
+    "check": "restored-defaults",
+    "status": "StatPeek · 磁盘剩余空间：312.6G；CPU 使用率：18.9%；内存使用率（估算）：60.3%；GPU 使用率：45.0%",
+    "selected": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "popover_open": true
+  },
+  {
+    "at": "2026-10-12T00:50:23.208030+00:00",
+    "check": "PASS",
+    "checks": "closed/open live refresh, all four immediate toggles, mixed/empty restart persistence, color persistence, one-decimal disk format"
+  }
+]
