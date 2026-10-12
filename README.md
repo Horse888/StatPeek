@@ -14,8 +14,9 @@ A compact macOS menu bar monitor. Selected metrics appear in two rows of colored
 
 - 磁盘剩余空间、系统 CPU 使用率、内存使用率估算、GPU 使用率。
 - 状态栏持续每 2 秒刷新，浮层关闭后也继续更新，仅采样选中项。
-- 四项全选时，上行为磁盘和 CPU，下行为内存和 GPU。
+- 四项全选时，上行为磁盘和 CPU，下行为内存和 GPU；紧凑留白和列间隔减少菜单栏占用，刷新时保持宽度稳定。
 - 每项支持六种颜色；勾选和颜色即时生效，并在重启后恢复。
+- 设置浮层中的「开机自动启动」使用 macOS 原生登录启动项；勾选后在当前用户登录时启动，取消即注销。默认关闭，需要系统批准或设置失败时明确提示。
 - 磁盘保留一位小数，单位使用单字母，例如 `320.8G`。
 - 全部取消时仍保留一个可点击图标，随时恢复显示项。
 - 无第三方运行依赖，无网络请求，无 sudo 或常驻辅助进程。
@@ -49,7 +50,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.1.0 / 1 |
+| Version / Build | 0.1.1 / 2 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |

@@ -8,6 +8,7 @@ final class StatusBarController: NSObject {
     private let strip = StatusStripView()
     private let popover = NSPopover()
     private let settings = SettingsViewController()
+    private let loginItem = LoginItemController()
     private var readings: [Metric: String] = [:]
     private var timer: Timer?
 
@@ -38,6 +39,12 @@ final class StatusBarController: NSObject {
             self.selection.setColor(color, for: metric)
             self.render()
         }
+        settings.onLoginToggle = { [weak self] enabled in
+            guard let self else { return }
+            self.loginItem.setEnabled(enabled)
+            self.updateLoginItem()
+        }
+        settings.onOpenLoginSettings = { [weak self] in self?.loginItem.openSystemSettings() }
         refresh()
         let timer = Timer(timeInterval: 2, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.refresh() }
@@ -67,12 +74,18 @@ final class StatusBarController: NSObject {
             button.setAccessibilityValue(summary)
         }
         settings.update(readings: readings, selection: selection)
+        if popover.isShown { updateLoginItem() }
+    }
+
+    private func updateLoginItem() {
+        settings.updateLoginItem(status: loginItem.status, error: loginItem.errorMessage)
     }
 
     @objc private func togglePopover() {
         guard let button = statusItem.button else { return }
         if popover.isShown { popover.performClose(nil) }
         else {
+            updateLoginItem()
             NSApp.activate(ignoringOtherApps: true)
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
         }

@@ -18,9 +18,9 @@ final class StatusStripView: NSView {
     private var rows: [[Metric]] = []
     private var readings: [Metric: String] = [:]
     private var colors: [Metric: MetricColor] = [:]
-    private let cellWidth: CGFloat = 75
+    private var layout = StatusStripLayout(rows: [], readings: [:])
     override var isFlipped: Bool { true }
-    var requiredWidth: CGFloat { rows.isEmpty ? 26 : CGFloat(rows.map(\.count).max() ?? 1) * cellWidth + 10 }
+    var requiredWidth: CGFloat { layout.width }
 
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
     override func isAccessibilityElement() -> Bool { false }
@@ -28,6 +28,7 @@ final class StatusStripView: NSView {
     func update(rows: [[Metric]], readings: [Metric: String], selection: MetricSelection) {
         self.rows = rows
         self.readings = readings
+        layout = StatusStripLayout(rows: rows, readings: readings)
         self.colors = Dictionary(uniqueKeysWithValues: Metric.allCases.map { ($0, selection.color(for: $0)) })
         needsDisplay = true
     }
@@ -43,14 +44,14 @@ final class StatusStripView: NSView {
         for (rowIndex, metrics) in rows.enumerated() {
             for (columnIndex, metric) in metrics.enumerated() {
                 let color = (colors[metric] ?? .neutral).nsColor
-                let x = 5 + CGFloat(columnIndex) * cellWidth
+                let x = layout.origin(of: columnIndex)
                 let y = top + CGFloat(rowIndex) * rowHeight
                 drawSymbol(metric.symbol, color: color, in: NSRect(x: x, y: y + 1, width: 10, height: 9))
                 let text = NSAttributedString(string: metric.compact(readings[metric]), attributes: [
-                    .font: NSFont.monospacedDigitSystemFont(ofSize: 9, weight: .semibold),
+                    .font: StatusStripLayout.font,
                     .foregroundColor: color
                 ])
-                text.draw(at: NSPoint(x: x + 13, y: y - 0.5))
+                text.draw(at: NSPoint(x: x + StatusStripLayout.iconWidth + StatusStripLayout.iconGap, y: y - 0.5))
             }
         }
     }

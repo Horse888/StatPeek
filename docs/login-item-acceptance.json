@@ -1,0 +1,69 @@
+[
+  {
+    "at": "2026-10-12T01:21:13.086519+00:00",
+    "check": "initial-login-state",
+    "value": 0,
+    "text": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 311.2G, 颜色, 27.6%, 颜色, 68.7%, 颜色, 59.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 未找到系统启动项；勾选后重试注册, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T01:21:14.317415+00:00",
+    "check": "register-real-login-item",
+    "login_checkbox": 1,
+    "popover_open": true,
+    "system_status_text": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 311.2G, 颜色, 27.6%, 颜色, 68.7%, 颜色, 59.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 已启用 · 登录此账户时自动启动, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T01:21:16.063246+00:00",
+    "check": "real-installed-app-restart",
+    "before_pid": "48666",
+    "after_pid": "48746"
+  },
+  {
+    "at": "2026-10-12T01:21:17.215812+00:00",
+    "check": "login-item-enabled-after-restart",
+    "login_checkbox": 1,
+    "popover_open": true,
+    "system_status_text": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 311.2G, 颜色, 采样中…, 颜色, 68.0%, 颜色, 63.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 已启用 · 登录此账户时自动启动, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T01:21:18.412043+00:00",
+    "check": "unregister-real-login-item",
+    "login_checkbox": 0,
+    "popover_open": true,
+    "system_status_text": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 311.2G, 颜色, 32.3%, 颜色, 68.3%, 颜色, 55.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 登录此账户时自动启动, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T01:21:20.485689+00:00",
+    "check": "real-installed-app-restart",
+    "before_pid": "48746",
+    "after_pid": "48776"
+  },
+  {
+    "at": "2026-10-12T01:21:21.630603+00:00",
+    "check": "login-item-disabled-after-restart",
+    "login_checkbox": 0,
+    "popover_open": true,
+    "system_status_text": "StatPeek, 勾选后直接显示在状态栏 · 每 2 秒更新, 311.2G, 颜色, 采样中…, 颜色, 68.0%, 颜色, 51.0%, 颜色, 内存为估算值；GPU 读数取决于驱动支持。, 登录此账户时自动启动, 状态一瞥"
+  },
+  {
+    "at": "2026-10-12T01:21:30.919879+00:00",
+    "check": "installed-live-refresh-and-stable-width",
+    "widths": [
+      "107, 24",
+      "107, 24",
+      "107, 24",
+      "107, 24"
+    ],
+    "readings": [
+      "StatPeek · 磁盘剩余空间：311.2G；CPU 使用率：32.9%；内存使用率（估算）：68.6%；GPU 使用率：57.0%",
+      "StatPeek · 磁盘剩余空间：311.2G；CPU 使用率：28.7%；内存使用率（估算）：67.6%；GPU 使用率：63.0%",
+      "StatPeek · 磁盘剩余空间：311.2G；CPU 使用率：24.2%；内存使用率（估算）：65.4%；GPU 使用率：40.0%",
+      "StatPeek · 磁盘剩余空间：311.2G；CPU 使用率：25.3%；内存使用率（估算）：64.5%；GPU 使用率：38.0%"
+    ]
+  },
+  {
+    "at": "2026-10-12T01:21:31.145326+00:00",
+    "check": "PASS",
+    "checks": "native login registration and cancellation; both survive real app restart; original login state restored; installed popover live refresh"
+  }
+]

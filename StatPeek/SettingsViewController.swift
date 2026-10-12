@@ -4,16 +4,22 @@ import AppKit
 final class SettingsViewController: NSViewController {
     var onToggle: ((Metric) -> Void)?
     var onColor: ((Metric, MetricColor) -> Void)?
+    var onLoginToggle: ((Bool) -> Void)?
+    var onOpenLoginSettings: (() -> Void)?
+    private var loginToggle: NSButton!
+    private var loginHint: NSTextField!
+    private var loginSettings: NSButton!
+    private var loginStatus: LoginItemStatus = .notRegistered
     private var toggles: [Metric: NSButton] = [:]
     private var values: [Metric: NSTextField] = [:]
     private var swatches: [Metric: [ColorSwatchButton]] = [:]
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 380, height: 436))
-        addText("StatPeek", x: 20, y: 398, size: 19, weight: .semibold)
-        addText("勾选后直接显示在状态栏 · 每 2 秒更新", x: 20, y: 376, size: 11, color: .secondaryLabelColor)
+        view = NSView(frame: NSRect(x: 0, y: 0, width: 380, height: 506))
+        addText("StatPeek", x: 20, y: 468, size: 19, weight: .semibold)
+        addText("勾选后直接显示在状态栏 · 每 2 秒更新", x: 20, y: 446, size: 11, color: .secondaryLabelColor)
         for (index, metric) in Metric.allCases.enumerated() {
-            let y = CGFloat(310 - index * 72)
+            let y = CGFloat(380 - index * 72)
             let toggle = NSButton(checkboxWithTitle: metric.title, target: self, action: #selector(toggleMetric(_:)))
             toggle.frame = NSRect(x: 20, y: y + 32, width: 230, height: 26)
             toggle.tag = index
@@ -37,13 +43,53 @@ final class SettingsViewController: NSViewController {
                 swatches[metric, default: []].append(swatch)
             }
         }
-        addText("内存为估算值；GPU 读数取决于驱动支持。", x: 20, y: 48, size: 10, color: .secondaryLabelColor)
+        addText("内存为估算值；GPU 读数取决于驱动支持。", x: 20, y: 118, size: 10, color: .secondaryLabelColor)
+        let separator = NSBox(frame: NSRect(x: 20, y: 108, width: 340, height: 1))
+        separator.boxType = .separator
+        view.addSubview(separator)
+        loginToggle = NSButton(checkboxWithTitle: "开机自动启动", target: self, action: #selector(toggleLoginItem(_:)))
+        loginToggle.frame = NSRect(x: 20, y: 76, width: 190, height: 26)
+        loginToggle.allowsMixedState = true
+        loginToggle.setAccessibilityIdentifier("launch-at-login")
+        view.addSubview(loginToggle)
+        loginHint = NSTextField(wrappingLabelWithString: "登录此账户时自动启动")
+        loginHint.font = .systemFont(ofSize: 10)
+        loginHint.textColor = .secondaryLabelColor
+        loginHint.frame = NSRect(x: 39, y: 42, width: 321, height: 30)
+        loginHint.setAccessibilityIdentifier("login-item-status")
+        view.addSubview(loginHint)
+        loginSettings = NSButton(title: "打开系统设置", target: self, action: #selector(openLoginSettings))
+        loginSettings.bezelStyle = .rounded
+        loginSettings.frame = NSRect(x: 242, y: 76, width: 120, height: 26)
+        loginSettings.isHidden = true
+        view.addSubview(loginSettings)
         let quit = NSButton(title: "退出 StatPeek", target: self, action: #selector(quitApp))
         quit.bezelStyle = .rounded
         quit.frame = NSRect(x: 246, y: 12, width: 116, height: 28)
         quit.setAccessibilityIdentifier("quit-app")
         view.addSubview(quit)
         addText("状态一瞥", x: 20, y: 21, size: 11, color: .secondaryLabelColor)
+    }
+
+    func updateLoginItem(status: LoginItemStatus, error: String?) {
+        _ = view
+        loginStatus = status
+        switch status {
+        case .enabled: loginToggle.state = .on
+        case .requiresApproval: loginToggle.state = .mixed
+        case .notRegistered, .notFound: loginToggle.state = .off
+        }
+        loginSettings.isHidden = status != .requiresApproval
+        let hint: String
+        switch status {
+        case .enabled: hint = "已启用 · 登录此账户时自动启动"
+        case .notRegistered: hint = "登录此账户时自动启动"
+        case .requiresApproval: hint = "等待批准 · 请在系统设置的登录项中允许 StatPeek"
+        case .notFound: hint = "未找到系统启动项；勾选后重试注册"
+        }
+        loginHint.stringValue = error ?? hint
+        loginHint.toolTip = error ?? hint
+        loginHint.textColor = error == nil ? .secondaryLabelColor : .systemRed
     }
 
     func update(readings: [Metric: String], selection: MetricSelection) {
@@ -70,6 +116,11 @@ final class SettingsViewController: NSViewController {
 
     @objc private func toggleMetric(_ sender: NSButton) { onToggle?(Metric.allCases[sender.tag]) }
     @objc private func changeColor(_ sender: ColorSwatchButton) { onColor?(sender.metric, sender.color) }
+    @objc private func toggleLoginItem(_ sender: NSButton) {
+        // A pending registration can be cancelled with one click.
+        onLoginToggle?(loginStatus != .enabled && loginStatus != .requiresApproval)
+    }
+    @objc private func openLoginSettings() { onOpenLoginSettings?() }
     @objc private func quitApp() { NSApplication.shared.terminate(nil) }
 }
 
