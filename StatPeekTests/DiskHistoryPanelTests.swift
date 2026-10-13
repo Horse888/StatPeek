@@ -45,38 +45,41 @@ final class DiskHistoryPanelTests: XCTestCase {
     @MainActor
     func testFixtureCurveRendersInNativePanelAtItsActualSize() throws {
         _ = NSApplication.shared
-        try withPanel { store, panel in
-            let now = Date()
-            for (index, free) in [310, 308, 309, 306, 307, 312, 310, 311].enumerated() {
-                try store.append(DiskSample(date: now.addingTimeInterval(Double(index - 7) * 300),
-                                            availableBytes: Int64(free) * 1_000_000_000, volumeID: "synthetic-test-volume"))
-            }
-            panel.reload()
-            let window = NSWindow(contentRect: panel.view.bounds, styleMask: .borderless, backing: .buffered, defer: false)
-            window.contentView = panel.view
-            panel.view.layoutSubtreeIfNeeded()
-            RunLoop.main.run(until: Date().addingTimeInterval(0.2))
-            window.displayIfNeeded()
-            let image = try XCTUnwrap(panel.view.bitmapImageRepForCachingDisplay(in: panel.view.bounds))
-            panel.view.cacheDisplay(in: panel.view.bounds, to: image)
-            let png = try XCTUnwrap(image.representation(using: .png, properties: [:]))
-            let attachment = XCTAttachment(data: png, uniformTypeIdentifier: "public.png")
-            attachment.name = "Synthetic disk trend in native history view"
-            attachment.lifetime = .keepAlways
-            add(attachment)
-            let scaleX = CGFloat(image.pixelsWide) / panel.view.bounds.width
-            let scaleY = CGFloat(image.pixelsHigh) / panel.view.bounds.height
-            var coloredPlotPixels = 0
-            for y in stride(from: Int(186 * scaleY), to: Int(336 * scaleY), by: 2) {
-                for x in stride(from: Int(20 * scaleX), to: Int(360 * scaleX), by: 2) {
-                    guard let color = image.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
-                    let channels = [color.redComponent, color.greenComponent, color.blueComponent]
-                    if color.alphaComponent > 0.5, (channels.max() ?? 0) - (channels.min() ?? 0) > 0.3 {
-                        coloredPlotPixels += 1
+        for appearance in [NSAppearance.Name.aqua, .darkAqua] {
+            try withPanel { store, panel in
+                let now = Date()
+                for (index, free) in [310, 308, 309, 306, 307, 312, 310, 311].enumerated() {
+                    try store.append(DiskSample(date: now.addingTimeInterval(Double(index - 7) * 300),
+                                                availableBytes: Int64(free) * 1_000_000_000, volumeID: "synthetic-test-volume"))
+                }
+                panel.reload()
+                let window = NSWindow(contentRect: panel.view.bounds, styleMask: .borderless, backing: .buffered, defer: false)
+                window.appearance = NSAppearance(named: appearance)
+                window.contentView = panel.view
+                panel.view.layoutSubtreeIfNeeded()
+                RunLoop.main.run(until: Date().addingTimeInterval(0.2))
+                window.displayIfNeeded()
+                let image = try XCTUnwrap(panel.view.bitmapImageRepForCachingDisplay(in: panel.view.bounds))
+                panel.view.cacheDisplay(in: panel.view.bounds, to: image)
+                let png = try XCTUnwrap(image.representation(using: .png, properties: [:]))
+                let attachment = XCTAttachment(data: png, uniformTypeIdentifier: "public.png")
+                attachment.name = "Synthetic disk trend in native history view - \(appearance.rawValue)"
+                attachment.lifetime = .keepAlways
+                add(attachment)
+                let scaleX = CGFloat(image.pixelsWide) / panel.view.bounds.width
+                let scaleY = CGFloat(image.pixelsHigh) / panel.view.bounds.height
+                var coloredPlotPixels = 0
+                for y in stride(from: Int(186 * scaleY), to: Int(336 * scaleY), by: 2) {
+                    for x in stride(from: Int(16 * scaleX), to: min(image.pixelsWide, Int(324 * scaleX)), by: 2) {
+                        guard let color = image.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
+                        let channels = [color.redComponent, color.greenComponent, color.blueComponent]
+                        if color.alphaComponent > 0.5, (channels.max() ?? 0) - (channels.min() ?? 0) > 0.3 {
+                            coloredPlotPixels += 1
+                        }
                     }
                 }
+                XCTAssertGreaterThan(coloredPlotPixels, 10, "The chart must paint actual data, not just an empty frame")
             }
-            XCTAssertGreaterThan(coloredPlotPixels, 10, "The chart must paint actual data, not just an empty frame")
         }
     }
 

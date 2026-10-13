@@ -1,7 +1,7 @@
 import AppKit
 
 @MainActor
-final class StatusBarController: NSObject {
+final class StatusBarController: NSObject, NSPopoverDelegate {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let selection = MetricSelection(legacyDefaults: UserDefaults.standard.persistentDomain(forName: "local.StatPeek"))
     private let sampler = SystemSampler()
@@ -10,7 +10,8 @@ final class StatusBarController: NSObject {
     private let settings = SettingsViewController()
     private let loginItem = LoginItemController()
     private var diskRecording: DiskRecordingController?
-    private var readings: [Metric: String] = [:]
+    private var snapshot = MetricSnapshot()
+    private var readings: [Metric: String] { snapshot.readings }
     private var timer: Timer?
 
     override init() {
@@ -23,17 +24,13 @@ final class StatusBarController: NSObject {
         }
         popover.behavior = .transient
         popover.animates = false
+        popover.delegate = self
         popover.contentViewController = settings
         settings.onToggle = { [weak self] metric in
             guard let self else { return }
             self.selection.toggle(metric)
-            if metric == .cpu { self.sampler.resetCPU() }
-            if self.selection.selected.contains(metric) {
-                self.readings.merge(self.sampler.sample([metric])) { _, new in new }
-            } else {
-                self.readings.removeValue(forKey: metric)
-            }
-            self.render()
+            if metric == .cpu, !self.popover.isShown { self.sampler.resetCPU() }
+            self.refresh()
         }
         settings.onColor = { [weak self] metric, color in
             guard let self else { return }
@@ -83,7 +80,7 @@ final class StatusBarController: NSObject {
     }
 
     private func refresh() {
-        readings = sampler.sample(selection.selected)
+        snapshot = sampler.sample(popover.isShown ? Set(Metric.allCases) : selection.selected)
         render()
     }
 
@@ -100,12 +97,16 @@ final class StatusBarController: NSObject {
             button.setAccessibilityLabel("StatPeek · " + (summary.isEmpty ? "未选择信息项" : summary))
             button.setAccessibilityValue(summary)
         }
-        settings.update(readings: readings, selection: selection)
+        settings.update(snapshot: snapshot, selection: selection)
         if popover.isShown { updateLoginItem() }
     }
 
     private func updateLoginItem() {
         settings.updateLoginItem(status: loginItem.status, error: loginItem.errorMessage)
+    }
+
+    func popoverDidClose(_ notification: Notification) {
+        if !selection.selected.contains(.cpu) { sampler.resetCPU() }
     }
 
     @objc private func togglePopover() {
@@ -115,7 +116,9 @@ final class StatusBarController: NSObject {
             updateLoginItem()
             settings.prepareToShow()
             NSApp.activate(ignoringOtherApps: true)
+            if !selection.selected.contains(.cpu) { sampler.resetCPU() }
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+            refresh()
         }
     }
 }

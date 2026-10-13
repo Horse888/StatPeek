@@ -7,25 +7,33 @@ final class SystemSampler {
 
     func resetCPU() { previousCPU = nil }
 
-    func sample(_ metrics: Set<Metric>) -> [Metric: String] {
-        var readings: [Metric: String] = [:]
+    func sample(_ metrics: Set<Metric>) -> MetricSnapshot {
+        var snapshot = MetricSnapshot()
         for metric in Metric.allCases where metrics.contains(metric) {
-            switch metric {
-            case .disk: readings[metric] = diskFree()
-            case .cpu: readings[metric] = cpuUsage()
-            case .memory: readings[metric] = MetricMath.percentage(memoryUsage())
-            case .gpu: readings[metric] = MetricMath.percentage(gpuUsage())
+            if metric == .disk {
+                snapshot.disk = DiskSpaceReader.snapshot()?.capacity
+                snapshot.readings[metric] = snapshot.disk.map { DiskFormatter.format(bytes: $0.availableBytes) } ?? "不可用"
+                snapshot.percentages[metric] = snapshot.disk?.usedPercentage
+                continue
             }
+            let value: Double?
+            switch metric {
+            case .cpu: value = cpuUsage()
+            case .memory: value = memoryUsage()
+            case .gpu: value = gpuUsage()
+            case .disk: value = nil
+            }
+            snapshot.readings[metric] = metric == .cpu && previousCPU != nil && cpuIsWarming
+                ? "采样中…" : MetricMath.percentage(value)
+            if let value, value.isFinite, (0...100).contains(value) { snapshot.percentages[metric] = value }
         }
-        return readings
+        return snapshot
     }
 
-    private func diskFree() -> String {
-        guard let reading = DiskSpaceReader.read(at: Date()) else { return "不可用" }
-        return DiskFormatter.format(bytes: reading.availableBytes)
-    }
+    private var cpuIsWarming = false
 
-    private func cpuUsage() -> String {
+    private func cpuUsage() -> Double? {
+        cpuIsWarming = false
         let host = mach_host_self()
         defer { mach_port_deallocate(mach_task_self_, host) }
         var stats = host_cpu_load_info_data_t()
@@ -36,13 +44,13 @@ final class SystemSampler {
                 host_statistics(host, HOST_CPU_LOAD_INFO, $0, &count)
             }
         }
-        guard result == KERN_SUCCESS else { previousCPU = nil; return "不可用" }
+        guard result == KERN_SUCCESS else { previousCPU = nil; return nil }
         let current = CPUTicks(user: stats.cpu_ticks.0, system: stats.cpu_ticks.1,
                                idle: stats.cpu_ticks.2, nice: stats.cpu_ticks.3)
         let previous = previousCPU
         previousCPU = current
-        guard let previous else { return "采样中…" }
-        return MetricMath.percentage(current.utilization(since: previous))
+        guard let previous else { cpuIsWarming = true; return nil }
+        return current.utilization(since: previous)
     }
 
     private func memoryUsage() -> Double? {

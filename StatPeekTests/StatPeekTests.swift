@@ -74,11 +74,11 @@ final class StatPeekTests: XCTestCase {
 
     func testSamplerOnlyReturnsRequestedMetricsAndResetsCPU() {
         let sampler = SystemSampler()
-        XCTAssertTrue(sampler.sample([]).isEmpty)
-        XCTAssertEqual(sampler.sample([.cpu]), [.cpu: "采样中…"])
+        XCTAssertTrue(sampler.sample([]).readings.isEmpty)
+        XCTAssertEqual(sampler.sample([.cpu]).readings, [.cpu: "采样中…"])
         sampler.resetCPU()
-        XCTAssertEqual(sampler.sample([.cpu]), [.cpu: "采样中…"])
-        let values = sampler.sample([.disk, .memory, .gpu])
+        XCTAssertEqual(sampler.sample([.cpu]).readings, [.cpu: "采样中…"])
+        let values = sampler.sample([.disk, .memory, .gpu]).readings
         XCTAssertEqual(Set(values.keys), [.disk, .memory, .gpu])
         XCTAssertNotEqual(values[.disk], "不可用")
         XCTAssertNotEqual(values[.memory], "不可用")

@@ -31,8 +31,38 @@ extension Metric {
     }
 }
 
-enum MetricColor: String, CaseIterable {
+enum MetricColor: Equatable, CaseIterable, RawRepresentable {
     case blue, orange, purple, green, red, neutral
+    case custom(String)
+
+    static let allCases: [MetricColor] = [.blue, .orange, .purple, .green, .red, .neutral]
+
+    init?(rawValue: String) {
+        switch rawValue {
+        case "blue": self = .blue
+        case "orange": self = .orange
+        case "purple": self = .purple
+        case "green": self = .green
+        case "red": self = .red
+        case "neutral": self = .neutral
+        default:
+            guard rawValue.count == 7, rawValue.first == "#",
+                  rawValue.dropFirst().allSatisfy({ $0.isASCII && $0.isHexDigit }) else { return nil }
+            self = .custom(rawValue.uppercased())
+        }
+    }
+
+    var rawValue: String {
+        switch self {
+        case .blue: "blue"
+        case .orange: "orange"
+        case .purple: "purple"
+        case .green: "green"
+        case .red: "red"
+        case .neutral: "neutral"
+        case .custom(let hex): hex
+        }
+    }
 
     var title: String {
         switch self {
@@ -42,6 +72,7 @@ enum MetricColor: String, CaseIterable {
         case .green: "绿色"
         case .red: "红色"
         case .neutral: "默认文字色"
+        case .custom(let hex): hex
         }
     }
 
@@ -115,4 +146,25 @@ enum MetricMath {
         guard let value, value.isFinite, (0...100).contains(value) else { return "不可用" }
         return String(format: "%.1f%%", value)
     }
+}
+
+/// All capacity numbers share one validated volume snapshot.
+struct DiskCapacity: Equatable {
+    let totalBytes: Int64
+    let availableBytes: Int64
+
+    init?(totalBytes: Int64, availableBytes: Int64) {
+        guard totalBytes > 0, availableBytes >= 0, availableBytes <= totalBytes else { return nil }
+        self.totalBytes = totalBytes
+        self.availableBytes = availableBytes
+    }
+
+    var usedBytes: Int64 { totalBytes - availableBytes }
+    var usedPercentage: Double { Double(usedBytes) / Double(totalBytes) * 100 }
+}
+
+struct MetricSnapshot {
+    var readings: [Metric: String] = [:]
+    var percentages: [Metric: Double] = [:]
+    var disk: DiskCapacity?
 }

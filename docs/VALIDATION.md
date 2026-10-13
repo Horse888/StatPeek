@@ -1,6 +1,22 @@
 # 验证记录
 
-日期：2026-10-12（Asia/Shanghai）。本机 Apple Silicon、Xcode 27.1、Swift 6.4。当前版本 **0.2.1 / Build 4**，最低 macOS 13。
+## 0.3.0 / Build 5 · 2026-10-13
+
+- 最终完整 Release 套件 **43 项 XCTest 通过，0 失败**，包括既有采样、全部选择、登录项、SQLite 和五分钟边界；新增容量边界、自定义 sRGB 保存/迁移/隔离、系统面板目标切换与初始化不写入、未选中卡片预览和刷新保持滚动文档，以及极端配色进度的真实绘图检查。
+- 白色浅背景与黑色深背景测试实际绘制轨道及 0/50/100% 填充，验证已知 0 与未知/NaN 不同。历史曲线在独立 Aqua/DarkAqua 原生测试窗口中绘制真实像素，附件保留在 XCTest 产物；合成数据仅存在临时测试库，不作为 README 产品截图。全部范围跨年份时轴标签包含年份，24 小时使用短时间标签。
+- 原生辅助功能实测四项分别取消/恢复立即更新状态栏；全部取消经过真实退出/启动，仍能打开设置并实时预览四项。底部滚动位置连续约 6 秒保持 1.0，状态栏和卡片读数持续变化。
+- 行尾小圆点打开真实 macOS Colors 面板。CPU `#336699`、GPU `#AA4477` 经系统输入、目标切换及真实退出/启动保留；面板初始化不改配色，浮层关闭后仍保存正确目标。最终恢复用户测试前的四项全选与蓝/橙/紫/绿配色。
+- 原用户已启用的登录启动项在验证和最终安装后均读取为 enabled；本次没有注册/注销它，也没有重启系统。
+- 338 条已有真实磁盘记录按原 ID 逐行比较保持不变，独立五分钟采样继续；最终安装检查已有 339 条。测试与重建产生的真实容量变化保留，未修改数据库以制造趋势。
+- 实际安装截图已更新 `assets/statusbar.png`、`assets/popover.png`、`assets/disk-history.png`；均为应用原生区域截图，未重绘，浮层截图仅截取干净内部区域。`assets/color-panel.png` 是本次真实系统面板。浅/深仪表盘曾观察实际界面；最终深色历史文字和极端配色进度由隔离原生渲染验证。
+- `/Applications/StatPeek.app` 为最终 **0.3.0 (5)**，唯一运行实例来自此路径。状态项仍为 **107 × 24 点**，双架构 arm64/x86_64，`codesign --verify --deep --strict` 通过；有效 LSUIElement=true、ITSAppUsesNonExemptEncryption=false 为布尔值。
+- 最终构建与安装可执行文件 SHA-256 一致：`43c6767a28baf1e31383baef2cba40fe52f9147797972ef3ea45b3f171a2e8c1`。仅移除本次确认的临时、替换备份与构建重复应用，保留源、偏好和真实用户数据。Derived Data 继续使用 Xcode 实际配置的位置。
+
+结构化证据见 [scrolling-dashboard-acceptance.json](scrolling-dashboard-acceptance.json)。以下为历史版本证据，不代替本次检查。
+
+## 0.2.1 / Build 4 · 历史记录
+
+日期：2026-10-12（Asia/Shanghai）。本机 Apple Silicon、Xcode 27.1、Swift 6.4。当时版本 **0.2.1 / Build 4**，最低 macOS 13。
 
 ## 自动检查
 

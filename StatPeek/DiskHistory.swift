@@ -9,11 +9,24 @@ struct DiskSample: Equatable, Identifiable {
 
 enum DiskSpaceReader {
     static func read(at date: Date) -> DiskSample? {
-        guard let values = try? FileManager.default.homeDirectoryForCurrentUser.resourceValues(
-            forKeys: [.volumeAvailableCapacityKey, .volumeUUIDStringKey, .volumeURLKey]),
-              let bytes = values.volumeAvailableCapacity, bytes >= 0,
+        // History only requires a valid remaining-space reading and volume identity.
+        // Missing total capacity must not interrupt the existing recording schedule.
+        guard let values = resourceValues(), let available = values.volumeAvailableCapacity, available >= 0,
               let volume = values.volumeUUIDString ?? values.volume?.path else { return nil }
-        return DiskSample(date: date, availableBytes: Int64(bytes), volumeID: volume)
+        return DiskSample(date: date, availableBytes: Int64(available), volumeID: volume)
+    }
+
+    static func snapshot() -> (capacity: DiskCapacity, volumeID: String)? {
+        guard let values = resourceValues(),
+              let total = values.volumeTotalCapacity, let available = values.volumeAvailableCapacity,
+              let capacity = DiskCapacity(totalBytes: Int64(total), availableBytes: Int64(available)),
+              let volume = values.volumeUUIDString ?? values.volume?.path else { return nil }
+        return (capacity, volume)
+    }
+
+    private static func resourceValues() -> URLResourceValues? {
+        try? FileManager.default.homeDirectoryForCurrentUser.resourceValues(
+            forKeys: [.volumeTotalCapacityKey, .volumeAvailableCapacityKey, .volumeUUIDStringKey, .volumeURLKey])
     }
 }
 

@@ -9,8 +9,11 @@
 /* Begin PBXBuildFile section */
 		0455109641CA3F3339E816FA /* StatusStripLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF977832BE116A2F0B5F6B0 /* StatusStripLayout.swift */; };
 		0674290CB774CBD45829031C /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3620CEE08054374DA4273318 /* libsqlite3.tbd */; };
+		08741CA30674786E236D1B81 /* StatusStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8F607A7BBFBB45DFE0FC1 /* StatusStripView.swift */; };
+		17F85B26F0E93BCCA1E62387 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7487870B95D0E5DFBB501822 /* SettingsViewController.swift */; };
 		1F260CD78F6A491597682E2D /* DiskHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8EFBA45662765A29AEDD02 /* DiskHistory.swift */; };
 		2071D6C0204480A2D2889831 /* StatusStripLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF977832BE116A2F0B5F6B0 /* StatusStripLayout.swift */; };
+		29B9FDA8DEAED3492B202227 /* DashboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01831CAFA6F23EB98B3613C0 /* DashboardTests.swift */; };
 		3BC48BF0420C965E012D0A47 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9CC245F21AAC60844976758 /* ServiceManagement.framework */; };
 		3FEE614EC833A2DB7852426E /* DiskHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8EFBA45662765A29AEDD02 /* DiskHistory.swift */; };
 		40D1B23E014095B8CD3E7F7F /* LoginItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518F85A4F59D0BDCBCE23035 /* LoginItemController.swift */; };
@@ -45,6 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01831CAFA6F23EB98B3613C0 /* DashboardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardTests.swift; sourceTree = "<group>"; };
 		0EEC2CA6280C05DDF6CA9F88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2514D72B2626DF5FBC1EE47D /* DiskRecordingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskRecordingController.swift; sourceTree = "<group>"; };
 		2575D6FDEC2236B9E18BE03F /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = System/Library/Frameworks/Charts.framework; sourceTree = SDKROOT; };
@@ -136,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				AA41ED99CD1127309D1DFDDB /* CompactLayoutAndLoginTests.swift */,
+				01831CAFA6F23EB98B3613C0 /* DashboardTests.swift */,
 				FC110A4D9D8B4547863CD606 /* DiskHistoryPanelTests.swift */,
 				AC5B5B08DD09C8E43512239F /* DiskHistoryTests.swift */,
 				EEEFE6286F25CE5FD679FA24 /* StatPeekTests.swift */,
@@ -258,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F5A9464DB54B6A0BF934851 /* CompactLayoutAndLoginTests.swift in Sources */,
+				29B9FDA8DEAED3492B202227 /* DashboardTests.swift in Sources */,
 				1F260CD78F6A491597682E2D /* DiskHistory.swift in Sources */,
 				B36A85D28CE7A55006F19BCE /* DiskHistoryPanelTests.swift in Sources */,
 				F3F517AF36DA6E64C330B43E /* DiskHistoryStore.swift in Sources */,
@@ -266,8 +272,10 @@
 				40D1B23E014095B8CD3E7F7F /* LoginItemController.swift in Sources */,
 				9E9AD4DAF41B9A9A57456FBA /* MetricSelection.swift in Sources */,
 				973E5998A2EAAE66EC49CFFF /* Metrics.swift in Sources */,
+				17F85B26F0E93BCCA1E62387 /* SettingsViewController.swift in Sources */,
 				779CB14E8565FF7342BF414F /* StatPeekTests.swift in Sources */,
 				2071D6C0204480A2D2889831 /* StatusStripLayout.swift in Sources */,
+				08741CA30674786E236D1B81 /* StatusStripView.swift in Sources */,
 				BCE0FD98DBEDA33E32679E9B /* SystemSampler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,7 +411,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -423,7 +431,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.2.1;
+				MARKETING_VERSION = 0.3.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -471,7 +479,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -485,7 +493,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.2.1;
+				MARKETING_VERSION = 0.3.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

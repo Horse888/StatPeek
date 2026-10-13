@@ -16,46 +16,46 @@ final class DiskHistoryViewController: NSViewController {
     private var chart: NSHostingView<DiskHistoryChart>?
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 380, height: 396))
+        view = NSView(frame: NSRect(x: 0, y: 0, width: 340, height: 396))
         let heading = NSTextField(labelWithString: "最近记录的剩余空间")
         heading.font = .systemFont(ofSize: 12)
         heading.textColor = .secondaryLabelColor
-        heading.frame = NSRect(x: 20, y: 366, width: 340, height: 20)
+        heading.frame = NSRect(x: 16, y: 366, width: 308, height: 20)
         view.addSubview(heading)
         amount.font = .monospacedDigitSystemFont(ofSize: 28, weight: .semibold)
-        amount.frame = NSRect(x: 20, y: 326, width: 340, height: 36)
+        amount.frame = NSRect(x: 16, y: 326, width: 308, height: 36)
         amount.setAccessibilityIdentifier("disk-history-amount")
         view.addSubview(amount)
         change.font = .systemFont(ofSize: 14, weight: .medium)
-        change.frame = NSRect(x: 20, y: 294, width: 340, height: 24)
+        change.frame = NSRect(x: 16, y: 294, width: 308, height: 24)
         change.setAccessibilityIdentifier("disk-history-change")
         view.addSubview(change)
         timestamp.font = .systemFont(ofSize: 11)
         timestamp.textColor = .secondaryLabelColor
-        timestamp.frame = NSRect(x: 20, y: 270, width: 340, height: 20)
+        timestamp.frame = NSRect(x: 16, y: 270, width: 308, height: 20)
         view.addSubview(timestamp)
         let ranges = NSSegmentedControl(labels: ["24 小时", "7 天", "全部"], trackingMode: .selectOne,
                                         target: self, action: #selector(changeRange(_:)))
         ranges.selectedSegment = range.rawValue
-        ranges.frame = NSRect(x: 20, y: 236, width: 225, height: 26)
+        ranges.frame = NSRect(x: 16, y: 236, width: 225, height: 26)
         ranges.setAccessibilityIdentifier("disk-history-range")
         view.addSubview(ranges)
         let unit = NSTextField(labelWithString: "剩余空间（G）")
         unit.font = .systemFont(ofSize: 10)
         unit.textColor = .secondaryLabelColor
-        unit.frame = NSRect(x: 20, y: 213, width: 340, height: 18)
+        unit.frame = NSRect(x: 16, y: 213, width: 308, height: 18)
         view.addSubview(unit)
         let hosting = NSHostingView(rootView: DiskHistoryChart(samples: [], range: range, now: Date()))
-        hosting.frame = NSRect(x: 20, y: 60, width: 340, height: 150)
+        hosting.frame = NSRect(x: 16, y: 60, width: 308, height: 150)
         view.addSubview(hosting)
         chart = hosting
         footer.font = .systemFont(ofSize: 11)
         footer.textColor = .secondaryLabelColor
-        footer.frame = NSRect(x: 20, y: 30, width: 340, height: 20)
+        footer.frame = NSRect(x: 16, y: 30, width: 308, height: 20)
         footer.setAccessibilityIdentifier("disk-history-schedule")
         view.addSubview(footer)
         note.font = .systemFont(ofSize: 10)
-        note.frame = NSRect(x: 20, y: 0, width: 340, height: 28)
+        note.frame = NSRect(x: 16, y: 0, width: 308, height: 28)
         note.setAccessibilityIdentifier("disk-history-note")
         view.addSubview(note)
     }
@@ -146,6 +146,16 @@ private struct DiskHistoryChart: View {
         return min(lower, upper.addingTimeInterval(-1800))...upper
     }
 
+    private var axisDateFormat: Date.FormatStyle {
+        if range == .day { return .dateTime.hour().minute() }
+        let calendar = Calendar.current
+        if range == .all,
+           calendar.component(.year, from: timeDomain.lowerBound) != calendar.component(.year, from: timeDomain.upperBound) {
+            return .dateTime.year().month(.twoDigits).day(.twoDigits)
+        }
+        return .dateTime.month(.twoDigits).day(.twoDigits)
+    }
+
     private var spaceDomain: ClosedRange<Double> {
         let values = samples.map { Double($0.availableBytes) / 1_000_000_000 }
         let low = values.min() ?? 0
@@ -183,12 +193,22 @@ private struct DiskHistoryChart: View {
                 .chartXScale(domain: timeDomain)
                 .chartYScale(domain: spaceDomain)
                 .chartLegend(.hidden)
-                .chartXAxis { AxisMarks(values: .automatic(desiredCount: 3)) }
+                .chartXAxis {
+                    AxisMarks(values: .automatic(desiredCount: 3)) { value in
+                        AxisGridLine()
+                        AxisTick()
+                        AxisValueLabel {
+                            if let date = value.as(Date.self) {
+                                Text(date, format: axisDateFormat)
+                            }
+                        }
+                    }
+                }
                 .chartYAxis {
                     AxisMarks(position: .leading, values: .automatic(desiredCount: 3)) { value in
                         AxisGridLine()
                         AxisValueLabel {
-                            if let amount = value.as(Double.self) { Text(String(format: "%.1f", amount)) }
+                            if let amount = value.as(Double.self) { Text(String(format: "%.1f", amount)).foregroundStyle(.secondary) }
                         }
                     }
                 }

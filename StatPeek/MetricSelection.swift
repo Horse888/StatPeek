@@ -36,7 +36,8 @@ final class MetricSelection {
     }
 
     func setColor(_ color: MetricColor, for metric: Metric) {
-        savedColors[metric.rawValue] = color.rawValue
+        guard let validated = MetricColor(rawValue: color.rawValue) else { return }
+        savedColors[metric.rawValue] = validated.rawValue
         defaults.set(savedColors, forKey: "metricColors")
     }
 }

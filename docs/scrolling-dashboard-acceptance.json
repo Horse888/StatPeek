@@ -1,0 +1,165 @@
+{
+  "date": "2026-10-13",
+  "version": "0.3.0",
+  "build": "5",
+  "tests": {
+    "configuration": "Release",
+    "executed": 43,
+    "failures": 0,
+    "dark_rendering": "isolated native DarkAqua fixture",
+    "extreme_colors": "native bitmap tests for white on light and black on dark"
+  },
+  "native_gui": [
+    {
+      "at": "2026-10-13T08:12:40.812115+00:00",
+      "check": "existing-database",
+      "count": 338,
+      "first_id": 1,
+      "last_id": 338
+    },
+    {
+      "at": "2026-10-13T08:12:41.900283+00:00",
+      "check": "version-and-real-login",
+      "version": "v0.3.0 (5)",
+      "login_enabled": true,
+      "status": "StatPeek · 磁盘剩余空间：158.0G；CPU 使用率：24.6%；内存使用率（估算）：77.6%；GPU 使用率：39.0%"
+    },
+    {
+      "at": "2026-10-13T08:12:42.556158+00:00",
+      "check": "immediate-deselect",
+      "metric": "disk",
+      "status": "StatPeek · CPU 使用率：24.8%；内存使用率（估算）：76.7%；GPU 使用率：52.0%"
+    },
+    {
+      "at": "2026-10-13T08:12:43.730896+00:00",
+      "check": "immediate-deselect",
+      "metric": "cpu",
+      "status": "StatPeek · 磁盘剩余空间：158.0G；内存使用率（估算）：75.6%；GPU 使用率：51.0%"
+    },
+    {
+      "at": "2026-10-13T08:12:44.897637+00:00",
+      "check": "immediate-deselect",
+      "metric": "memory",
+      "status": "StatPeek · 磁盘剩余空间：158.0G；CPU 使用率：不可用；GPU 使用率：0.0%"
+    },
+    {
+      "at": "2026-10-13T08:12:46.063428+00:00",
+      "check": "immediate-deselect",
+      "metric": "gpu",
+      "status": "StatPeek · 磁盘剩余空间：158.0G；CPU 使用率：21.4%；内存使用率（估算）：75.6%"
+    },
+    {
+      "at": "2026-10-13T08:12:54.911713+00:00",
+      "check": "scrolled-live-refresh",
+      "scroll": 1,
+      "status_samples": [
+        "StatPeek · 磁盘剩余空间：158.0G；CPU 使用率：15.3%；内存使用率（估算）：75.6%；GPU 使用率：55.0%",
+        "StatPeek · 磁盘剩余空间：158.0G；CPU 使用率：18.0%；内存使用率（估算）：75.5%；GPU 使用率：43.0%",
+        "StatPeek · 磁盘剩余空间：158.0G；CPU 使用率：17.0%；内存使用率（估算）：75.6%；GPU 使用率：49.0%",
+        "StatPeek · 磁盘剩余空间：158.0G；CPU 使用率：16.0%；内存使用率（估算）：75.5%；GPU 使用率：42.0%"
+      ],
+      "history": "158.0G, 68.0%, 总容量 494.3G · 已用 336.4G\n剩余 158.0G · 进度为已用比例, 16.0%, 16.0%, 两次采样之间的处理器使用率, 75.5%, 75.5%, 估算使用量 · 不含可清除内存, 42.0%, 42.0%, 设备使用率 · 取决于驱动支持, 已启用 · 登录此账户时自动启动, 磁盘记录, 最近记录的剩余空间, 158.0G, 基本不变（变化小于 0.1G）, 记录于 10-13 16:11 · 对比 10-13 16:06, 剩余空间（G）, 累计 338 条记录 · 下次 10-13 16:16, 每 5 分钟记录 · 只保存在本机，不自动弹出提示"
+    },
+    {
+      "at": "2026-10-13T08:12:56.117444+00:00",
+      "check": "native-color-panel-open",
+      "target": "cpu"
+    },
+    {
+      "at": "2026-10-13T08:12:56.610702+00:00",
+      "check": "panel-change-after-popover-close",
+      "target": "cpu",
+      "saved": "#336699"
+    },
+    {
+      "at": "2026-10-13T08:12:57.801164+00:00",
+      "check": "native-color-panel-open",
+      "target": "gpu"
+    },
+    {
+      "at": "2026-10-13T08:12:58.085545+00:00",
+      "check": "panel-target-switch-isolated",
+      "cpu": "#336699",
+      "gpu": "#AA4477"
+    },
+    {
+      "at": "2026-10-13T08:13:00.855216+00:00",
+      "check": "real-quit-relaunch",
+      "old_pid": "59240",
+      "new_pid": "59350"
+    },
+    {
+      "at": "2026-10-13T08:13:00.892670+00:00",
+      "check": "custom-colors-survive-restart",
+      "colors": {
+        "cpu": "#336699",
+        "disk": "blue",
+        "gpu": "#AA4477",
+        "memory": "purple"
+      }
+    },
+    {
+      "at": "2026-10-13T08:13:04.068418+00:00",
+      "check": "real-quit-relaunch",
+      "old_pid": "59350",
+      "new_pid": "59371"
+    },
+    {
+      "at": "2026-10-13T08:13:07.368096+00:00",
+      "check": "empty-selection-restart-preview",
+      "status": "StatPeek · 未选择信息项",
+      "readings": "158.0G, 68.0%, 总容量 494.3G · 已用 336.4G\n剩余 158.0G · 进度为已用比例, 20.0%, 20.0%, 两次采样之间的处理器使用率, 75.8%, 75.8%, 估算使用量 · 不含可清除内存, 46.0%, 46.0%, 设备使用率 · 取决于驱动支持, 已启用 · 登录此账户时自动启动, 磁盘记录, 最近记录的剩余空间, 158.0G, 基本不变（变化小于 0.1G）, 记录于 10-13 16:11 · 对比 10-13 16:06, 剩余空间（G）, 累计 338 条记录 · 下次 10-13 16:16, 每 5 分钟记录 · 只保存在本机，不自动弹出提示"
+    },
+    {
+      "at": "2026-10-13T08:13:07.368598+00:00",
+      "check": "original-history-unchanged",
+      "rows": 338,
+      "current_count": 338
+    },
+    {
+      "at": "2026-10-13T08:13:08.707150+00:00",
+      "check": "restored-user-preferences",
+      "colors": {
+        "cpu": "orange",
+        "disk": "blue",
+        "gpu": "green",
+        "memory": "purple"
+      },
+      "selection": [
+        "disk",
+        "cpu",
+        "memory",
+        "gpu"
+      ]
+    }
+  ],
+  "final_install": {
+    "app": "/Applications/StatPeek.app",
+    "version": "0.3.0",
+    "build": "5",
+    "sha256": "43c6767a28baf1e31383baef2cba40fe52f9147797972ef3ea45b3f171a2e8c1",
+    "process": "/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+    "pid": "61103",
+    "login_enabled": true,
+    "sign_verified": true,
+    "architectures": "x86_64 arm64",
+    "encryption_boolean_false": true,
+    "user_selection": [
+      "disk",
+      "cpu",
+      "memory",
+      "gpu"
+    ],
+    "user_colors": {
+      "cpu": "orange",
+      "disk": "blue",
+      "gpu": "green",
+      "memory": "purple"
+    },
+    "disk_records": 339,
+    "status_item_width": 107,
+    "system_color_panel_opened": true,
+    "initial_panel_color_did_not_save": true,
+    "desktop_dark_mode_restored": true
+  }
+}

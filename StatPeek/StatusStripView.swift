@@ -1,6 +1,14 @@
 import AppKit
 
 extension MetricColor {
+    init?(nsColor: NSColor) {
+        guard let rgb = nsColor.usingColorSpace(.sRGB) else { return nil }
+        let channels = [rgb.redComponent, rgb.greenComponent, rgb.blueComponent]
+        guard channels.allSatisfy({ $0.isFinite }) else { return nil }
+        let bytes = channels.map { Int((min(1, max(0, $0)) * 255).rounded()) }
+        self.init(rawValue: String(format: "#%02X%02X%02X", bytes[0], bytes[1], bytes[2]))
+    }
+
     var nsColor: NSColor {
         switch self {
         case .blue: .systemBlue
@@ -9,6 +17,12 @@ extension MetricColor {
         case .green: .systemGreen
         case .red: .systemRed
         case .neutral: .labelColor
+        case .custom(let hex):
+            if let number = UInt32(hex.dropFirst(), radix: 16) {
+                NSColor(srgbRed: CGFloat((number >> 16) & 255) / 255,
+                        green: CGFloat((number >> 8) & 255) / 255,
+                        blue: CGFloat(number & 255) / 255, alpha: 1)
+            } else { NSColor.labelColor }
         }
     }
 }
