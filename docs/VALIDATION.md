@@ -1,5 +1,17 @@
 # 验证记录
 
+## 0.3.2 / Build 7 · 2026-10-13
+
+- 最终完整 Release 套件 **43 项 XCTest 通过，0 失败**。动画与颜色浮层修复均包含在最终构建；此前仅动画的构建不用于安装。
+- Apple SF Symbols 目录中 gpu/graphicscard 无对应名称，原 cpu.fill 与 CPU 相似。GPU 改为 square.3.layers.3d，用三层图形表达图形渲染；这是本应用的语义选择，不宣称为 Apple 专用 GPU 符号。四项保持统一 SF 风格，未生成额外位图。
+- Apple 导出模板确认 GPU 有三组运动图层，磁盘/CPU/内存各一组。改用系统原生 Breathe.plain.byLayer（速度 0.65），移除 Core Animation 透明度替代。九个原生截图分别比较四项独立图标区域，均观察到缩放动画；另保留六秒实际安装动画录像在本机工作目录。macOS 13/14 保持静态，macOS 15+ 使用原生效果，Symbols 弱链接保留最低 macOS 13。
+- 浮层改为 semi-transient，并在应用失去激活状态时关闭。真实打开 CPU 颜色面板后浮层持续显示且读数更新；切到 GPU 配色保留浮层，初始化不覆盖 CPU 配色，关闭面板后浮层仍可操作。Finder 激活、状态栏再次点击及 Escape 关闭验证通过。
+- CPU #336699、GPU #33AA77 与取消 GPU 显示均经过真实退出/启动恢复，随后恢复测试前的四项全选和蓝/橙/紫/绿配色；已启用登录启动项保留。376 条原历史按 ID 逐行保持不变，正常五分钟记录继续至安装时 378 条。首次 GUI 流程在末尾重启检查时受外部焦点中断，重新完成验证，未将中断尝试标为完整通过。
+- 安装副本再次实测颜色面板与浮层同时显示、面板关闭后保留浮层及真实退出/启动保存。最终 `/Applications/StatPeek.app` 为 **0.3.2 (7)**，唯一运行进程来自该路径；arm64/x86_64，严格签名检查通过。有效 LSUIElement=true、ITSAppUsesNonExemptEncryption=false 为布尔值。
+- 构建、验证和安装的可执行文件 SHA-256 一致：`cf54cfd5a2e710dae9c5060324c942e288f069f5f1831c2e99e64d10006be4fe`。本次已确认的暂存、替换备份与构建重复 App 已移除；真实安装和系统颜色面板截图已更新。减少动态效果与隐藏动画停止由源码核验，未改全局系统偏好；macOS 13/14 与 Intel 实机没有单独运行验证。
+
+结构化证据见 [native-symbols-acceptance.json](native-symbols-acceptance.json)。以下为历史版本证据。
+
 ## 0.3.1 / Build 6 · 2026-10-13
 
 - 完整 Release 套件 **43 项 XCTest 通过，0 失败**；源、测试与最终安装来自同一次构建。

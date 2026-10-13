@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-13",
+  "version": "0.3.2",
+  "build": "7",
+  "tests": {
+    "configuration": "Release",
+    "executed": 43,
+    "failures": 0
+  },
+  "icons": {
+    "disk": "internaldrive",
+    "cpu": "cpu",
+    "memory": "memorychip",
+    "gpu": "square.3.layers.3d",
+    "gpu_semantics": "Three-dimensional graphic layers represent graphics rendering; not an Apple-designated GPU icon",
+    "source": "Apple SF Symbols catalog and exported motion-group metadata",
+    "native_motion_groups": {
+      "disk": 1,
+      "cpu": 1,
+      "memory": 1,
+      "gpu": 3
+    }
+  },
+  "animation": {
+    "API": "BreatheSymbolEffect.plain.byLayer",
+    "minimum_macOS": "15.0",
+    "speed": 0.65,
+    "older_systems": "static",
+    "custom_animation": false,
+    "hidden_and_reduced_motion_stop": "source-reviewed; system preference was not changed"
+  },
+  "popover": {
+    "behavior": "semitransient",
+    "closes_when_application_deactivates": true,
+    "color_panel_and_popover_coexist": true,
+    "escape_and_status_button_close": true
+  },
+  "gui": [
+    {
+      "check": "color-panel-keeps-live-popover",
+      "cpu_color": "#336699",
+      "status_samples": [
+        "StatPeek · 磁盘剩余空间：163.5G；CPU 使用率：15.7%；内存使用率（估算）：65.4%；GPU 使用率：22.0%",
+        "StatPeek · 磁盘剩余空间：163.4G；CPU 使用率：11.6%；内存使用率（估算）：65.2%；GPU 使用率：16.0%",
+        "StatPeek · 磁盘剩余空间：163.4G；CPU 使用率：10.3%；内存使用率（估算）：65.2%；GPU 使用率：20.0%"
+      ]
+    },
+    {
+      "check": "switch-color-target-keeps-popover",
+      "gpu_color": "#33AA77",
+      "cpu_unchanged": true
+    },
+    {
+      "check": "color-panel-close-keeps-settings",
+      "popover_visible": true
+    },
+    {
+      "check": "four-native-breathe-animations-observed",
+      "frames": 9,
+      "changed_icon_regions": {
+        "disk": true,
+        "cpu": true,
+        "memory": true,
+        "gpu": true
+      }
+    },
+    {
+      "check": "other-application-closes-popover",
+      "closed": true
+    },
+    {
+      "check": "status-toggle-close-reopen",
+      "visible": true
+    },
+    {
+      "check": "real-relaunch-keeps-selection-and-colors",
+      "gpu_unchecked": true,
+      "colors": {
+        "cpu": "#336699",
+        "disk": "blue",
+        "gpu": "#33AA77",
+        "memory": "purple"
+      }
+    },
+    {
+      "check": "original-user-state-preserved",
+      "selection": [
+        "disk",
+        "cpu",
+        "memory",
+        "gpu"
+      ],
+      "colors": {
+        "cpu": "orange",
+        "disk": "blue",
+        "gpu": "green",
+        "memory": "purple"
+      },
+      "original_history_rows": 376,
+      "current_history_rows": 378,
+      "login_enabled": true
+    }
+  ],
+  "installation": {
+    "app": "/Applications/StatPeek.app",
+    "version": "0.3.2",
+    "build": "7",
+    "sha256": "cf54cfd5a2e710dae9c5060324c942e288f069f5f1831c2e99e64d10006be4fe",
+    "process": "/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+    "pid": "82077",
+    "login_enabled": true,
+    "sign_verified": true,
+    "architectures": "x86_64 arm64",
+    "LSUIElement": true,
+    "ITSAppUsesNonExemptEncryption": false,
+    "original_history_rows_unchanged": 376,
+    "current_history_rows": 378,
+    "statusbar_size": "107, 24",
+    "colors": {
+      "cpu": "orange",
+      "disk": "blue",
+      "gpu": "green",
+      "memory": "purple"
+    },
+    "selection": [
+      "disk",
+      "cpu",
+      "memory",
+      "gpu"
+    ],
+    "installed_color_panel_and_popover_both_visible": true,
+    "installed_panel_close_keeps_popover": true,
+    "installed_relaunch_preserved_all_settings": true,
+    "escape_close_verified_on_validated_binary": true
+  },
+  "verification_note": "A first GUI run was interrupted after relaunch by external focus; completed checks were rerun successfully. No production database was altered.",
+  "limitations": [
+    "macOS 13/14 static behavior and Intel hardware not separately runtime tested",
+    "No OS reboot/login-cycle test in this iteration"
+  ]
+}

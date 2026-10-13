@@ -18,8 +18,8 @@ A compact macOS menu bar monitor. Selected metrics appear in two rows of colored
 - 状态栏持续每 2 秒刷新；浮层打开时预览四项，关闭后只采样选中项。勾选仅决定状态栏显示。
 - 四项全选时，上行为磁盘和 CPU，下行为内存和 GPU；紧凑留白和列间隔减少菜单栏占用，刷新时保持宽度稳定。
 - 四项各有紧凑淡色卡片，百分比只在进度条右侧显示；磁盘显示总容量、已用、剩余，进度代表已用比例。采样中或不可用不画虚假的零进度。
-- 浮层模块使用彩色 SF Symbol 与轻微呼吸动画，指标图标跟随所选颜色；关闭浮层或滚出可见区域后停止，遵循系统“减少动态效果”。状态栏仍使用 D/C/M/G 字母。macOS 14+ 使用原生 Symbol Effect，macOS 13 使用透明度动画。
-- 行尾淡色小圆点打开 macOS 系统颜色面板，任意 RGB 配色即时生效并在重启后恢复；兼容旧六种配色，单项修改不影响其他项。
+- 浮层模块使用彩色 SF Symbol，GPU 用三层立体图形表达图形渲染，与 CPU/内存区分。macOS 15+ 使用系统原生 Breathe 分层呼吸，较旧系统保持静态，不添加自制动画；关闭浮层、滚出可见区域或开启系统“减少动态效果”时停止。状态栏仍使用 D/C/M/G 字母。
+- 行尾淡色小圆点打开 macOS 系统颜色面板，设置浮层保持显示，可同时查看即时配色；关闭颜色面板仍可操作设置。任意 RGB 配色在重启后恢复；兼容旧六种配色，单项修改不影响其他项。
 - 滚动内容最下方的「开机自动启动」使用 macOS 原生登录启动项；勾选后在当前用户登录时启动，取消即注销。默认关闭，需要系统批准或设置失败时明确提示。
 - 磁盘保留一位小数，单位使用单字母，例如 `320.8G`。
 - 后台每 5 分钟记录一次磁盘剩余空间，即使取消磁盘显示也继续记录；只保存本机，静默运行。
@@ -56,7 +56,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.3.1 / 6 |
+| Version / Build | 0.3.2 / 7 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |

@@ -251,7 +251,7 @@ private final class MetricCardView: DashboardCardView {
         case .disk: symbolName = "internaldrive"
         case .cpu: symbolName = "cpu"
         case .memory: symbolName = "memorychip"
-        case .gpu: symbolName = "cpu.fill"
+        case .gpu: symbolName = "square.3.layers.3d"
         }
         symbol = ModuleSymbolView(name: symbolName, color: .labelColor,
                                   frame: NSRect(x: 12, y: frame.height - 28, width: 18, height: 18))

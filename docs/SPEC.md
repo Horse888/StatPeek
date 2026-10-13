@@ -5,7 +5,7 @@
 Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共享 Scheme 均使用 StatPeek。
 当前任务完成原生 macOS 项目、本机界面验证、应用图标、Xcode 应用信息、Applications 安装，并推送到用户授权的 GitHub 公开仓库；商标核验与 App Store 上架另行处理。
 
-应用信息：StatPeek，Bundle ID `com.zyapps.StatPeek`，版本 0.3.1 / Build 6，Utilities 分类，最低 macOS 13.0。原型 `local.StatPeek` 的选择与配色在新标识首次启动时迁移，已有新偏好不覆盖。
+应用信息：StatPeek，Bundle ID `com.zyapps.StatPeek`，版本 0.3.2 / Build 7，Utilities 分类，最低 macOS 13.0。原型 `local.StatPeek` 的选择与配色在新标识首次启动时迁移，已有新偏好不覆盖。
 
 图标：深蓝底板、两排彩色状态指示，见 `icon-design.md`；AppIcon 资源包含 macOS 标准 16–1024 像素尺寸。
 
@@ -109,3 +109,13 @@ Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共
 - 用既有仪表盘/历史测试与真实上下滚动验证，安装并同步 GitHub。
 
 动画 API：[Apple PulseSymbolEffect](https://developer.apple.com/documentation/symbols/pulsesymboleffect)。
+
+## 0.3.2 原生分层呼吸与 GPU 图标
+
+- 四项继续使用系统 SF Symbol，GPU 改为 square.3.layers.3d，用三层立体图形表达图形渲染；这是产品语义选择，不宣称为 Apple 专用 GPU 符号。Apple 目录未提供名为 gpu 或 graphicscard 的符号。
+- macOS 15+ 可见图标使用 BreatheSymbolEffect.plain.byLayer，按系统原生运动图层平滑缩放，速度 0.65；不额外叠加透明度、弹跳或旋转。GPU 符号具有三组原生运动图层，其余三项具有一组。
+- macOS 13/14 保持静态；移除 Core Animation 兼容动画。系统开启减少动态效果、关闭浮层或滚出可见区域时停止；指标自选配色、紧凑卡片和状态栏字母保留。
+- 验收原生动画实际帧变化、四项图标清晰度、滚动/关闭/重新打开、勾选和重启保存；保留原偏好与真实历史，再安装和推送。
+- 系统颜色面板打开或切换目标时，设置浮层保持显示，数值和配色实时刷新；关闭颜色面板仍可继续操作设置。浮层使用 semi-transient，切到其他应用时主动关闭；状态栏再次点击与 Escape 仍可关闭。
+
+依据：[Apple BreatheSymbolEffect](https://developer.apple.com/documentation/symbols/breathesymboleffect)、[Apple SF Symbols 动画](https://developer.apple.com/design/human-interface-guidelines/sf-symbols)。系统版本门槛以本机 SDK 的 macOS 15.0 声明为准，图层依据 Apple SF Symbols 导出模板核验。

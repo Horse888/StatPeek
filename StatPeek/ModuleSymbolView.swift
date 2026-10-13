@@ -1,5 +1,4 @@
 import AppKit
-import QuartzCore
 import Symbols
 
 /// Decorative symbols stay inside the popover; status-bar labels remain D/C/M/G.
@@ -23,25 +22,12 @@ final class ModuleSymbolView: NSImageView {
     func setAnimating(_ animate: Bool) {
         guard animate != isAnimating else { return }
         isAnimating = animate
-        if #available(macOS 14.0, *) {
+        // Breathe is native to SF Symbols on macOS 15+. Older systems stay static.
+        if #available(macOS 15.0, *) {
             if animate {
-                addSymbolEffect(.pulse.wholeSymbol, options: .repeating.speed(0.45))
+                addSymbolEffect(.breathe.plain.byLayer, options: .repeating.speed(0.65))
             } else {
                 removeAllSymbolEffects()
-            }
-        } else {
-            wantsLayer = true
-            if animate {
-                let pulse = CABasicAnimation(keyPath: "opacity")
-                pulse.fromValue = 0.65
-                pulse.toValue = 1.0
-                pulse.duration = 1.5
-                pulse.autoreverses = true
-                pulse.repeatCount = .infinity
-                pulse.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                layer?.add(pulse, forKey: "module-pulse")
-            } else {
-                layer?.removeAnimation(forKey: "module-pulse")
             }
         }
     }

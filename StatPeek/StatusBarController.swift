@@ -22,10 +22,13 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             button.setAccessibilityIdentifier("status-toggle")
             button.addSubview(strip)
         }
-        popover.behavior = .transient
+        // Keep settings visible when a window of this app (the color panel) gains focus.
+        popover.behavior = .semitransient
         popover.animates = false
         popover.delegate = self
         popover.contentViewController = settings
+        NotificationCenter.default.addObserver(self, selector: #selector(closeOnDeactivation),
+                                               name: NSApplication.didResignActiveNotification, object: NSApp)
         settings.onToggle = { [weak self] metric in
             guard let self else { return }
             self.selection.toggle(metric)
@@ -107,6 +110,10 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
 
     func popoverDidClose(_ notification: Notification) {
         if !selection.selected.contains(.cpu) { sampler.resetCPU() }
+    }
+
+    @objc private func closeOnDeactivation() {
+        if popover.isShown { popover.performClose(nil) }
     }
 
     @objc private func togglePopover() {
