@@ -2,6 +2,27 @@ import AppKit
 import XCTest
 
 final class DashboardTests: XCTestCase {
+    @MainActor
+    func testDashboardFitsItsContentAndScrollsOnlyWhenScreenIsShort() throws {
+        let settings = SettingsViewController()
+        _ = settings.view
+        let scroll = try XCTUnwrap(descendants(settings.view).compactMap { $0 as? NSScrollView }.first)
+        let document = try XCTUnwrap(scroll.documentView)
+        settings.fitToAvailableHeight(1400)
+        XCTAssertFalse(scroll.hasVerticalScroller)
+        XCTAssertEqual(scroll.contentView.bounds.height, document.frame.height, accuracy: 0.5)
+        XCTAssertLessThan(settings.view.frame.height, 1400)
+        settings.fitToAvailableHeight(600)
+        XCTAssertLessThanOrEqual(settings.view.frame.height, 600)
+        XCTAssertTrue(scroll.hasVerticalScroller)
+        scroll.contentView.scroll(to: NSPoint(x: 0, y: 180))
+        settings.fitToAvailableHeight(1400)
+        XCTAssertFalse(scroll.hasVerticalScroller)
+        XCTAssertEqual(scroll.contentView.bounds.origin, .zero)
+        let quit = try XCTUnwrap(descendants(settings.view).first { $0.accessibilityIdentifier() == "quit-app" })
+        XCTAssertFalse(quit.isDescendant(of: document), "Footer actions must remain reachable when content scrolls")
+    }
+
     func testCapacityRejectsInvalidInputsAndKeepsTheWholeSnapshotConsistent() throws {
         for (total, available): (Int64, Int64) in [(0, 0), (-1, 0), (100, -1), (100, 101)] {
             XCTAssertNil(DiskCapacity(totalBytes: total, availableBytes: available))
@@ -44,7 +65,7 @@ final class DashboardTests: XCTestCase {
     }
 
     @MainActor
-    func testColorPanelTargetSwitchDoesNotOverwritePreferencesAndSurvivesPopoverClosure() throws {
+    func testColorWellsInitializeWithoutWritingAndCommitOnlyTheirOwnMetric() throws {
         _ = NSApplication.shared
         try isolated { defaults in
             let selection = MetricSelection(defaults: defaults)
@@ -52,24 +73,27 @@ final class DashboardTests: XCTestCase {
             var changes: [Metric] = []
             settings.onColor = { metric, color in changes.append(metric); selection.setColor(color, for: metric) }
             settings.update(snapshot: MetricSnapshot(), selection: selection)
-            let cpu = try XCTUnwrap(descendants(settings.view).first { $0.accessibilityIdentifier() == "color-cpu" } as? NSButton)
-            let gpu = try XCTUnwrap(descendants(settings.view).first { $0.accessibilityIdentifier() == "color-gpu" } as? NSButton)
-            cpu.performClick(nil)
-            XCTAssertTrue(NSColorPanel.shared.isVisible)
-            XCTAssertFalse(NSColorPanel.shared.showsAlpha)
-            XCTAssertTrue(changes.isEmpty)
-            NSColorPanel.shared.color = NSColor(srgbRed: 0.2, green: 0.4, blue: 0.6, alpha: 0.3)
-            XCTAssertEqual(selection.color(for: .cpu).rawValue, "#336699")
+            let cpu = try XCTUnwrap(descendants(settings.view).first { $0.accessibilityIdentifier() == "color-cpu" } as? MetricColorButton)
+            let gpu = try XCTUnwrap(descendants(settings.view).first { $0.accessibilityIdentifier() == "color-gpu" } as? MetricColorButton)
+            XCTAssertTrue(changes.isEmpty, "Initial rendering must not write preferences")
+            cpu.color = NSColor(srgbRed: 0.2, green: 0.4, blue: 0.6, alpha: 1)
             settings.update(snapshot: MetricSnapshot(), selection: selection)
-            gpu.performClick(nil)
+            XCTAssertEqual(MetricColor(nsColor: cpu.color)?.rawValue, "#336699", "Live metric refresh must preserve an in-progress picker edit")
+            XCTAssertTrue(cpu.sendAction(cpu.action, to: cpu.target))
+            XCTAssertEqual(selection.color(for: .cpu).rawValue, "#336699")
+            selection.toggle(.cpu)
+            settings.update(snapshot: MetricSnapshot(), selection: selection)
+            XCTAssertEqual(cpu.displayedColor, .systemGray)
+            XCTAssertEqual(MetricColor(nsColor: cpu.color)?.rawValue, "#336699", "Gray presentation must not replace the stored or picker color")
             XCTAssertEqual(changes, [.cpu])
-            XCTAssertEqual(settings.colorTarget, .gpu)
-            // There is no popover window here; the same retained controller receives panel actions.
-            NSColorPanel.shared.color = NSColor(srgbRed: 1, green: 0, blue: 0.5, alpha: 1)
+            gpu.color = NSColor(srgbRed: 1, green: 0, blue: 0.5, alpha: 1)
+            XCTAssertTrue(gpu.sendAction(gpu.action, to: gpu.target))
             XCTAssertEqual(MetricSelection(defaults: defaults).color(for: .gpu).rawValue, "#FF0080")
             XCTAssertEqual(selection.color(for: .cpu).rawValue, "#336699")
-            NSColorPanel.shared.close()
-            NSColorPanel.shared.setTarget(nil)
+            selection.toggle(.cpu)
+            settings.update(snapshot: MetricSnapshot(), selection: selection)
+            XCTAssertEqual(cpu.displayedColor, selection.color(for: .cpu).nsColor)
+            XCTAssertEqual(changes, [.cpu, .gpu])
         }
     }
 

@@ -121,7 +121,9 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
         if popover.isShown { popover.performClose(nil) }
         else {
             updateLoginItem()
-            settings.prepareToShow()
+            let screen = button.window?.screen ?? NSScreen.main
+            settings.prepareToShow(availableHeight: (screen?.visibleFrame.height ?? 900) - 32)
+            popover.contentSize = settings.view.frame.size
             NSApp.activate(ignoringOtherApps: true)
             if !selection.selected.contains(.cpu) { sampler.resetCPU() }
             popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)

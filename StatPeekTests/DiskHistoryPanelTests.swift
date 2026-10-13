@@ -68,9 +68,12 @@ final class DiskHistoryPanelTests: XCTestCase {
                 add(attachment)
                 let scaleX = CGFloat(image.pixelsWide) / panel.view.bounds.width
                 let scaleY = CGFloat(image.pixelsHigh) / panel.view.bounds.height
+                let chart = try XCTUnwrap(panel.view.subviews.first { $0.accessibilityIdentifier() == "disk-history-chart" })
+                let top = panel.view.bounds.height - chart.frame.maxY
+                let bottom = panel.view.bounds.height - chart.frame.minY
                 var coloredPlotPixels = 0
-                for y in stride(from: Int(186 * scaleY), to: Int(336 * scaleY), by: 2) {
-                    for x in stride(from: Int(16 * scaleX), to: min(image.pixelsWide, Int(324 * scaleX)), by: 2) {
+                for y in stride(from: Int(top * scaleY), to: min(image.pixelsHigh, Int(bottom * scaleY)), by: 2) {
+                    for x in stride(from: Int(chart.frame.minX * scaleX), to: min(image.pixelsWide, Int(chart.frame.maxX * scaleX)), by: 2) {
                         guard let color = image.colorAt(x: x, y: y)?.usingColorSpace(.deviceRGB) else { continue }
                         let channels = [color.redComponent, color.greenComponent, color.blueComponent]
                         if color.alphaComponent > 0.5, (channels.max() ?? 0) - (channels.min() ?? 0) > 0.3 {

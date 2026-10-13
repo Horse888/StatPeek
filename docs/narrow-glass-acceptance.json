@@ -1,0 +1,159 @@
+{
+  "version": "0.3.3",
+  "build": "8",
+  "date": "2026-10-13",
+  "final_release": {
+    "tests_passed": 44,
+    "tests_failed": 0,
+    "result": "adaptive-tests.xcresult",
+    "input_automation_used": false,
+    "adaptive_height": "Content fits without scrolling on a tall screen; short screens enable scrolling; returning to tall screen resets the scroll offset",
+    "render_check": "Native Aqua/DarkAqua history views paint real test fixture chart pixels in hidden test windows",
+    "visual_acceptance": "Final decorative-symbol and compact adaptive layout changes were not rechecked by controlling desktop input, per user request"
+  },
+  "final_install": {
+    "app": "/Applications/StatPeek.app",
+    "version": "0.3.3",
+    "build": "8",
+    "sha256": "073e1760a396d557e374349d73a424e40a5b6fda69e2794362352867ba5769cb",
+    "process": "/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+    "pid": "1662",
+    "sign_verified": true,
+    "architectures": "x86_64 arm64",
+    "LSUIElement": true,
+    "ITSAppUsesNonExemptEncryption": false,
+    "original_history_rows_unchanged": 385,
+    "current_history_rows": 399,
+    "colors": {
+      "cpu": "orange",
+      "disk": "blue",
+      "gpu": "green",
+      "memory": "purple"
+    },
+    "selection": [
+      "disk",
+      "cpu",
+      "memory",
+      "gpu"
+    ],
+    "input_automation_used": false,
+    "final_revision": "Adaptive height, compact teal disk history, plain decorative symbols"
+  },
+  "earlier_iteration_runtime_evidence": {
+    "scope": "Before final plain-symbol and adaptive compact layout revisions",
+    "tests_passed": 43,
+    "gui": [
+      {
+        "check": "narrow-layout-checkbox-first-footer-aligned",
+        "content_size": [
+          288,
+          700
+        ],
+        "actual_popover_size": [
+          314,
+          726
+        ],
+        "footer_centers": [
+          715.0,
+          715.0,
+          715.0
+        ]
+      },
+      {
+        "check": "native-popover-color-selection",
+        "metric": "cpu",
+        "saved": "#0042AA",
+        "others_unchanged": true,
+        "main_remains_visible": true
+      },
+      {
+        "check": "native-popover-color-selection",
+        "metric": "gpu",
+        "saved": "#FFF76B",
+        "others_unchanged": true,
+        "main_remains_visible": true
+      },
+      {
+        "check": "unchecked-gray-static-keeps-color",
+        "cpu_saved": "#0042AA",
+        "grayscale_icon_pixels": true,
+        "animation_stopped": true
+      },
+      {
+        "check": "real-relaunch-gray-selection-and-colors",
+        "cpu": "#0042AA",
+        "gpu": "#FFF76B",
+        "restored_selection_after_test": true
+      },
+      {
+        "check": "narrow-history-scroll-live-refresh",
+        "status_samples": [
+          "StatPeek · 磁盘剩余空间：162.8G；CPU 使用率：17.8%；内存使用率（估算）：80.9%；GPU 使用率：32.0%",
+          "StatPeek · 磁盘剩余空间：162.8G；CPU 使用率：11.9%；内存使用率（估算）：77.6%；GPU 使用率：35.0%",
+          "StatPeek · 磁盘剩余空间：162.8G；CPU 使用率：9.2%；内存使用率（估算）：78.0%；GPU 使用率：13.0%"
+        ],
+        "footer_login_fixed": true
+      },
+      {
+        "check": "original-user-data-preserved",
+        "colors": {
+          "cpu": "orange",
+          "disk": "blue",
+          "gpu": "green",
+          "memory": "purple"
+        },
+        "selection": [
+          "disk",
+          "cpu",
+          "memory",
+          "gpu"
+        ],
+        "original_history_rows": 385,
+        "current_history_rows": 396
+      }
+    ],
+    "history_ranges": [
+      {
+        "range": "7 天",
+        "main_visible": true
+      },
+      {
+        "range": "全部",
+        "main_visible": true
+      },
+      {
+        "range": "24 小时",
+        "main_visible": true
+      }
+    ],
+    "installed_smoke": {
+      "installed_relaunch_selection_login": true,
+      "installed_native_color_popover_parent_retained": true
+    }
+  },
+  "source_reviewed": {
+    "symbols": [
+      "internaldrive.fill",
+      "cpu.fill",
+      "memorychip.fill",
+      "cube.fill"
+    ],
+    "decorative_symbols_background": false,
+    "symbol_entrance": "Native non-repeating Bounce.byLayer, macOS 14+; macOS 13 static",
+    "reduce_motion": "Stops native symbol effects; global preference not changed",
+    "glass": "macOS 26+ native NSGlassEffectView; older system material",
+    "color_picker": "Minimal NSColorWell native Popover, per-metric target; ongoing edits survive metric refresh",
+    "width": 288,
+    "natural_content_height": 870,
+    "screen_height_limit": "Status-item screen visibleFrame.height minus 32",
+    "history_height": 304,
+    "history_remaining_amount_font": 20,
+    "history_remaining_amount_color": "systemTeal",
+    "history_change_font": 11
+  },
+  "limitations": [
+    "Final visible layout and entrance motion await natural user interaction",
+    "macOS 13 and Intel hardware not individually exercised",
+    "Login item enabled state preserved; no machine restart performed"
+  ]
+}

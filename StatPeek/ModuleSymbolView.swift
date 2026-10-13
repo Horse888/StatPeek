@@ -4,6 +4,7 @@ import Symbols
 /// Decorative symbols stay inside the popover; status-bar labels remain D/C/M/G.
 @MainActor
 final class ModuleSymbolView: NSImageView {
+    var permitsAnimation = true
     private var isAnimating = false
 
     init(name: String, color: NSColor, frame: NSRect) {
@@ -22,12 +23,12 @@ final class ModuleSymbolView: NSImageView {
     func setAnimating(_ animate: Bool) {
         guard animate != isAnimating else { return }
         isAnimating = animate
-        // Breathe is native to SF Symbols on macOS 15+. Older systems stay static.
-        if #available(macOS 15.0, *) {
+        // Play the native entrance once per visible presentation, never on metric refresh.
+        if #available(macOS 14.0, *) {
             if animate {
-                addSymbolEffect(.breathe.plain.byLayer, options: .repeating.speed(0.65))
+                addSymbolEffect(.bounce.byLayer, options: .nonRepeating.speed(0.8))
             } else {
-                removeAllSymbolEffects()
+                removeAllSymbolEffects(animated: false)
             }
         }
     }

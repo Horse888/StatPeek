@@ -5,7 +5,7 @@
 Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共享 Scheme 均使用 StatPeek。
 当前任务完成原生 macOS 项目、本机界面验证、应用图标、Xcode 应用信息、Applications 安装，并推送到用户授权的 GitHub 公开仓库；商标核验与 App Store 上架另行处理。
 
-应用信息：StatPeek，Bundle ID `com.zyapps.StatPeek`，版本 0.3.2 / Build 7，Utilities 分类，最低 macOS 13.0。原型 `local.StatPeek` 的选择与配色在新标识首次启动时迁移，已有新偏好不覆盖。
+应用信息：StatPeek，Bundle ID `com.zyapps.StatPeek`，版本 0.3.3 / Build 8，Utilities 分类，最低 macOS 13.0。原型 `local.StatPeek` 的选择与配色在新标识首次启动时迁移，已有新偏好不覆盖。
 
 图标：深蓝底板、两排彩色状态指示，见 `icon-design.md`；AppIcon 资源包含 macOS 标准 16–1024 像素尺寸。
 
@@ -119,3 +119,17 @@ Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共
 - 系统颜色面板打开或切换目标时，设置浮层保持显示，数值和配色实时刷新；关闭颜色面板仍可继续操作设置。浮层使用 semi-transient，切到其他应用时主动关闭；状态栏再次点击与 Escape 仍可关闭。
 
 依据：[Apple BreatheSymbolEffect](https://developer.apple.com/documentation/symbols/breathesymboleffect)、[Apple SF Symbols 动画](https://developer.apple.com/design/human-interface-guidelines/sf-symbols)。系统版本门槛以本机 SDK 的 macOS 15.0 声明为准，图层依据 Apple SF Symbols 导出模板核验。
+
+## 0.3.3 窄高玻璃浮层与就地选色
+
+- 浮层宽 288 点，比 380 点减少 24.2%；高度按实际内容自适应（当前内容约 870 点）。以状态栏所在屏幕的可用高度减去 32 点作为上限，仅放不下时启用纵向滚动；卡片宽 260 点，固定标题和页脚始终可见。
+- 勾选框位于最前，后接无背景的彩色装饰图标、名称和圆形玻璃选色入口。未勾选时图标/读数/进度/卡片呈灰色，保存的颜色不变，预览仍更新。
+- 四项使用填充版 internaldrive.fill/cpu.fill/memorychip.fill/cube.fill。GPU 的立方体表达 3D 图形渲染，是应用语义选择，不宣称为 Apple 专用 GPU 图标。
+- 可见时只播放一次原生 Bounce.byLayer（macOS 14+），不在每次读数刷新时重播；未选中/隐藏/减少动态效果立即停止。macOS 13 静态，无自制替代动画。
+- 颜色入口为 minimal NSColorWell，点击默认打开系统颜色 Popover；每个控件按自己的指标保存 RGB，开启连续更新，普通读数刷新不覆盖正在编辑的颜色。保留系统主动“更多颜色”入口。
+- 主浮层、圆形颜色入口、历史范围胶囊和退出胶囊使用 macOS 26+ 原生 NSGlassEffectView；较旧系统使用原生磨砂材质。各玻璃视图保留滚动裁切层级，不跨滚动边界合并提升；无自制模糊/玻璃动画。
+- 页脚左侧版本、右侧裸开机启动勾选项与 24 点高的退出胶囊中心对齐；开机启动没有背景，退出仅为警告红色“退出”文字，无图标。状态/错误用 tooltip/辅助功能帮助，等待批准或失败显示橙色，右键保留系统登录项入口。
+- 历史内容从 420 点缩至 304 点：剩余容量为 20 点青色，变化文案 11 点，时间 10 点；绘图区宽 228 点，时间、计划和说明允许换行。24 小时/7 天/全部使用三个独立胶囊玻璃按钮，平滑渐变线与真实历史保持。
+- 验收原生 Popover 和主浮层共存、颜色目标隔离、灰色静态与颜色恢复、范围按钮和重启保存，保留原数据后安装、推送。用户要求不控制鼠标/键盘后，后续只进行隔离自动测试、源码及安装检查；最终无背景图标版本不操作桌面输入，出现动画及最终视觉待用户自然使用确认。
+
+依据：[Apple NSColorWell.Style.minimal](https://developer.apple.com/documentation/appkit/nscolorwell/style/minimal)、[Apple BounceSymbolEffect](https://developer.apple.com/documentation/symbols/bouncesymboleffect)、[Apple NSGlassEffectView](https://developer.apple.com/documentation/appkit/nsglasseffectview)。

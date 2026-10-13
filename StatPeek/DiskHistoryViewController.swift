@@ -4,6 +4,7 @@ import SwiftUI
 
 @MainActor
 final class DiskHistoryViewController: NSViewController {
+    var contentWidth: CGFloat = 340
     var store: DiskHistoryStore?
     var nextRecordingDate: Date?
     var recordingError: String?
@@ -14,48 +15,65 @@ final class DiskHistoryViewController: NSViewController {
     private let footer = NSTextField(labelWithString: "")
     private let note = NSTextField(wrappingLabelWithString: "")
     private var chart: NSHostingView<DiskHistoryChart>?
+    private var rangeButtons: [NSButton] = []
+    private var rangeSurfaces: [GlassSurfaceView] = []
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 340, height: 396))
+        let innerWidth = contentWidth - 32
+        view = NSView(frame: NSRect(x: 0, y: 0, width: contentWidth, height: 304))
         let heading = NSTextField(labelWithString: "最近记录的剩余空间")
-        heading.font = .systemFont(ofSize: 12)
+        heading.font = .systemFont(ofSize: 10)
         heading.textColor = .secondaryLabelColor
-        heading.frame = NSRect(x: 16, y: 366, width: 308, height: 20)
+        heading.frame = NSRect(x: 16, y: 284, width: innerWidth, height: 16)
         view.addSubview(heading)
-        amount.font = .monospacedDigitSystemFont(ofSize: 28, weight: .semibold)
-        amount.frame = NSRect(x: 16, y: 326, width: 308, height: 36)
+        amount.font = .monospacedDigitSystemFont(ofSize: 20, weight: .semibold)
+        amount.frame = NSRect(x: 16, y: 252, width: innerWidth, height: 28)
+        amount.textColor = .systemTeal
         amount.setAccessibilityIdentifier("disk-history-amount")
         view.addSubview(amount)
-        change.font = .systemFont(ofSize: 14, weight: .medium)
-        change.frame = NSRect(x: 16, y: 294, width: 308, height: 24)
+        change.font = .systemFont(ofSize: 11, weight: .medium)
+        change.frame = NSRect(x: 16, y: 232, width: innerWidth, height: 18)
         change.setAccessibilityIdentifier("disk-history-change")
         view.addSubview(change)
-        timestamp.font = .systemFont(ofSize: 11)
+        timestamp.font = .systemFont(ofSize: 10)
         timestamp.textColor = .secondaryLabelColor
-        timestamp.frame = NSRect(x: 16, y: 270, width: 308, height: 20)
+        timestamp.lineBreakMode = .byWordWrapping
+        timestamp.maximumNumberOfLines = 2
+        timestamp.frame = NSRect(x: 16, y: 206, width: innerWidth, height: 24)
         view.addSubview(timestamp)
-        let ranges = NSSegmentedControl(labels: ["24 小时", "7 天", "全部"], trackingMode: .selectOne,
-                                        target: self, action: #selector(changeRange(_:)))
-        ranges.selectedSegment = range.rawValue
-        ranges.frame = NSRect(x: 16, y: 236, width: 225, height: 26)
-        ranges.setAccessibilityIdentifier("disk-history-range")
-        view.addSubview(ranges)
+        for (index, label) in ["24 小时", "7 天", "全部"].enumerated() {
+            let width = (innerWidth - 12) / 3
+            let surface = GlassSurfaceView(frame: NSRect(x: 16 + CGFloat(index) * (width + 6), y: 178, width: width, height: 24))
+            let button = NSButton(title: label, target: self, action: #selector(changeRange(_:)))
+            button.isBordered = false
+            button.tag = index
+            button.frame = surface.content.bounds
+            button.setAccessibilityIdentifier("history-range-\(index)")
+            surface.content.addSubview(button)
+            view.addSubview(surface)
+            rangeButtons.append(button)
+            rangeSurfaces.append(surface)
+        }
+        updateRangeControls()
         let unit = NSTextField(labelWithString: "剩余空间（G）")
         unit.font = .systemFont(ofSize: 10)
         unit.textColor = .secondaryLabelColor
-        unit.frame = NSRect(x: 16, y: 213, width: 308, height: 18)
+        unit.frame = NSRect(x: 16, y: 160, width: innerWidth, height: 16)
         view.addSubview(unit)
         let hosting = NSHostingView(rootView: DiskHistoryChart(samples: [], range: range, now: Date()))
-        hosting.frame = NSRect(x: 16, y: 60, width: 308, height: 150)
+        hosting.frame = NSRect(x: 16, y: 48, width: innerWidth, height: 110)
+        hosting.setAccessibilityIdentifier("disk-history-chart")
         view.addSubview(hosting)
         chart = hosting
-        footer.font = .systemFont(ofSize: 11)
+        footer.font = .systemFont(ofSize: 9)
         footer.textColor = .secondaryLabelColor
-        footer.frame = NSRect(x: 16, y: 30, width: 308, height: 20)
+        footer.lineBreakMode = .byWordWrapping
+        footer.maximumNumberOfLines = 2
+        footer.frame = NSRect(x: 16, y: 24, width: innerWidth, height: 20)
         footer.setAccessibilityIdentifier("disk-history-schedule")
         view.addSubview(footer)
-        note.font = .systemFont(ofSize: 10)
-        note.frame = NSRect(x: 16, y: 0, width: 308, height: 28)
+        note.font = .systemFont(ofSize: 9)
+        note.frame = NSRect(x: 16, y: 0, width: innerWidth, height: 22)
         note.setAccessibilityIdentifier("disk-history-note")
         view.addSubview(note)
     }
@@ -100,8 +118,20 @@ final class DiskHistoryViewController: NSViewController {
         return formatter.string(from: date)
     }
 
-    @objc private func changeRange(_ sender: NSSegmentedControl) {
-        range = DiskHistoryRange(rawValue: sender.selectedSegment) ?? .day
+    private func updateRangeControls() {
+        for (index, button) in rangeButtons.enumerated() {
+            let selected = index == range.rawValue
+            button.state = selected ? .on : .off
+            button.attributedTitle = NSAttributedString(string: button.title,
+                attributes: [.foregroundColor: selected ? NSColor.controlAccentColor : NSColor.labelColor,
+                             .font: NSFont.systemFont(ofSize: 11, weight: selected ? .semibold : .regular)])
+            rangeSurfaces[index].tintColor = selected ? NSColor.controlAccentColor.withAlphaComponent(0.12) : nil
+        }
+    }
+
+    @objc private func changeRange(_ sender: NSButton) {
+        range = DiskHistoryRange(rawValue: sender.tag) ?? .day
+        updateRangeControls()
         reload()
     }
 }

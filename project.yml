@@ -9,8 +9,8 @@ settings:
     GENERATE_INFOPLIST_FILE: YES
     CODE_SIGN_STYLE: Automatic
     CODE_SIGN_IDENTITY: '-'
-    MARKETING_VERSION: '0.3.2'
-    CURRENT_PROJECT_VERSION: 7
+    MARKETING_VERSION: '0.3.3'
+    CURRENT_PROJECT_VERSION: 8
 targets:
   StatPeek:
     type: application
@@ -44,6 +44,7 @@ targets:
       - path: StatPeek/MetricSelection.swift
       - path: StatPeek/SettingsViewController.swift
       - path: StatPeek/ModuleSymbolView.swift
+      - path: StatPeek/GlassSurfaceView.swift
       - path: StatPeek/StatusStripView.swift
       - path: StatPeek/SystemSampler.swift
       - path: StatPeek/StatusStripLayout.swift
