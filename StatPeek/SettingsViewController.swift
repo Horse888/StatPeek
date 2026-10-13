@@ -10,6 +10,8 @@ final class SettingsViewController: NSViewController {
     private let historyController = DiskHistoryViewController()
     private let scrollView = NSScrollView()
     private var cards: [Metric: MetricCardView] = [:]
+    private var moduleSymbols: [ModuleSymbolView] = []
+    private var loginSymbol: ModuleSymbolView!
     private var loginToggle: NSButton!
     private var loginHint: NSTextField!
     private var loginSettings: NSButton!
@@ -30,9 +32,9 @@ final class SettingsViewController: NSViewController {
         let document = FlippedDashboardView(frame: NSRect(x: 0, y: 0, width: 380, height: 1010))
         scrollView.documentView = document
         view.addSubview(scrollView)
-        var y: CGFloat = 10
+        var y: CGFloat = 8
         for (index, metric) in Metric.allCases.enumerated() {
-            let height: CGFloat = metric == .disk ? 126 : 92
+            let height: CGFloat = metric == .disk ? 108 : 80
             let card = MetricCardView(metric: metric, frame: NSRect(x: 20, y: y, width: 340, height: height))
             card.toggle.tag = index
             card.toggle.target = self
@@ -41,35 +43,45 @@ final class SettingsViewController: NSViewController {
             card.colorButton.action = #selector(showColorPanel(_:))
             document.addSubview(card)
             cards[metric] = card
-            y += height + 10
+            moduleSymbols.append(card.symbol)
+            y += height + 6
         }
-        let loginCard = DashboardCardView(frame: NSRect(x: 20, y: y, width: 340, height: 94))
-        document.addSubview(loginCard)
-        loginToggle = NSButton(checkboxWithTitle: "开机自动启动", target: self, action: #selector(toggleLoginItem(_:)))
-        loginToggle.frame = NSRect(x: 12, y: 56, width: 190, height: 26)
-        loginToggle.allowsMixedState = true
-        loginToggle.setAccessibilityIdentifier("launch-at-login")
-        loginCard.addSubview(loginToggle)
-        loginHint = NSTextField(wrappingLabelWithString: "登录此账户时自动启动")
-        loginHint.font = .systemFont(ofSize: 11)
-        loginHint.textColor = .secondaryLabelColor
-        loginHint.frame = NSRect(x: 32, y: 14, width: 292, height: 36)
-        loginHint.setAccessibilityIdentifier("login-item-status")
-        loginCard.addSubview(loginHint)
-        loginSettings = NSButton(title: "系统设置", target: self, action: #selector(openLoginSettings))
-        loginSettings.bezelStyle = .rounded
-        loginSettings.frame = NSRect(x: 234, y: 56, width: 96, height: 26)
-        loginSettings.isHidden = true
-        loginCard.addSubview(loginSettings)
-        y += 114
-        text("磁盘记录", frame: NSRect(x: 20, y: y, width: 340, height: 24), size: 15, weight: .semibold, in: document)
-        y += 30
+        let historySymbol = ModuleSymbolView(name: "chart.xyaxis.line", color: .systemBlue,
+                                             frame: NSRect(x: 20, y: y + 3, width: 18, height: 18))
+        document.addSubview(historySymbol)
+        moduleSymbols.append(historySymbol)
+        text("磁盘记录", frame: NSRect(x: 46, y: y, width: 314, height: 24), size: 15, weight: .semibold, in: document)
+        y += 28
         let historyCard = DashboardCardView(frame: NSRect(x: 20, y: y, width: 340, height: 412))
         document.addSubview(historyCard)
         addChild(historyController)
         historyController.view.frame = NSRect(x: 0, y: 8, width: 340, height: 396)
         historyCard.addSubview(historyController.view)
-        document.setFrameSize(NSSize(width: 380, height: y + 428))
+        y += 420
+        let loginCard = DashboardCardView(frame: NSRect(x: 20, y: y, width: 340, height: 72))
+        document.addSubview(loginCard)
+        loginSymbol = ModuleSymbolView(name: "power", color: .secondaryLabelColor,
+                                       frame: NSRect(x: 12, y: 44, width: 18, height: 18))
+        loginCard.addSubview(loginSymbol)
+        moduleSymbols.append(loginSymbol)
+        loginToggle = NSButton(checkboxWithTitle: "开机自动启动", target: self, action: #selector(toggleLoginItem(_:)))
+        loginToggle.frame = NSRect(x: 38, y: 40, width: 164, height: 26)
+        loginToggle.allowsMixedState = true
+        loginToggle.setAccessibilityIdentifier("launch-at-login")
+        loginCard.addSubview(loginToggle)
+        loginHint = NSTextField(wrappingLabelWithString: "登录此账户时自动启动")
+        loginHint.font = .systemFont(ofSize: 10)
+        loginHint.textColor = .secondaryLabelColor
+        loginHint.frame = NSRect(x: 32, y: 6, width: 292, height: 30)
+        loginHint.setAccessibilityIdentifier("login-item-status")
+        loginCard.addSubview(loginHint)
+        loginSettings = NSButton(title: "系统设置", target: self, action: #selector(openLoginSettings))
+        loginSettings.bezelStyle = .rounded
+        loginSettings.frame = NSRect(x: 234, y: 40, width: 96, height: 26)
+        loginSettings.isHidden = true
+        loginCard.addSubview(loginSettings)
+        y += 86
+        document.setFrameSize(NSSize(width: 380, height: y))
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
         let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "—"
         let versionLabel = text("v\(version) (\(build))", frame: NSRect(x: 20, y: 16, width: 200, height: 20), size: 11, color: .secondaryLabelColor)
@@ -79,6 +91,28 @@ final class SettingsViewController: NSViewController {
         quit.frame = NSRect(x: 246, y: 10, width: 116, height: 28)
         quit.setAccessibilityIdentifier("quit-app")
         view.addSubview(quit)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateSymbolMotion),
+                                               name: NSView.boundsDidChangeNotification, object: scrollView.contentView)
+        scrollView.contentView.postsBoundsChangedNotifications = true
+        NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(updateSymbolMotion),
+                                                          name: NSWorkspace.accessibilityDisplayOptionsDidChangeNotification, object: nil)
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        updateSymbolMotion()
+    }
+
+    override func viewWillDisappear() {
+        moduleSymbols.forEach { $0.setAnimating(false) }
+        super.viewWillDisappear()
+    }
+
+    @objc private func updateSymbolMotion() {
+        let allowed = view.window?.isVisible == true && !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        for symbol in moduleSymbols {
+            symbol.setAnimating(allowed && !symbol.visibleRect.isEmpty)
+        }
     }
 
     func updateDiskHistory(store: DiskHistoryStore?, nextRecordingDate: Date?, error: String?) {
@@ -113,6 +147,7 @@ final class SettingsViewController: NSViewController {
         loginHint.stringValue = error ?? hint
         loginHint.toolTip = error ?? hint
         loginHint.textColor = error == nil ? .secondaryLabelColor : .systemRed
+        loginSymbol.contentTintColor = status == .enabled ? .systemGreen : .secondaryLabelColor
     }
 
     func update(snapshot: MetricSnapshot, selection: MetricSelection) {
@@ -122,6 +157,7 @@ final class SettingsViewController: NSViewController {
             colors[metric] = color
             cards[metric]?.update(snapshot: snapshot, selected: selection.selected.contains(metric), color: color)
         }
+        updateSymbolMotion()
     }
 
     @objc private func showColorPanel(_ sender: MetricColorButton) {
@@ -200,6 +236,7 @@ private final class MetricCardView: DashboardCardView {
     let metric: Metric
     let toggle: NSButton
     let colorButton: MetricColorButton
+    let symbol: ModuleSymbolView
     private let value = NSTextField(labelWithString: "采样中…")
     private let progress = MetricProgressView()
     private let detail = NSTextField(labelWithString: "")
@@ -209,28 +246,39 @@ private final class MetricCardView: DashboardCardView {
         self.metric = metric
         toggle = NSButton(checkboxWithTitle: metric.title, target: nil, action: nil)
         colorButton = MetricColorButton(metric: metric)
+        let symbolName: String
+        switch metric {
+        case .disk: symbolName = "internaldrive"
+        case .cpu: symbolName = "cpu"
+        case .memory: symbolName = "memorychip"
+        case .gpu: symbolName = "cpu.fill"
+        }
+        symbol = ModuleSymbolView(name: symbolName, color: .labelColor,
+                                  frame: NSRect(x: 12, y: frame.height - 28, width: 18, height: 18))
         super.init(frame: frame)
-        toggle.frame = NSRect(x: 12, y: frame.height - 38, width: 209, height: 26)
+        addSubview(symbol)
+        toggle.frame = NSRect(x: 38, y: frame.height - 32, width: 183, height: 26)
         toggle.font = .systemFont(ofSize: 12, weight: .medium)
         toggle.setAccessibilityIdentifier("toggle-\(metric.rawValue)")
         addSubview(toggle)
         value.font = .monospacedDigitSystemFont(ofSize: 12, weight: .semibold)
         value.alignment = .right
-        value.frame = NSRect(x: 222, y: frame.height - 34, width: 72, height: 18)
+        value.frame = NSRect(x: 222, y: frame.height - 28, width: 72, height: 18)
         value.setAccessibilityIdentifier("reading-\(metric.rawValue)")
-        addSubview(value)
-        colorButton.frame = NSRect(x: 300, y: frame.height - 38, width: 28, height: 28)
+        if metric == .disk { addSubview(value) }
+        colorButton.frame = NSRect(x: 300, y: frame.height - 32, width: 28, height: 28)
         addSubview(colorButton)
-        progress.frame = NSRect(x: 16, y: frame.height - 62, width: 240, height: 6)
+        progress.frame = NSRect(x: 16, y: frame.height - 51, width: 240, height: 6)
         progress.setAccessibilityIdentifier("progress-\(metric.rawValue)")
         addSubview(progress)
-        percentage.font = .monospacedDigitSystemFont(ofSize: 10, weight: .medium)
+        percentage.font = .monospacedDigitSystemFont(ofSize: 11, weight: .semibold)
         percentage.alignment = .right
-        percentage.frame = NSRect(x: 266, y: frame.height - 67, width: 58, height: 17)
+        percentage.frame = NSRect(x: 266, y: frame.height - 56, width: 58, height: 17)
+        percentage.setAccessibilityIdentifier(metric == .disk ? "usage-disk" : "reading-\(metric.rawValue)")
         addSubview(percentage)
         detail.font = .systemFont(ofSize: 10)
         detail.textColor = .secondaryLabelColor
-        detail.frame = NSRect(x: 16, y: 10, width: 310, height: metric == .disk ? 36 : 17)
+        detail.frame = NSRect(x: 16, y: 6, width: 310, height: metric == .disk ? 34 : 17)
         detail.maximumNumberOfLines = 2
         detail.setAccessibilityIdentifier("detail-\(metric.rawValue)")
         addSubview(detail)
@@ -241,12 +289,13 @@ private final class MetricCardView: DashboardCardView {
     func update(snapshot: MetricSnapshot, selected: Bool, color: MetricColor) {
         toggle.state = selected ? .on : .off
         tint = color.nsColor
+        symbol.contentTintColor = tint
         colorButton.color = tint
         value.stringValue = snapshot.readings[metric] ?? "采样中…"
         value.textColor = .labelColor
         progress.color = tint
         progress.percentage = snapshot.percentages[metric]
-        percentage.stringValue = snapshot.percentages[metric].map { MetricMath.percentage($0) } ?? "—"
+        percentage.stringValue = snapshot.percentages[metric].map { MetricMath.percentage($0) } ?? value.stringValue
         if metric == .disk, let disk = snapshot.disk {
             detail.stringValue = "总容量 \(DiskFormatter.format(bytes: disk.totalBytes)) · 已用 \(DiskFormatter.format(bytes: disk.usedBytes))\n剩余 \(DiskFormatter.format(bytes: disk.availableBytes)) · 进度为已用比例"
         } else if metric == .disk { detail.stringValue = "暂时无法读取磁盘容量" }

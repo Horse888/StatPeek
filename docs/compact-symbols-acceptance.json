@@ -1,0 +1,126 @@
+{
+  "date": "2026-10-13",
+  "version": "0.3.1",
+  "build": "6",
+  "tests": {
+    "configuration": "Release",
+    "executed": 43,
+    "failures": 0
+  },
+  "layout": {
+    "disk_card_height": 108,
+    "other_card_height": 80,
+    "card_gap": 6,
+    "startup_after_history": true,
+    "percentages_only_right_of_progress": true
+  },
+  "symbols": {
+    "disk": "internaldrive",
+    "cpu": "cpu",
+    "memory": "memorychip",
+    "gpu": "cpu.fill",
+    "history": "chart.xyaxis.line",
+    "login": "power",
+    "macOS14_native_effect": "pulse.wholeSymbol",
+    "speed": 0.45,
+    "macOS13_fallback": "opacity",
+    "reduced_motion_and_hidden_views_stop": "source-reviewed; system setting was not changed",
+    "statusbar_labels": "D/C/M/G"
+  },
+  "gui": [
+    {
+      "check": "single-percentage-per-metric",
+      "percentages": [
+        "67.6%",
+        "12.4%",
+        "66.6%",
+        "49.0%"
+      ]
+    },
+    {
+      "check": "startup-below-history",
+      "history_y": 496,
+      "startup_y": 950
+    },
+    {
+      "check": "native-symbol-animation-observed",
+      "frames": 8,
+      "seconds": 3.6,
+      "isolated_disk_symbol_pixels_changed": true
+    },
+    {
+      "check": "four-metric-toggles",
+      "restored": true
+    },
+    {
+      "check": "real-relaunch-selection-persistence",
+      "cpu_unchecked_restored_then_reenabled": true
+    },
+    {
+      "check": "scrolled-live-refresh",
+      "status_samples": [
+        "StatPeek · 磁盘剩余空间：159.9G；CPU 使用率：14.5%；内存使用率（估算）：64.4%；GPU 使用率：47.0%",
+        "StatPeek · 磁盘剩余空间：159.9G；CPU 使用率：12.3%；内存使用率（估算）：65.7%；GPU 使用率：51.0%",
+        "StatPeek · 磁盘剩余空间：159.9G；CPU 使用率：12.6%；内存使用率（估算）：65.1%；GPU 使用率：64.0%",
+        "StatPeek · 磁盘剩余空间：159.9G；CPU 使用率：12.1%；内存使用率（估算）：64.5%；GPU 使用率：74.0%"
+      ],
+      "scroll_position": 1,
+      "login_enabled": true
+    },
+    {
+      "check": "user-state-preserved",
+      "original_rows": 362,
+      "current_rows": 365,
+      "colors": {
+        "cpu": "orange",
+        "disk": "blue",
+        "gpu": "green",
+        "memory": "purple"
+      },
+      "selection": [
+        "disk",
+        "cpu",
+        "memory",
+        "gpu"
+      ]
+    }
+  ],
+  "installation": {
+    "app": "/Applications/StatPeek.app",
+    "version": "0.3.1",
+    "build": "6",
+    "sha256": "337d63cdc47e32e9867fe145f5d380ecb7e0aa03c6b1b356305bdd9eb4b8d7f3",
+    "process": "/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+    "pid": "71882",
+    "login_enabled": true,
+    "sign_verified": true,
+    "architectures": "x86_64 arm64",
+    "LSUIElement": true,
+    "ITSAppUsesNonExemptEncryption": false,
+    "original_history_rows_unchanged": 362,
+    "current_history_rows": 366,
+    "statusbar_size": "107, 24",
+    "colors": {
+      "cpu": "orange",
+      "disk": "blue",
+      "gpu": "green",
+      "memory": "purple"
+    },
+    "selection": [
+      "disk",
+      "cpu",
+      "memory",
+      "gpu"
+    ],
+    "installed_relaunch_all_metrics_and_login_preserved": true
+  },
+  "screenshots": [
+    "assets/popover.png",
+    "assets/disk-history.png"
+  ],
+  "qa_recovery": "Initial install preference check found disk unchecked; installation rolled back. Original disk selection restored through UI and installation repeated. Final installed relaunch preserved all four selections, colors and enabled login item. No historical rows modified.",
+  "limitations": [
+    "macOS 13 fallback and Intel hardware not separately runtime tested",
+    "No system reboot or login-cycle test in this iteration"
+  ]
+}

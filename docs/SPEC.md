@@ -5,7 +5,7 @@
 Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共享 Scheme 均使用 StatPeek。
 当前任务完成原生 macOS 项目、本机界面验证、应用图标、Xcode 应用信息、Applications 安装，并推送到用户授权的 GitHub 公开仓库；商标核验与 App Store 上架另行处理。
 
-应用信息：StatPeek，Bundle ID `com.zyapps.StatPeek`，版本 0.3.0 / Build 5，Utilities 分类，最低 macOS 13.0。原型 `local.StatPeek` 的选择与配色在新标识首次启动时迁移，已有新偏好不覆盖。
+应用信息：StatPeek，Bundle ID `com.zyapps.StatPeek`，版本 0.3.1 / Build 6，Utilities 分类，最低 macOS 13.0。原型 `local.StatPeek` 的选择与配色在新标识首次启动时迁移，已有新偏好不覆盖。
 
 图标：深蓝底板、两排彩色状态指示，见 `icon-design.md`；AppIcon 资源包含 macOS 标准 16–1024 像素尺寸。
 
@@ -98,3 +98,14 @@ Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共
 
 - [Apple 平滑单调插值](https://developer.apple.com/documentation/charts/interpolationmethod/monotone)
 - [Apple 图表渐变对齐](https://developer.apple.com/documentation/charts/chartcontent/alignsmarkstyleswithplotarea%28_%3A%29)
+
+## 0.3.1 紧凑卡片
+
+- CPU/内存/GPU 百分比仅在进度条右侧显示，磁盘标题行保留剩余容量；不可用/采样中状态仍在读数位置明确显示。
+- 磁盘卡片从 126 点缩为 108 点，其他指标从 92 点缩为 80 点，间隔从 10 点缩为 6 点。
+- 开机自动启动卡片移到磁盘历史下方、滚动内容最末，固定版本与退出页脚保留。
+- 浮层磁盘/CPU/内存/GPU 使用 internaldrive/cpu/memorychip/cpu.fill，磁盘记录使用 chart.xyaxis.line，启动设置使用 power。指标符号跟随用户配色，启动图标已启用时呈绿色；符号不增加重复辅助功能信息，也不截获点击。
+- 可见模块使用轻微呼吸动画：macOS 14+ 原生 PulseSymbolEffect，macOS 13 透明度动画。关闭浮层、滚出可见区域或系统开启减少动态效果时停止。状态栏保留 D/C/M/G。
+- 用既有仪表盘/历史测试与真实上下滚动验证，安装并同步 GitHub。
+
+动画 API：[Apple PulseSymbolEffect](https://developer.apple.com/documentation/symbols/pulsesymboleffect)。
