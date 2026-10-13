@@ -25,7 +25,9 @@ final class SettingsViewController: NSViewController {
         heading.autoresizingMask = .minYMargin
         subtitle.autoresizingMask = .minYMargin
         scrollView.frame = NSRect(x: 0, y: 48, width: 288, height: 574)
-        scrollView.autoresizingMask = [.width, .height]
+        // Its height is set explicitly below. Glass content can resize again after
+        // window attachment; autoresizing the height would apply the delta twice.
+        scrollView.autoresizingMask = .width
         scrollView.autohidesScrollers = true
         scrollView.hasHorizontalScroller = false
         scrollView.drawsBackground = false
@@ -53,7 +55,7 @@ final class SettingsViewController: NSViewController {
                                              frame: NSRect(x: 17, y: y + 3, width: 18, height: 18))
         document.addSubview(historySymbol)
         moduleSymbols.append(historySymbol)
-        text("磁盘记录", frame: NSRect(x: 44, y: y, width: 230, height: 24), size: 15, weight: .semibold, in: document)
+        text("磁盘记录", frame: NSRect(x: 39, y: y, width: 235, height: 24), size: 15, weight: .semibold, in: document)
         y += 28
         let historyCard = DashboardCardView(frame: NSRect(x: 14, y: y, width: 260, height: 320))
         document.addSubview(historyCard)
@@ -246,7 +248,7 @@ private final class MetricCardView: DashboardCardView {
         case .gpu: symbolName = "cube.fill"
         }
         symbol = ModuleSymbolView(name: symbolName, color: .labelColor,
-                                  frame: NSRect(x: 37, y: frame.height - 28, width: 18, height: 18))
+                                  frame: NSRect(x: 34, y: frame.height - 28, width: 18, height: 18), pointSize: 14)
         super.init(frame: frame)
         addSubview(symbol)
         toggle.frame = NSRect(x: 8, y: frame.height - 32, width: 24, height: 26)
@@ -254,7 +256,7 @@ private final class MetricCardView: DashboardCardView {
         toggle.font = .systemFont(ofSize: 12, weight: .medium)
         toggle.setAccessibilityIdentifier("toggle-\(metric.rawValue)")
         addSubview(toggle)
-        titleLabel.frame = NSRect(x: 64, y: frame.height - 28, width: metric == .disk ? 86 : 150, height: 18)
+        titleLabel.frame = NSRect(x: 56, y: frame.height - 28, width: metric == .disk ? 94 : 158, height: 18)
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
         titleLabel.setAccessibilityElement(false)
         addSubview(titleLabel)

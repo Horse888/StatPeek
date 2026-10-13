@@ -7,10 +7,10 @@ final class ModuleSymbolView: NSImageView {
     var permitsAnimation = true
     private var isAnimating = false
 
-    init(name: String, color: NSColor, frame: NSRect) {
+    init(name: String, color: NSColor, frame: NSRect, pointSize: CGFloat = 16) {
         super.init(frame: frame)
         image = NSImage(systemSymbolName: name, accessibilityDescription: nil)?
-            .withSymbolConfiguration(.init(pointSize: 16, weight: .medium))
+            .withSymbolConfiguration(.init(pointSize: pointSize, weight: .medium))
         contentTintColor = color
         imageScaling = .scaleProportionallyDown
         setAccessibilityElement(false)

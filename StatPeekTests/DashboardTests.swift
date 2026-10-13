@@ -3,6 +3,98 @@ import XCTest
 
 final class DashboardTests: XCTestCase {
     @MainActor
+    func testIndependentWindowLayoutAndScrollAtDifferentScreenHeights() throws {
+        _ = NSApplication.shared
+        try isolated { defaults in
+            let directory = FileManager.default.temporaryDirectory.appendingPathComponent("StatPeekLayoutTests-\(UUID().uuidString)")
+            defer { try? FileManager.default.removeItem(at: directory) }
+            var store: DiskHistoryStore? = try DiskHistoryStore(url: directory.appendingPathComponent("history.sqlite"))
+            let date = Date().addingTimeInterval(-2400)
+            for (index, free) in [310, 308, 309, 306, 307, 312, 310, 311].enumerated() {
+                try store!.append(DiskSample(date: date.addingTimeInterval(Double(index) * 300),
+                                           availableBytes: Int64(free) * 1_000_000_000, volumeID: "synthetic-layout-test"))
+            }
+            let settings = SettingsViewController()
+            defer {
+                settings.updateDiskHistory(store: nil, nextRecordingDate: nil, error: nil)
+                store = nil
+            }
+            let selection = MetricSelection(defaults: defaults)
+            let snapshot = MetricSnapshot(readings: [.disk: "311.0G", .cpu: "100.0%", .memory: "100.0%", .gpu: "100.0%"],
+                                          percentages: [.disk: 37.8, .cpu: 100, .memory: 100, .gpu: 100],
+                                          disk: DiskCapacity(totalBytes: 500_000_000_000, availableBytes: 311_000_000_000))
+            settings.update(snapshot: snapshot, selection: selection)
+            settings.updateLoginItem(status: .enabled, error: nil)
+            settings.updateDiskHistory(store: store, nextRecordingDate: date.addingTimeInterval(2400), error: nil)
+            let version = try XCTUnwrap(descendants(settings.view).first { $0.accessibilityIdentifier() == "app-version" } as? NSTextField)
+            version.stringValue = "v0.3.4 (9)"
+            let scroll = try XCTUnwrap(descendants(settings.view).compactMap { $0 as? NSScrollView }.first)
+            let document = try XCTUnwrap(scroll.documentView)
+            for appearance in [NSAppearance.Name.aqua, .darkAqua] {
+                // Hidden independent windows never activate or receive desktop input.
+                let window = NSWindow(contentRect: settings.view.bounds, styleMask: .borderless, backing: .buffered, defer: false)
+                window.isReleasedWhenClosed = false
+                window.ignoresMouseEvents = true
+                window.animationBehavior = .none
+                window.setFrameOrigin(NSPoint(x: 30, y: 80))
+                window.appearance = NSAppearance(named: appearance)
+                window.contentView = settings.view
+                defer { window.contentView = nil; window.close() }
+                for height: CGFloat in [1378, 736, 568, 448] {
+                    settings.prepareToShow(availableHeight: height)
+                    window.setContentSize(settings.view.frame.size)
+                    XCTAssertFalse(window.isKeyWindow)
+                    XCTAssertFalse(window.isMainWindow)
+                    settings.view.layoutSubtreeIfNeeded()
+                    RunLoop.main.run(until: Date().addingTimeInterval(0.04))
+                    XCTAssertEqual(scroll.frame.minY, 48, accuracy: 0.5)
+                    XCTAssertEqual(scroll.frame.maxY, settings.view.bounds.height - 78, accuracy: 0.5,
+                                   "Window attachment must not resize the explicit scroll viewport a second time")
+                    XCTAssertLessThanOrEqual(settings.view.frame.height, height)
+                    XCTAssertEqual(scroll.hasVerticalScroller, document.frame.height > scroll.contentView.bounds.height + 0.5)
+                    let maximumOffset = max(0, document.frame.height - scroll.contentView.bounds.height)
+                    for (position, offset) in [("top", CGFloat.zero), ("middle", maximumOffset / 2), ("bottom", maximumOffset)] {
+                        if maximumOffset == 0 && position != "top" { continue }
+                        scroll.contentView.scroll(to: NSPoint(x: 0, y: offset))
+                        scroll.reflectScrolledClipView(scroll.contentView)
+                        settings.update(snapshot: snapshot, selection: selection)
+                        assertLabelsFit(in: settings.view)
+                        XCTAssertEqual(scroll.contentView.bounds.origin.y, offset, accuracy: 0.5, "Refresh must preserve scroll position")
+                        let footer = try XCTUnwrap(descendants(settings.view).first { $0.accessibilityIdentifier() == "quit-app" })
+                        let footerFrame = settings.view.convert(footer.bounds, from: footer)
+                        XCTAssertTrue(settings.view.bounds.contains(footerFrame))
+                        XCTAssertLessThanOrEqual(footerFrame.maxY, scroll.frame.minY)
+                        RunLoop.main.run(until: Date().addingTimeInterval(0.12))
+                        let image = try XCTUnwrap(settings.view.bitmapImageRepForCachingDisplay(in: settings.view.bounds))
+                        settings.view.cacheDisplay(in: settings.view.bounds, to: image)
+                        let png = try XCTUnwrap(image.representation(using: .png, properties: [:]))
+                        let attachment = XCTAttachment(data: png, uniformTypeIdentifier: "public.png")
+                        attachment.name = "Independent layout fixture - \(appearance.rawValue) - \(Int(height)) - \(position)"
+                        attachment.lifetime = .keepAlways
+                        add(attachment)
+                    }
+                }
+                let measurements: [[String: Any]] = descendants(settings.view).compactMap { item in
+                    guard let field = item as? NSTextField, !field.stringValue.isEmpty, let cell = field.cell else { return nil }
+                    let needed = cell.cellSize(forBounds: NSRect(x: 0, y: 0, width: field.bounds.width, height: 10000))
+                    return ["text": field.stringValue, "frame": NSStringFromRect(field.frame),
+                            "natural": NSStringFromSize(cell.cellSize), "needed": NSStringFromSize(needed)]
+                }
+                let measurement = XCTAttachment(data: try JSONSerialization.data(withJSONObject: measurements, options: [.prettyPrinted]), uniformTypeIdentifier: "public.json")
+                measurement.name = "Independent text measurement - \(appearance.rawValue)"
+                measurement.lifetime = .keepAlways
+                add(measurement)
+                settings.update(snapshot: MetricSnapshot(readings: [.disk: "采样中…", .cpu: "采样中…", .memory: "不可用", .gpu: "不可用"]), selection: selection)
+                settings.updateDiskHistory(store: nil, nextRecordingDate: nil, error: "暂时无法读取磁盘剩余空间，历史记录已保留")
+                settings.prepareToShow(availableHeight: 568)
+                assertLabelsFit(in: settings.view)
+                settings.update(snapshot: snapshot, selection: selection)
+                settings.updateDiskHistory(store: store, nextRecordingDate: date.addingTimeInterval(2700), error: nil)
+            }
+        }
+    }
+
+    @MainActor
     func testDashboardFitsItsContentAndScrollsOnlyWhenScreenIsShort() throws {
         let settings = SettingsViewController()
         _ = settings.view
@@ -156,6 +248,28 @@ final class DashboardTests: XCTestCase {
             XCTAssertGreaterThan(changed(zero, half), 50, "An extreme custom color must remain visible on the track")
             XCTAssertGreaterThan(changed(half, full), 50)
             XCTAssertEqual(try pixels(.nan), unknown)
+        }
+    }
+
+    @MainActor
+    private func assertLabelsFit(in root: NSView, file: StaticString = #filePath, line: UInt = #line) {
+        for item in descendants(root) {
+            guard let field = item as? NSTextField, !field.stringValue.isEmpty, let cell = field.cell else { continue }
+            let size = cell.cellSize(forBounds: NSRect(x: 0, y: 0, width: field.bounds.width, height: 10000))
+            XCTAssertLessThanOrEqual(size.width, field.bounds.width + 0.5, "Truncated width: \(field.stringValue)", file: file, line: line)
+            XCTAssertLessThanOrEqual(size.height, field.bounds.height + 0.5, "Truncated height: \(field.stringValue)", file: file, line: line)
+        }
+        for parent in [root] + descendants(root) {
+            let labels = parent.subviews.compactMap { $0 as? NSTextField }.filter { !$0.stringValue.isEmpty }
+            for (index, label) in labels.enumerated() {
+                for other in labels.dropFirst(index + 1) {
+                    XCTAssertFalse(label.frame.intersects(other.frame), "Overlapping labels: \(label.stringValue) / \(other.stringValue)", file: file, line: line)
+                }
+            }
+            guard let symbol = parent.subviews.compactMap({ $0 as? ModuleSymbolView }).first,
+                  let title = labels.first(where: { Metric.allCases.map(\.title).contains($0.stringValue) }) else { continue }
+            XCTAssertEqual(symbol.frame.midY, title.frame.midY, accuracy: 0.5, file: file, line: line)
+            XCTAssertEqual(title.frame.minX - symbol.frame.maxX, 4, accuracy: 0.5, file: file, line: line)
         }
     }
 

@@ -133,3 +133,10 @@ Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共
 - 验收原生 Popover 和主浮层共存、颜色目标隔离、灰色静态与颜色恢复、范围按钮和重启保存，保留原数据后安装、推送。用户要求不控制鼠标/键盘后，后续只进行隔离自动测试、源码及安装检查；最终无背景图标版本不操作桌面输入，出现动画及最终视觉待用户自然使用确认。
 
 依据：[Apple NSColorWell.Style.minimal](https://developer.apple.com/documentation/appkit/nscolorwell/style/minimal)、[Apple BounceSymbolEffect](https://developer.apple.com/documentation/symbols/bouncesymboleffect)、[Apple NSGlassEffectView](https://developer.apple.com/documentation/appkit/nsglasseffectview)。
+
+## 0.3.4 独立窗口排版验证
+
+- 指标图标与标题共用中心线，间隔 4 点；指标符号字号 14，历史标题间距也为 4 点。保留无背景装饰图标及可点击控件玻璃外观。
+- 显式设置滚动区高度，仅宽度自动调整；避免玻璃内容层在窗口挂载后再调整尺寸时，滚动区重复应用高度变化。标题和页脚仍固定。
+- 使用独立测试窗口检查浅/深色、1378/736/568/448 点可用高度与短屏顶部/中段/底部；窗口不成为 key/main，测试进程不替代用户前台应用，不发送鼠标或键盘事件。
+- 自动检查文字容纳尺寸、同层标签不重叠、刷新不改变滚动位置、最大滚动能抵达末尾；既有采样、偏好、记录与登录项逻辑保持。测试截图明确为合成数据。

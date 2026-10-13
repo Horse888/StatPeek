@@ -1,0 +1,519 @@
+{
+  "date": "2026-10-13",
+  "version": "0.3.4",
+  "build": "9",
+  "tests": {
+    "passed": 45,
+    "failed": 0,
+    "result_bundle": "accepted-tests.xcresult",
+    "scope": [
+      "native window attachment and resize",
+      "four available screen heights",
+      "refresh preserves scroll offsets",
+      "fixed footer stays reachable",
+      "text cell sizes fit label frames",
+      "sibling labels do not overlap",
+      "icon and title share center line with 4pt gap",
+      "loading and unavailable metrics and empty history"
+    ]
+  },
+  "fixture_rendering": {
+    "synthetic_data": true,
+    "screen_available_heights": [
+      1378,
+      736,
+      568,
+      448
+    ],
+    "states": [
+      {
+        "actual_height": 870,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 1378,
+        "name": "light-1378-top",
+        "offset": 0,
+        "scrolling": false,
+        "sequence": 1,
+        "viewport_height": 744,
+        "window": 23219
+      },
+      {
+        "actual_height": 736,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 736,
+        "name": "light-736-top",
+        "offset": 0,
+        "scrolling": true,
+        "sequence": 2,
+        "viewport_height": 610,
+        "window": 23219
+      },
+      {
+        "actual_height": 736,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 736,
+        "name": "light-736-middle",
+        "offset": 67,
+        "scrolling": true,
+        "sequence": 3,
+        "viewport_height": 610,
+        "window": 23219
+      },
+      {
+        "actual_height": 736,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 736,
+        "name": "light-736-bottom",
+        "offset": 134,
+        "scrolling": true,
+        "sequence": 4,
+        "viewport_height": 610,
+        "window": 23219
+      },
+      {
+        "actual_height": 568,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 568,
+        "name": "light-568-top",
+        "offset": 0,
+        "scrolling": true,
+        "sequence": 5,
+        "viewport_height": 442,
+        "window": 23219
+      },
+      {
+        "actual_height": 568,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 568,
+        "name": "light-568-middle",
+        "offset": 151,
+        "scrolling": true,
+        "sequence": 6,
+        "viewport_height": 442,
+        "window": 23219
+      },
+      {
+        "actual_height": 568,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 568,
+        "name": "light-568-bottom",
+        "offset": 302,
+        "scrolling": true,
+        "sequence": 7,
+        "viewport_height": 442,
+        "window": 23219
+      },
+      {
+        "actual_height": 448,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 448,
+        "name": "light-448-top",
+        "offset": 0,
+        "scrolling": true,
+        "sequence": 8,
+        "viewport_height": 322,
+        "window": 23219
+      },
+      {
+        "actual_height": 448,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 448,
+        "name": "light-448-middle",
+        "offset": 211,
+        "scrolling": true,
+        "sequence": 9,
+        "viewport_height": 322,
+        "window": 23219
+      },
+      {
+        "actual_height": 448,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 448,
+        "name": "light-448-bottom",
+        "offset": 422,
+        "scrolling": true,
+        "sequence": 10,
+        "viewport_height": 322,
+        "window": 23219
+      },
+      {
+        "actual_height": 870,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 1378,
+        "name": "dark-1378-top",
+        "offset": 0,
+        "scrolling": false,
+        "sequence": 11,
+        "viewport_height": 744,
+        "window": 23222
+      },
+      {
+        "actual_height": 736,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 736,
+        "name": "dark-736-top",
+        "offset": 0,
+        "scrolling": true,
+        "sequence": 12,
+        "viewport_height": 610,
+        "window": 23222
+      },
+      {
+        "actual_height": 736,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 736,
+        "name": "dark-736-middle",
+        "offset": 67,
+        "scrolling": true,
+        "sequence": 13,
+        "viewport_height": 610,
+        "window": 23222
+      },
+      {
+        "actual_height": 736,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 736,
+        "name": "dark-736-bottom",
+        "offset": 134,
+        "scrolling": true,
+        "sequence": 14,
+        "viewport_height": 610,
+        "window": 23222
+      },
+      {
+        "actual_height": 568,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 568,
+        "name": "dark-568-top",
+        "offset": 0,
+        "scrolling": true,
+        "sequence": 15,
+        "viewport_height": 442,
+        "window": 23222
+      },
+      {
+        "actual_height": 568,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 568,
+        "name": "dark-568-middle",
+        "offset": 151,
+        "scrolling": true,
+        "sequence": 16,
+        "viewport_height": 442,
+        "window": 23222
+      },
+      {
+        "actual_height": 568,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 568,
+        "name": "dark-568-bottom",
+        "offset": 302,
+        "scrolling": true,
+        "sequence": 17,
+        "viewport_height": 442,
+        "window": 23222
+      },
+      {
+        "actual_height": 448,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 448,
+        "name": "dark-448-top",
+        "offset": 0,
+        "scrolling": true,
+        "sequence": 18,
+        "viewport_height": 322,
+        "window": 23222
+      },
+      {
+        "actual_height": 448,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 448,
+        "name": "dark-448-middle",
+        "offset": 211,
+        "scrolling": true,
+        "sequence": 19,
+        "viewport_height": 322,
+        "window": 23222
+      },
+      {
+        "actual_height": 448,
+        "app_in_foreground": false,
+        "document_height": 744,
+        "ignores_mouse": true,
+        "is_key": false,
+        "is_main": false,
+        "limit": 448,
+        "name": "dark-448-bottom",
+        "offset": 422,
+        "scrolling": true,
+        "sequence": 20,
+        "viewport_height": 322,
+        "window": 23222
+      }
+    ],
+    "text_measurements": [
+      {
+        "frame": "{{14, 402}, {260, 24}}",
+        "natural": "{79.878367024706677, 21}",
+        "needed": "{79.878367024706677, 21}",
+        "text": "StatPeek"
+      },
+      {
+        "frame": "{{14, 380}, {260, 18}}",
+        "natural": "{157.89558760943581, 14}",
+        "needed": "{157.89558760943581, 14}",
+        "text": "勾选显示在状态栏 · 每 2 秒更新"
+      },
+      {
+        "frame": "{{56, 80}, {94, 18}}",
+        "natural": "{75.509727626459139, 15}",
+        "needed": "{75.509727626459139, 15}",
+        "text": "磁盘剩余空间"
+      },
+      {
+        "frame": "{{150, 80}, {68, 18}}",
+        "natural": "{48.507331848144531, 15}",
+        "needed": "{48.507331848144531, 15}",
+        "text": "311.0G"
+      },
+      {
+        "frame": "{{188, 52}, {58, 17}}",
+        "natural": "{40.542134046554565, 14}",
+        "needed": "{40.542134046554565, 14}",
+        "text": "37.8%"
+      },
+      {
+        "frame": "{{14, 6}, {232, 34}}",
+        "natural": "{137.99528058122567, 26}",
+        "needed": "{137.99528058122567, 26}",
+        "text": "总容量 500.0G · 已用 189.0G\n剩余 311.0G · 进度为已用比例"
+      },
+      {
+        "frame": "{{56, 52}, {158, 18}}",
+        "natural": "{68.468658044644371, 15}",
+        "needed": "{68.468658044644371, 15}",
+        "text": "CPU 使用率"
+      },
+      {
+        "frame": "{{188, 24}, {58, 17}}",
+        "natural": "{47.824427127838135, 14}",
+        "needed": "{47.824427127838135, 14}",
+        "text": "100.0%"
+      },
+      {
+        "frame": "{{14, 6}, {232, 17}}",
+        "natural": "{133.24124513618679, 13}",
+        "needed": "{133.24124513618679, 13}",
+        "text": "两次采样之间的处理器使用率"
+      },
+      {
+        "frame": "{{56, 52}, {158, 18}}",
+        "natural": "{103.10894941634241, 15}",
+        "needed": "{103.10894941634241, 15}",
+        "text": "内存使用率（估算）"
+      },
+      {
+        "frame": "{{188, 24}, {58, 17}}",
+        "natural": "{47.824427127838135, 14}",
+        "needed": "{47.824427127838135, 14}",
+        "text": "100.0%"
+      },
+      {
+        "frame": "{{14, 6}, {232, 17}}",
+        "natural": "{132.24492339494165, 13}",
+        "needed": "{132.24492339494165, 13}",
+        "text": "估算使用量 · 不含可清除内存"
+      },
+      {
+        "frame": "{{56, 52}, {158, 18}}",
+        "natural": "{68.786231592007653, 15}",
+        "needed": "{68.786231592007653, 15}",
+        "text": "GPU 使用率"
+      },
+      {
+        "frame": "{{188, 24}, {58, 17}}",
+        "natural": "{47.824427127838135, 14}",
+        "needed": "{47.824427127838135, 14}",
+        "text": "100.0%"
+      },
+      {
+        "frame": "{{14, 6}, {232, 17}}",
+        "natural": "{132.24492339494165, 13}",
+        "needed": "{132.24492339494165, 13}",
+        "text": "设备使用率 · 取决于驱动支持"
+      },
+      {
+        "frame": "{{39, 380}, {235, 24}}",
+        "natural": "{63.533073929961091, 19}",
+        "needed": "{63.533073929961091, 19}",
+        "text": "磁盘记录"
+      },
+      {
+        "frame": "{{16, 284}, {228, 16}}",
+        "natural": "{93.474708171206245, 13}",
+        "needed": "{93.474708171206245, 13}",
+        "text": "最近记录的剩余空间"
+      },
+      {
+        "frame": "{{16, 252}, {228, 28}}",
+        "natural": "{74.383442551828921, 24}",
+        "needed": "{74.383442551828921, 24}",
+        "text": "311.0G"
+      },
+      {
+        "frame": "{{16, 232}, {228, 18}}",
+        "natural": "{96.381500565124398, 14}",
+        "needed": "{96.381500565124398, 14}",
+        "text": "剩余空间增加 1.0G"
+      },
+      {
+        "frame": "{{16, 206}, {228, 24}}",
+        "natural": "{182.04801495622567, 13}",
+        "needed": "{182.04801495622567, 13}",
+        "text": "记录于 10-13 21:35 · 对比 10-13 21:30"
+      },
+      {
+        "frame": "{{16, 160}, {228, 16}}",
+        "natural": "{64.115433234030476, 13}",
+        "needed": "{64.115433234030476, 13}",
+        "text": "剩余空间（G）"
+      },
+      {
+        "frame": "{{16, 24}, {228, 20}}",
+        "natural": "{140.78561603234436, 11}",
+        "needed": "{140.78561603234436, 11}",
+        "text": "累计 8 条记录 · 下次 10-13 21:45"
+      },
+      {
+        "frame": "{{16, 0}, {228, 22}}",
+        "natural": "{193.48681830617701, 11}",
+        "needed": "{193.48681830617701, 11}",
+        "text": "每 5 分钟记录 · 只保存在本机，不自动弹出提示"
+      },
+      {
+        "frame": "{{14, 15}, {66, 18}}",
+        "natural": "{50.93359375, 13}",
+        "needed": "{50.93359375, 13}",
+        "text": "v0.3.4 (9)"
+      }
+    ],
+    "posted_input_events": false,
+    "mouse_events_received": false,
+    "window_became_key_or_main": false,
+    "fixture_app_became_foreground": false,
+    "capture": "Only owned independent fixture windows; no desktop region captured"
+  },
+  "resolved_regression": {
+    "before": "NSGlassEffectView resized its content after window attachment; the scroll view height autoresizing applied the height delta again, creating gaps or overlapping the fixed header",
+    "after": "The viewport height is set explicitly and only width autoresizes; late window attachment preserves viewport height = content height - 126"
+  },
+  "install": {
+    "app": "/Applications/StatPeek.app",
+    "version": "0.3.4",
+    "build": "9",
+    "sha256": "35b9611c55c936a1734fdc30e6dc92d3330093817c787056bf83e34e9d1e0059",
+    "process": "/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+    "pid": "11870",
+    "sign_verified": true,
+    "architectures": "x86_64 arm64",
+    "LSUIElement": true,
+    "ITSAppUsesNonExemptEncryption": false,
+    "original_history_rows_unchanged": 403,
+    "current_history_rows": 403,
+    "colors": {
+      "cpu": "orange",
+      "disk": "#FFE2D6",
+      "gpu": "green",
+      "memory": "#FFFB00"
+    },
+    "selection": [
+      "disk",
+      "cpu",
+      "memory",
+      "gpu"
+    ],
+    "input_automation_used": false,
+    "final_revision": "Aligned compact icons and viewport height double-resize fix"
+  },
+  "limitations": [
+    "Native menu-bar popover not opened by desktop automation in this revision",
+    "Independent windows show the system inactive-control appearance",
+    "macOS 13 and Intel hardware not individually exercised"
+  ]
+}

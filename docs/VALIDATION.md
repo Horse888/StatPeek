@@ -1,5 +1,25 @@
 # 验证记录
 
+## 0.3.4 / Build 9 · 2026-10-13
+
+- 最终 Release **45 项 XCTest 通过，0 失败**，覆盖窗口挂载/缩放后的滚动区边界、刷新保持偏移、固定页脚、正常/采样中/不可用/空历史文字尺寸、同层文本不重叠、指标图标居中及 4 点间距。
+- 真实独立窗口发现并修复了仅查隐藏视图未覆盖的高度重复调整：玻璃内容层晚调整时，滚动区的 height autoresizing 重复应用尺寸差，造成空白或压住标题。修复为高度显式布局、仅宽度 autoresizing；窗口布局完成后再断言高度与边界。
+- 独立原生测试窗口浅/深色共 **20 个状态**：可用高度 1378、736、568、448 点；后三档分别检查顶部、中段和底部。完整内容高 870 点，视口 744 点，不滚动；小屏视口分别为 610、442、322 点，可滚到底部，刷新不跳动。固定标题和页脚无覆盖，所测文案没有宽/高截断或同层重叠。
+- 图标与指标文字共用中心线并收紧至 4 点间隔，指标符号改为 14 点；历史标题图标间距也收紧至 4 点。实际绘制截图已查看，浅/深色及最短屏幕边界检查通过。
+- 全程没有发送鼠标或键盘事件。独立窗口不接收点击，不成为 key/main；每个截图状态核验测试进程未成为前台应用。通过程序操作自己的 scroll view，并只截取自己的窗口。临时偏好与临时 SQLite 中的合成读数不进入实际用户数据库。
+- XCTest 进程内调用系统截屏失败，因此自动测试保留尺寸/布局检查，实际玻璃绘制由独立原生工具配合外部窗口截屏完成；未将失败尝试或不完整的隐藏玻璃截图当作最终可见证据。
+- `/Applications/StatPeek.app` 已更新为 **0.3.4 (9)**；唯一进程来自固定路径，双架构，严格签名验证通过；有效 LSUIElement=true 和 ITSAppUsesNonExemptEncryption=false 为布尔值。构建与安装可执行文件 SHA-256 一致：`35b9611c55c936a1734fdc30e6dc92d3330093817c787056bf83e34e9d1e0059`。
+- 更新前的选择和颜色保留，403 条原真实磁盘记录逐行未变，安装时累计 403 条；通过进程终止及后台启动替换，未操作桌面输入。构建重复 App 与旧安装备份已移除。
+- 当前修订未通过桌面自动化打开实际菜单栏 Popover；独立窗口验证的是同一套原生内容视图及布局，不替代实际 NSPopover 宿主的最终可见验收。macOS 13 与 Intel 实机未单独运行。
+
+以下为独立测试窗口（合成数据，非本机指标截图；勾选控件呈系统非激活态）：
+
+<img src="assets/layout-fixture-full.png" width="288" alt="Independent fixture at full content height">
+<img src="assets/layout-fixture-small-top.png" width="288" alt="Independent fixture small-screen top">
+<img src="assets/layout-fixture-small-bottom.png" width="288" alt="Independent fixture small-screen bottom">
+
+结构化证据见 [independent-layout-acceptance.json](independent-layout-acceptance.json)。以下为历史版本证据。
+
 ## 0.3.3 / Build 8 · 2026-10-13
 
 - 最终自适应布局完整 Release 套件 **44 项 XCTest 通过，0 失败**。独立控件验证包含颜色初始化不写入、CPU/GPU 目标隔离、正在编辑的颜色不被实时刷新覆盖、未选中显示灰色且原颜色保留；新增高屏完整容纳、短屏滚动、恢复高屏重置偏移及固定页脚可达性检查。
