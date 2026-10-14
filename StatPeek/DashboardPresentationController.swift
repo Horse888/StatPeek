@@ -54,9 +54,10 @@ final class DashboardPresentationController {
         let wasShown = isShown
         removeDismissalObservers()
         guard wasShown else { return }
-        // Deactivate only this dashboard's wells before hiding their parent.
+        // Finish each native popover's presentation before deactivating its color well.
+        // Hiding/closing its NSWindow alone leaves NSPopover.isShown stale on reopen.
+        closeChildPopovers(of: panel)
         if let root = panel.contentView { deactivateColorWells(in: root) }
-        panel.childWindows?.forEach { $0.orderOut(nil) }
         if NSColorPanel.sharedColorPanelExists { NSColorPanel.shared.orderOut(nil) }
         panel.orderOut(nil)
         onClose?()
@@ -126,6 +127,27 @@ final class DashboardPresentationController {
     private func deactivateColorWells(in view: NSView) {
         (view as? NSColorWell)?.deactivate()
         view.subviews.forEach { deactivateColorWells(in: $0) }
+    }
+
+    private func closeChildPopovers(of window: NSWindow) {
+        for child in window.childWindows ?? [] {
+            closeChildPopovers(of: child)
+            var responder: NSResponder? = child.contentView
+            var visited = Set<ObjectIdentifier>()
+            var closedPopover = false
+            while let current = responder, visited.insert(ObjectIdentifier(current)).inserted {
+                if let popover = current as? NSPopover {
+                    let animated = popover.animates
+                    popover.animates = false
+                    popover.close()
+                    if !popover.isShown { popover.animates = animated }
+                    closedPopover = true
+                    break
+                }
+                responder = current.nextResponder
+            }
+            if !closedPopover { child.close() }
+        }
     }
 }
 

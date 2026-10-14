@@ -1,5 +1,23 @@
 # 验证记录
 
+## 0.3.6 / Build 11 · 2026-10-14
+
+- 真实独立颜色控件回放复现旧行为：关闭主面板后，原生颜色 NSPopover.isShown 仍为 true，重开同一控件后没有可见颜色窗口，回归程序退出 1。仅隐藏/关闭子 NSWindow 不能完成 Popover 自身生命周期；保留动画的 close 也会被紧接着隐藏父窗口打断。
+- 修复为通过公开 nextResponder 链取得 NSPopover，在收起主面板之前暂时禁止其关闭动画并同步 close，确认 isShown=false 后恢复动画设置，再取消颜色井激活及隐藏父面板。无私有选择器、KVC 或系统输入注入。
+- 最终 Release **50 项 XCTest 通过，0 失败**。新增真实 NSColorWell / NSPopover / NSColorPanel 集成回归：四项各三阶段，选色关闭、未选色取消关闭、重开再选色；同时检查刷新时两层保持显示、关闭时两层和颜色井状态清空、颜色只写入对应项且从独立偏好恢复。
+- 独立原生工具额外通过 **12 个窗口场景**并保存真实颜色 Popover 截图。每次使用控件 performClick 打开系统颜色选择器，使用 NSColorPanel.shared.color 通过 AppKit 激活颜色井通路提交 #336699 / #CC3355，未直接调用应用颜色回调。主面板一直显示，关闭后子窗口与 isShown 均为 false，重开可再次提交。
+- 测试未移动鼠标、发送桌面鼠标或键盘事件、切换前台应用；所有控件动作、颜色模型提交及状态检查局限于独立进程。测试窗口不接收点击且不成为 key/main。使用唯一 UserDefaults suite 与合成读数，不打开正式磁盘库；没有物理点击色块，截图明确为测试数据。
+- 早期试探中，当前 AppKit 的色块 accessibilityPerformPress 触发系统适配器异常；该尝试不计作有效选色证据。最终框架改用公开系统颜色模型通路，既能观察真实保存回调，也无需创建输入事件。
+- 最终 `/Applications/StatPeek.app` 为 **0.3.6 (11)**，唯一进程来自固定路径；arm64/x86_64，严格签名通过；有效 LSUIElement=true、ITSAppUsesNonExemptEncryption=false 为布尔值。构建与安装可执行文件 SHA-256 一致：`35c32dec0b66389e801531ac407db8d4dfb3e9109997c388748f79915f3c7c49`。
+- 用户配色及选择保留，610 条原磁盘记录逐行未变，安装时共 610 条。替换及后台启动不操作桌面输入，已移除本次旧安装备份、暂存及构建重复 App。macOS 13 / Intel 实机未单独运行。
+
+下图为独立窗口中的首次选色及关闭重开后的再次选色（合成数据）：
+
+<img src="assets/color-lifecycle-first.png" width="340" alt="Native picker and parent stay visible during the first color edit">
+<img src="assets/color-lifecycle-reopened.png" width="340" alt="Native picker reopened and committed a second color">
+
+结构化证据见 [color-lifecycle-acceptance.json](color-lifecycle-acceptance.json)。以下为历史版本证据。
+
 ## 0.3.5 / Build 10 · 2026-10-14
 
 - 最终 Release **49 项 XCTest 通过，0 失败**。新增真实 NSPanel 上的状态栏按下/失活/按钮动作顺序、100 次快速开关奇偶性及延迟重开、颜色窗口保留、外部关闭/重复关闭、cancelOperation 和多屏边界回归。其余布局、采样、存储和颜色测试保留，版本标签更新为两位 build 检查宽度。

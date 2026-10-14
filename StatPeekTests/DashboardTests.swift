@@ -27,7 +27,7 @@ final class DashboardTests: XCTestCase {
             settings.updateLoginItem(status: .enabled, error: nil)
             settings.updateDiskHistory(store: store, nextRecordingDate: date.addingTimeInterval(2400), error: nil)
             let version = try XCTUnwrap(descendants(settings.view).first { $0.accessibilityIdentifier() == "app-version" } as? NSTextField)
-            version.stringValue = "v0.3.5 (10)"
+            version.stringValue = "v0.3.6 (11)"
             let scroll = try XCTUnwrap(descendants(settings.view).compactMap { $0 as? NSScrollView }.first)
             let document = try XCTUnwrap(scroll.documentView)
             for appearance in [NSAppearance.Name.aqua, .darkAqua] {

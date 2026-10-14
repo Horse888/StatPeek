@@ -150,3 +150,10 @@ Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共
 - 独立窗口按生产展示路径运行，关闭桌面输入监听和激活，直接调用自己的事件路由；验证 200 次开关、20 个浅深/高度/滚动状态，并检查偶数次点击后保持关闭。保留事件回放与物理桌面事件的证据边界。
 
 参考：[Apple NSPopover 行为](https://developer.apple.com/documentation/appkit/nspopover)、[hasFullSizeContent 与安全区域](https://developer.apple.com/documentation/appkit/nspopover/hasfullsizecontent)、[NSWindow.animationBehavior](https://developer.apple.com/documentation/appkit/nswindow/animationbehavior-swift.property)。
+
+## 0.3.6 颜色 Popover 联动生命周期
+
+- 打开系统颜色 Popover 时主浮层保持可见；从状态栏关闭主浮层时，子 Popover 的显示状态与窗口都必须同步结束；重开后同一颜色控件可再次选色。
+- 通过子窗口内容的公开 nextResponder 链找到 NSPopover，先关闭其动画并调用 close，待 isShown=false 后恢复原动画设置；随后取消颜色井激活并隐藏父面板。避免只隐藏窗口或在关闭动画结束前隐藏父面板导致内部状态残留。
+- 四个指标分别验证选色、取消、重开选色三阶段，颜色变化必须经 AppKit 的真实颜色面板→激活颜色井通路进入现有保存回调；其他指标不变，重建选择对象仍读到保存值。
+- 独立工具使用隔离偏好和合成读数，不发送桌面输入、不激活应用；采用公开控件方法和系统颜色模型，截图只包含自己的窗口。

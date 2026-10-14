@@ -10,6 +10,7 @@ import time
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', required=True, type=Path, help='A new directory for fixture screenshots and measurements')
+    parser.add_argument('--color-picker', action='store_true', help='Verify native color Popover close/reopen lifecycle instead of the layout matrix')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parent.parent
     output = args.output.resolve()
@@ -23,7 +24,8 @@ def main():
     sources = ['SettingsViewController', 'GlassSurfaceView', 'ModuleSymbolView', 'Metrics', 'MetricSelection',
                'StatusStripLayout', 'StatusStripView', 'SystemSampler', 'LoginItemController', 'DashboardPresentationController',
                'DiskHistory', 'DiskHistoryStore', 'DiskHistoryViewController']
-    command = ['swiftc', '-swift-version', '6', '-parse-as-library', str(repo / 'scripts/verify-layout.swift')]
+    fixture = 'verify-color-lifecycle.swift' if args.color_picker else 'verify-layout.swift'
+    command = ['swiftc', '-swift-version', '6', '-parse-as-library', str(repo / 'scripts' / fixture)]
     command += [str(repo / 'StatPeek' / (name + '.swift')) for name in sources]
     for framework in ['AppKit', 'Charts', 'SwiftUI', 'IOKit', 'ServiceManagement']:
         command += ['-framework', framework]
@@ -51,6 +53,15 @@ def main():
                     process.terminate()
                     process.wait()
         result = json.loads((output / 'result.json').read_text())
+        if args.color_picker:
+            assert len(result['states']) == 12 and len(seen) == 12
+            assert not result['posted_input_events'] and result['native_color_model']
+            for state in result['states']:
+                assert state['parent_visible'] and state['picker_visible'] and state['picker_shown']
+                assert state['parent_closed'] and state['picker_closed'] and state['well_deactivated']
+                assert not state['app_in_foreground'] and not state['is_key'] and not state['is_main']
+            print(f'12 native color Popover lifecycle checks passed without desktop input: {output}')
+            return
         assert len(result['states']) == 20 and len(seen) == 20
         assert result['arrowless_panel'] and result['rapid_toggles'] == 200 and not result['delayed_reopen']
         for state in result['states']:
