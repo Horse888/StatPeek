@@ -10,7 +10,9 @@ import time
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', required=True, type=Path, help='A new directory for fixture screenshots and measurements')
-    parser.add_argument('--color-picker', action='store_true', help='Verify native color Popover close/reopen lifecycle instead of the layout matrix')
+    scenario = parser.add_mutually_exclusive_group()
+    scenario.add_argument('--color-picker', action='store_true', help='Verify native color Popover close/reopen lifecycle instead of the layout matrix')
+    scenario.add_argument('--layered-dismissal', action='store_true', help='Verify two-step Escape and outside dismissal with the native color Popover')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parent.parent
     output = args.output.resolve()
@@ -24,7 +26,7 @@ def main():
     sources = ['SettingsViewController', 'GlassSurfaceView', 'ModuleSymbolView', 'Metrics', 'MetricSelection',
                'StatusStripLayout', 'StatusStripView', 'SystemSampler', 'LoginItemController', 'DashboardPresentationController',
                'DiskHistory', 'DiskHistoryStore', 'DiskHistoryViewController']
-    fixture = 'verify-color-lifecycle.swift' if args.color_picker else 'verify-layout.swift'
+    fixture = 'verify-color-lifecycle.swift' if args.color_picker or args.layered_dismissal else 'verify-layout.swift'
     command = ['swiftc', '-swift-version', '6', '-parse-as-library', str(repo / 'scripts' / fixture)]
     command += [str(repo / 'StatPeek' / (name + '.swift')) for name in sources]
     for framework in ['AppKit', 'Charts', 'SwiftUI', 'IOKit', 'ServiceManagement']:
@@ -33,7 +35,8 @@ def main():
     try:
         subprocess.run(command, check=True, cwd=repo)
         with (output / 'runner.log').open('w') as log:
-            process = subprocess.Popen([str(runner), str(output)], stdout=log, stderr=subprocess.STDOUT)
+            fixture_args = ['--layered-dismissal'] if args.layered_dismissal else []
+            process = subprocess.Popen([str(runner), str(output), *fixture_args], stdout=log, stderr=subprocess.STDOUT)
             seen = set()
             try:
                 while process.poll() is None:
@@ -53,13 +56,18 @@ def main():
                     process.terminate()
                     process.wait()
         result = json.loads((output / 'result.json').read_text())
-        if args.color_picker:
-            assert len(result['states']) == 12 and len(seen) == 12
+        if args.color_picker or args.layered_dismissal:
+            assert len(result['states']) == 12 and len(seen) == (20 if args.layered_dismissal else 12)
             assert not result['posted_input_events'] and result['native_color_model']
             for state in result['states']:
                 assert state['parent_visible'] and state['picker_visible'] and state['picker_shown']
                 assert state['parent_closed'] and state['picker_closed'] and state['well_deactivated']
                 assert not state['app_in_foreground'] and not state['is_key'] and not state['is_main']
+                if args.layered_dismissal and state['phase'] < 2:
+                    assert state['first_escape_parent_visible'] and state['first_escape_picker_closed']
+                    assert state['first_escape_well_deactivated'] and state['first_escape_did_not_close_session']
+                elif args.layered_dismissal:
+                    assert state['outside_closed_both']
             print(f'12 native color Popover lifecycle checks passed without desktop input: {output}')
             return
         assert len(result['states']) == 20 and len(seen) == 20

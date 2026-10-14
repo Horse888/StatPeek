@@ -54,7 +54,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.3.6 / 11 |
+| Version / Build | 0.3.7 / 12 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |
@@ -88,3 +88,11 @@ python3 scripts/verify-layout.py --color-picker --output work/verification/color
 ```
 
 四项各运行选色关闭、取消关闭、重开选色三阶段。打开实际系统 Popover，通过系统颜色模型触发真实颜色回调，不向桌面发送输入、不切换前台应用。证据见 [颜色浮层验收记录](docs/color-lifecycle-acceptance.json)。
+
+分层 Esc 与外部关闭检查：
+
+```sh
+python3 scripts/verify-layout.py --layered-dismissal --output work/verification/escape-new-run
+```
+
+对四项分别验证主面板取消命令、颜色子窗口的 Esc 处理入口，以及外部点击处理入口：第一次 Esc 只收回颜色选择器，第二次关闭主浮层；外部关闭一次收回两层。12 个流程保存 20 个截图状态，并验证重开、保存与不抢焦点。测试直接调用生产处理入口，不发送物理键盘或桌面鼠标事件，见 [分层关闭验收记录](docs/layered-dismissal-acceptance.json)。

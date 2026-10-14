@@ -6,6 +6,81 @@ final class PresentationTests: XCTestCase {
     private let anchor = NSRect(x: 1200, y: 870, width: 107, height: 24)
 
     @MainActor
+    func testEscapeDismissesNativePickerBeforeParentAndOutsideDismissesBoth() throws {
+        _ = NSApplication.shared
+        let suite = "StatPeekEscapeTests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let selection = MetricSelection(defaults: defaults)
+        let settings = SettingsViewController()
+        settings.onColor = { metric, color in selection.setColor(color, for: metric) }
+        settings.update(snapshot: MetricSnapshot(), selection: selection)
+        settings.prepareToShow(availableHeight: 736)
+        let presenter = DashboardPresentationController(contentViewController: settings, observesOutsideEvents: false)
+        presenter.panel.ignoresMouseEvents = true
+        let originalColor = NSColorPanel.shared.color
+        defer {
+            presenter.close()
+            NSColorPanel.shared.color = originalColor
+            presenter.panel.close()
+        }
+        func descendants(_ root: NSView) -> [NSView] { root.subviews.flatMap { [$0] + descendants($0) } }
+        var closes = 0
+        presenter.onClose = { closes += 1 }
+        for metric in Metric.allCases {
+            let well = try XCTUnwrap(descendants(settings.view).compactMap { $0 as? MetricColorButton }.first { $0.metric == metric })
+            let before = selection.color(for: metric)
+            for route in ["panel-escape", "picker-escape", "outside"] {
+                presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false)
+                well.performClick(nil)
+                RunLoop.main.run(until: Date().addingTimeInterval(0.08))
+                let picker = try XCTUnwrap(pickerPopover(in: presenter.panel))
+                let child = try XCTUnwrap(picker.contentViewController?.view.window)
+                child.ignoresMouseEvents = true
+                XCTAssertTrue(picker.isShown && presenter.isShown)
+                let previousCloses = closes
+                if route == "outside" {
+                    let chosen = try XCTUnwrap(MetricColor(rawValue: "#338866"))
+                    NSColorPanel.shared.color = chosen.nsColor
+                    RunLoop.main.run(until: Date().addingTimeInterval(0.03))
+                    XCTAssertEqual(MetricSelection(defaults: defaults).color(for: metric), chosen)
+                    presenter.handleMouseDown(at: NSPoint(x: 20, y: 20), inAppWindow: false)
+                } else {
+                    // Escape's cancelOperation command reaches the owning panel; no keyboard event is posted.
+                    if route == "picker-escape" {
+                        XCTAssertTrue(presenter.handleEscape(in: child))
+                    } else {
+                        presenter.panel.cancelOperation(nil)
+                    }
+                    XCTAssertTrue(presenter.isShown, "First Escape must keep the main panel open")
+                    XCTAssertEqual(closes, previousCloses, "Closing a picker must not end the dashboard session")
+                    XCTAssertFalse(picker.isShown || child.isVisible || well.isActive, "\(metric) \(route): picker=\(picker.isShown), child=\(child.isVisible), active=\(well.isActive)")
+                    XCTAssertEqual(selection.color(for: metric), before)
+                    presenter.panel.cancelOperation(nil)
+                }
+                XCTAssertFalse(presenter.isShown || picker.isShown || child.isVisible || well.isActive, "\(metric) \(route): parent=\(presenter.isShown), picker=\(picker.isShown), child=\(child.isVisible), active=\(well.isActive)")
+                XCTAssertEqual(closes, previousCloses + 1)
+                RunLoop.main.run(until: Date().addingTimeInterval(0.05))
+                XCTAssertFalse(presenter.isShown || picker.isShown)
+            }
+        }
+    }
+
+    @MainActor
+    func testEscapeDoesNotConsumeCommandsFromUnrelatedWindows() {
+        let presenter = fixture()
+        let other = NSPanel(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
+        defer { presenter.close(); other.close() }
+        XCTAssertFalse(presenter.handleEscape(in: presenter.panel))
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false)
+        XCTAssertFalse(presenter.handleEscape(in: nil))
+        XCTAssertFalse(presenter.handleEscape(in: other))
+        XCTAssertTrue(presenter.isShown)
+        XCTAssertTrue(presenter.handleEscape(in: presenter.panel))
+        XCTAssertFalse(presenter.isShown)
+    }
+
+    @MainActor
     func testNativeColorPickerClosesWithParentAndCanReopenAndCommitForEveryMetric() throws {
         _ = NSApplication.shared
         let suite = "StatPeekNativePickerTests.\(UUID().uuidString)"

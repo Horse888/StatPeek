@@ -1,5 +1,22 @@
 # 验证记录
 
+## 0.3.7 / Build 12 · 2026-10-14
+
+- 新增真实原生颜色控件失败回归：旧版收到主面板 cancelOperation 时，第一次就关闭主浮层，四项产生 8 个失败断言。另用颜色子窗口 firstResponder.doCommand 回放系统取消命令，观察到子窗口隐藏但 NSPopover.isShown 与颜色井激活状态残留；该试探不计作通过验收。
+- 修复主面板取消命令为分层关闭；对属于浮层的窗口，在应用本地 keyDown 监听中提前接管 Escape，避免原生子窗口留下未结束的展示状态。第一次只同步关闭颜色选择器并取消颜色井，保留主浮层会话及监听；第二次关闭主浮层。外部点击及状态栏关闭保持一次收回两层。不会吞掉其他窗口的 Escape。
+- 最终 Release **52 项 XCTest 通过，0 失败**。其中 7 项展示专项回归覆盖四项真实 NSColorWell / NSPopover、主面板取消路由、颜色子窗口 Esc 处理入口、外部关闭、重开后原生选色持久化、关闭回调次数、无延迟重开及非所属窗口隔离。
+- 独立原生窗口通过 **12 个流程，保存 20 个截图状态**：四项各三种关闭路径；每个两次 Escape 流程额外截图第一次之后仅保留的主浮层。颜色经 NSColorPanel 的系统模型提交给激活颜色井，不直接调用应用回调。选色、普通更新、关闭和重开均不串项、不意外改写已保存值。
+- 全程不操作鼠标或键盘、不发送输入事件、不切换前台应用；测试窗口不成为 key/main，不接收鼠标事件。测试采用唯一隔离偏好及合成指标，不打开正式磁盘库。Esc 与外部点击由生产 responder/处理入口直接回放，未注入物理按键，也不将此描述为用户实际桌面的按键验收。
+- 已后台更新并启动 `/Applications/StatPeek.app` **0.3.7 (12)**，仅一个固定路径进程；arm64/x86_64、严格签名通过、有效 LSUIElement=true、ITSAppUsesNonExemptEncryption=false（布尔值）。构建与安装可执行文件 SHA-256 一致：`a79bd3ada3bbfcdc901b7870de5e6aac8df43c779f451cb9f054c4899906a6c7`。
+- 原配色与四项选择保持，617 条原磁盘记录按 ID 逐行不变；已移除本次暂存、旧安装备份与构建重复 App。macOS 13 / Intel 实机未单独运行。
+
+下图为独立测试的颜色选择器打开状态，以及第一次 Esc 后保留的主浮层（合成数据）：
+
+<img src="assets/layered-dismissal-picker.png" width="340" alt="Native color picker before Escape">
+<img src="assets/layered-dismissal-first-escape.png" width="288" alt="First Escape closes only the picker and preserves the dashboard">
+
+结构化证据见 [layered-dismissal-acceptance.json](layered-dismissal-acceptance.json)。以下为历史版本证据。
+
 ## 0.3.6 / Build 11 · 2026-10-14
 
 - 真实独立颜色控件回放复现旧行为：关闭主面板后，原生颜色 NSPopover.isShown 仍为 true，重开同一控件后没有可见颜色窗口，回归程序退出 1。仅隐藏/关闭子 NSWindow 不能完成 Popover 自身生命周期；保留动画的 close 也会被紧接着隐藏父窗口打断。

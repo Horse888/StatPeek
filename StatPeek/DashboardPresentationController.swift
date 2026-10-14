@@ -9,6 +9,7 @@ final class DashboardPresentationController {
     private var anchorRect = NSRect.zero
     private let observesOutsideEvents: Bool
     private var localMonitor: Any?
+    private var escapeMonitor: Any?
     private var globalMonitor: Any?
     private var deactivationObserver: NSObjectProtocol?
 
@@ -28,7 +29,7 @@ final class DashboardPresentationController {
         window.setAccessibilityIdentifier("statpeek-dashboard")
         window.contentViewController = contentViewController
         panel = window
-        window.onCancel = { [weak self] in self?.close() }
+        window.onCancel = { [weak self] in self?.cancel() }
     }
 
     func toggle(anchor: NSRect, visibleFrame: NSRect, activate: Bool = true) {
@@ -48,6 +49,20 @@ final class DashboardPresentationController {
             }
             installDismissalObservers()
         }
+    }
+
+    private func cancel() {
+        guard isShown else { return }
+        // Escape may reach this panel through the color picker's responder chain.
+        // Keep the dashboard session and outside-dismissal observers until the next Escape.
+        let closedChild = closeChildPopovers(of: panel)
+        let colorPanelVisible = NSColorPanel.sharedColorPanelExists && NSColorPanel.shared.isVisible
+        if closedChild || colorPanelVisible {
+            if let root = panel.contentView { deactivateColorWells(in: root) }
+            if colorPanelVisible { NSColorPanel.shared.orderOut(nil) }
+            return
+        }
+        close()
     }
 
     func close() {
@@ -72,6 +87,26 @@ final class DashboardPresentationController {
 
     func handleAppDeactivation(duringStatusClick: Bool) {
         if !duringStatusClick { close() }
+    }
+
+    /// Consume Escape before the native picker can hide only its NSWindow and leave isShown stale.
+    /// Other windows keep their own keyboard handling.
+    @discardableResult
+    func handleEscape(in window: NSWindow?) -> Bool {
+        guard isShown, let window else { return false }
+        var ancestor: NSWindow? = window
+        while let current = ancestor {
+            if current === panel {
+                cancel()
+                return true
+            }
+            ancestor = current.parent
+        }
+        if NSColorPanel.sharedColorPanelExists, window === NSColorPanel.shared, window.isVisible {
+            cancel()
+            return true
+        }
+        return false
     }
 
     func updateAnchor(_ anchor: NSRect, visibleFrame: NSRect) {
@@ -100,6 +135,12 @@ final class DashboardPresentationController {
             }
             return event
         }
+        escapeMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            let consumed = MainActor.assumeIsolated {
+                event.keyCode == 53 && self?.handleEscape(in: event.window ?? NSApp.keyWindow) == true
+            }
+            return consumed ? nil : event
+        }
         globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: mask) { [weak self] _ in
             MainActor.assumeIsolated {
                 self?.handleMouseDown(at: NSEvent.mouseLocation, inAppWindow: false)
@@ -117,9 +158,11 @@ final class DashboardPresentationController {
 
     private func removeDismissalObservers() {
         if let localMonitor { NSEvent.removeMonitor(localMonitor) }
+        if let escapeMonitor { NSEvent.removeMonitor(escapeMonitor) }
         if let globalMonitor { NSEvent.removeMonitor(globalMonitor) }
         if let deactivationObserver { NotificationCenter.default.removeObserver(deactivationObserver) }
         localMonitor = nil
+        escapeMonitor = nil
         globalMonitor = nil
         deactivationObserver = nil
     }
@@ -129,14 +172,17 @@ final class DashboardPresentationController {
         view.subviews.forEach { deactivateColorWells(in: $0) }
     }
 
-    private func closeChildPopovers(of window: NSWindow) {
+    @discardableResult
+    private func closeChildPopovers(of window: NSWindow) -> Bool {
+        var dismissed = false
         for child in window.childWindows ?? [] {
-            closeChildPopovers(of: child)
+            dismissed = closeChildPopovers(of: child) || child.isVisible || dismissed
             var responder: NSResponder? = child.contentView
             var visited = Set<ObjectIdentifier>()
             var closedPopover = false
             while let current = responder, visited.insert(ObjectIdentifier(current)).inserted {
                 if let popover = current as? NSPopover {
+                    dismissed = popover.isShown || dismissed
                     let animated = popover.animates
                     popover.animates = false
                     popover.close()
@@ -148,6 +194,7 @@ final class DashboardPresentationController {
             }
             if !closedPopover { child.close() }
         }
+        return dismissed
     }
 }
 
