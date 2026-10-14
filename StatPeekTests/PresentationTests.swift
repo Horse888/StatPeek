@@ -6,6 +6,102 @@ final class PresentationTests: XCTestCase {
     private let anchor = NSRect(x: 1200, y: 870, width: 107, height: 24)
 
     @MainActor
+    func testFreshClickOpensAfterOutsideCloseAndOldOutsideEventCannotCloseNewSession() throws {
+        let presenter = fixture()
+        defer { presenter.close() }
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false)
+        let outside = try mouseEvent(at: NSPoint(x: 20, y: 20), number: 1)
+        presenter.handleMouseDown(outside, inAppWindow: false)
+        XCTAssertFalse(presenter.isShown)
+        let fresh = try mouseEvent(at: NSPoint(x: anchor.midX, y: anchor.midY), number: 2)
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: fresh)
+        XCTAssertTrue(presenter.isShown, "A genuinely new click must open immediately without a debounce timeout")
+        presenter.handleMouseDown(outside, inAppWindow: false)
+        XCTAssertTrue(presenter.isShown, "An outside event from the previous session cannot close a new panel")
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: outside)
+        XCTAssertTrue(presenter.isShown, "Older actions cannot override a newer click")
+    }
+
+    @MainActor
+    func testRapidNativeEventActionsRetainParityAcrossInterleavedDeactivationAndDuplicateDelivery() throws {
+        let presenter = fixture()
+        defer { presenter.close() }
+        for click in 1...200 {
+            let stale = try mouseEvent(at: NSPoint(x: 20, y: 20), number: -click)
+            let event = try mouseEvent(at: NSPoint(x: anchor.midX, y: anchor.midY), number: click)
+            presenter.handleMouseDown(event, inAppWindow: false)
+            if click % 4 == 0 { presenter.handleAppDeactivation(duringStatusClick: false) }
+            presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: event)
+            presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: event)
+            presenter.handleMouseDown(stale, inAppWindow: false)
+            XCTAssertEqual(presenter.isShown, click % 2 == 1, "Click \(click)")
+            XCTAssertFalse(presenter.panel.isKeyWindow || presenter.panel.isMainWindow)
+        }
+        RunLoop.main.run(until: Date().addingTimeInterval(0.1))
+        XCTAssertFalse(presenter.isShown)
+    }
+
+    @MainActor
+    private func mouseEvent(at point: NSPoint, number: Int) throws -> NSEvent {
+        try XCTUnwrap(NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [],
+            timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: 0, context: nil,
+            eventNumber: number, clickCount: 1, pressure: 1))
+    }
+
+    @MainActor
+    func testStatusClickDoesNotReopenWhenDeactivationClosesBeforeButtonAction() throws {
+        let presenter = fixture()
+        defer { presenter.close() }
+        for observedMouseDown in [false, true] {
+            presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false)
+            let event = try XCTUnwrap(NSEvent.mouseEvent(with: .leftMouseDown,
+                location: NSPoint(x: anchor.midX, y: anchor.midY), modifierFlags: [],
+                timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: 0,
+                context: nil, eventNumber: observedMouseDown ? 2 : 1, clickCount: 1, pressure: 1))
+            if observedMouseDown { presenter.handleMouseDown(event, inAppWindow: false) }
+            // Deactivation can be delivered after button release but before its action.
+            presenter.handleAppDeactivation(duringStatusClick: false)
+            XCTAssertFalse(presenter.isShown)
+            presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: event)
+            XCTAssertFalse(presenter.isShown, "A click that began with a visible panel must finish closed")
+            presenter.close()
+        }
+    }
+
+    @MainActor
+    func testOneNativeMouseEventCannotToggleTwice() throws {
+        let presenter = fixture()
+        defer { presenter.close() }
+        let event = try XCTUnwrap(NSEvent.mouseEvent(with: .leftMouseDown,
+            location: NSPoint(x: anchor.midX, y: anchor.midY), modifierFlags: [],
+            timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: 0,
+            context: nil, eventNumber: 1, clickCount: 1, pressure: 1))
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: event)
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: event)
+        XCTAssertTrue(presenter.isShown, "Repeated delivery of one mouse-down must produce just one transition")
+    }
+
+    @MainActor
+    func testStatusEventKeepsItsClickPositionWhenPointerHasMovedBeforeDelivery() throws {
+        let presenter = fixture()
+        defer { presenter.close() }
+        // Keep both fixture windows and the recorded click away from the user's current pointer.
+        let pointer = NSEvent.mouseLocation
+        let area = NSRect(x: pointer.x + 4000, y: pointer.y + 4000, width: 1440, height: 870)
+        let target = NSRect(x: area.minX + 700, y: area.maxY, width: 107, height: 24)
+        presenter.toggle(anchor: target, visibleFrame: area, activate: false)
+        XCTAssertFalse(presenter.panel.frame.contains(pointer))
+        let event = try XCTUnwrap(NSEvent.mouseEvent(with: .leftMouseDown,
+            location: NSPoint(x: target.midX, y: target.midY), modifierFlags: [],
+            timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: 0,
+            context: nil, eventNumber: 1, clickCount: 1, pressure: 1))
+        // Constructing this value never posts input to the system or dispatches it to another app.
+        presenter.handleMouseDown(event, inAppWindow: false)
+        presenter.toggle(anchor: target, visibleFrame: area, activate: false)
+        XCTAssertFalse(presenter.isShown, "A recorded status click must close, even after the pointer has moved")
+    }
+
+    @MainActor
     func testEscapeDismissesNativePickerBeforeParentAndOutsideDismissesBoth() throws {
         _ = NSApplication.shared
         let suite = "StatPeekEscapeTests.\(UUID().uuidString)"
@@ -134,8 +230,10 @@ final class PresentationTests: XCTestCase {
                 }
                 XCTAssertTrue(presenter.isShown)
                 XCTAssertTrue(picker.isShown, "A metric refresh during color editing must preserve the picker")
-                presenter.handleMouseDown(at: NSPoint(x: anchor.midX, y: anchor.midY), inAppWindow: false)
-                presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false)
+                let statusClick = try mouseEvent(at: NSPoint(x: anchor.midX, y: anchor.midY), number: phase)
+                presenter.handleMouseDown(statusClick, inAppWindow: false)
+                if phase == 2 { presenter.handleAppDeactivation(duringStatusClick: false) }
+                presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: statusClick)
                 XCTAssertFalse(presenter.isShown)
                 XCTAssertFalse(picker.isShown, "Native dismissal must finish before hiding its parent")
                 XCTAssertFalse(pickerWindow.isVisible)

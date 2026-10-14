@@ -54,7 +54,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.3.7 / 12 |
+| Version / Build | 0.3.8 / 13 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |
@@ -79,7 +79,7 @@ xcodegen generate
 python3 scripts/verify-layout.py --output work/verification/layout-new-run
 ```
 
-脚本沿用 Xcode 配置的构建位置，创建不获取焦点、不接收鼠标事件的独立窗口，以临时偏好和临时数据库检查浅/深色、四档可用高度及顶部/中段/底部，并执行 200 次快速开关，检查关闭后无延迟重开。只截取自己的测试窗口，不发送鼠标或键盘事件；输出目录必须为新目录。截图使用合成数据，见 [浮层开关验收记录](docs/presentation-acceptance.json) 和 [独立布局验收记录](docs/independent-layout-acceptance.json)。
+脚本沿用 Xcode 配置的构建位置，创建不获取焦点、不接收鼠标事件的独立窗口，以临时偏好和临时数据库检查浅/深色、四档可用高度及顶部/中段/底部，并执行 1,000 次切换：交错 250 次失活、1,000 次重复动作与 1,000 次旧鼠标事件，检查每次切换及关闭后无延迟重开。NSEvent 仅作为进程内数据交给生产处理入口，不投递到系统事件队列；只截取自己的测试窗口，不操作鼠标或键盘。输出目录必须为新目录，截图使用合成数据。见 [状态栏点击验收记录](docs/status-toggle-acceptance.json)；早期结果见 [浮层开关验收记录](docs/presentation-acceptance.json) 和 [独立布局验收记录](docs/independent-layout-acceptance.json)。
 
 颜色选择器的独立生命周期检查：
 
@@ -87,7 +87,7 @@ python3 scripts/verify-layout.py --output work/verification/layout-new-run
 python3 scripts/verify-layout.py --color-picker --output work/verification/color-new-run
 ```
 
-四项各运行选色关闭、取消关闭、重开选色三阶段。打开实际系统 Popover，通过系统颜色模型触发真实颜色回调，不向桌面发送输入、不切换前台应用。证据见 [颜色浮层验收记录](docs/color-lifecycle-acceptance.json)。
+四项各运行选色关闭、取消关闭、重开选色三阶段。打开实际系统 Popover，通过系统颜色模型触发真实颜色回调；最后阶段交错失活再处理关闭动作，并重复派发同一点击，确认不会重开。不向桌面发送输入、不切换前台应用。当前证据见 [状态栏点击验收记录](docs/status-toggle-acceptance.json)，此前记录见 [颜色浮层验收记录](docs/color-lifecycle-acceptance.json)。
 
 分层 Esc 与外部关闭检查：
 

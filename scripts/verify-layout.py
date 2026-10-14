@@ -71,7 +71,9 @@ def main():
             print(f'12 native color Popover lifecycle checks passed without desktop input: {output}')
             return
         assert len(result['states']) == 20 and len(seen) == 20
-        assert result['arrowless_panel'] and result['rapid_toggles'] == 200 and not result['delayed_reopen']
+        assert result['arrowless_panel'] and result['rapid_toggles'] == 1000 and not result['delayed_reopen']
+        assert result['duplicate_deliveries'] == 1000 and result['stale_mouse_events'] == 1000
+        assert result['interleaved_deactivations'] == 250 and not result['posted_input_events']
         for state in result['states']:
             assert not state['is_key'] and not state['is_main'] and state['ignores_mouse']
             assert not state['app_in_foreground']

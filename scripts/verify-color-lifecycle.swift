@@ -38,7 +38,7 @@ struct ColorLifecycleVerification {
         settings.update(snapshot: snapshot, selection: selection)
         settings.prepareToShow(availableHeight: 736)
         descendants(settings.view).compactMap { $0 as? NSTextField }
-            .first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.7 (12)"
+            .first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.8 (13)"
         let host = DashboardPresentationController(contentViewController: settings, observesOutsideEvents: false)
         host.panel.ignoresMouseEvents = true
         host.panel.appearance = NSAppearance(named: .darkAqua)
@@ -116,8 +116,14 @@ struct ColorLifecycleVerification {
                     host.handleMouseDown(at: NSPoint(x: area.minX + 5, y: area.minY + 5), inAppWindow: false)
                     state["outside_closed_both"] = !host.isShown && !picker.isShown && !child.isVisible
                 } else {
-                    host.handleMouseDown(at: NSPoint(x: anchor.midX, y: anchor.midY), inAppWindow: false)
-                    host.toggle(anchor: anchor, visibleFrame: area, activate: false)
+                    let click = NSEvent.mouseEvent(with: .leftMouseDown,
+                        location: NSPoint(x: anchor.midX, y: anchor.midY), modifierFlags: [],
+                        timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: 0,
+                        context: nil, eventNumber: sequence, clickCount: 1, pressure: 1)!
+                    host.handleMouseDown(click, inAppWindow: false)
+                    if phase == 2 { host.handleAppDeactivation(duringStatusClick: false) }
+                    host.toggle(anchor: anchor, visibleFrame: area, activate: false, event: click)
+                    host.toggle(anchor: anchor, visibleFrame: area, activate: false, event: click)
                 }
                 state["parent_closed"] = !host.isShown
                 state["picker_closed"] = !picker.isShown && !child.isVisible

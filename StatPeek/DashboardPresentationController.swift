@@ -12,6 +12,9 @@ final class DashboardPresentationController {
     private var escapeMonitor: Any?
     private var globalMonitor: Any?
     private var deactivationObserver: NSObjectProtocol?
+    private var shownAt: TimeInterval?
+    private var hiddenAt: TimeInterval?
+    private var lastStatusClick: (timestamp: TimeInterval, number: Int)?
 
     init(contentViewController: NSViewController, observesOutsideEvents: Bool = true) {
         self.observesOutsideEvents = observesOutsideEvents
@@ -32,8 +35,20 @@ final class DashboardPresentationController {
         window.onCancel = { [weak self] in self?.cancel() }
     }
 
-    func toggle(anchor: NSRect, visibleFrame: NSRect, activate: Bool = true) {
-        if isShown {
+    func toggle(anchor: NSRect, visibleFrame: NSRect, activate: Bool = true, event: NSEvent? = nil) {
+        var shouldClose = isShown
+        if let event, event.type == .leftMouseDown {
+            if let lastStatusClick,
+               event.timestamp < lastStatusClick.timestamp
+                || (event.timestamp == lastStatusClick.timestamp && event.eventNumber == lastStatusClick.number) { return }
+            lastStatusClick = (event.timestamp, event.eventNumber)
+            // A deactivation/outside callback can hide the panel before this action is delivered.
+            // Honor visibility when the click began instead of turning that close into a reopen.
+            if let shownAt, let hiddenAt, (shownAt...hiddenAt).contains(event.timestamp) {
+                shouldClose = true
+            }
+        }
+        if shouldClose {
             close()
         } else {
             anchorRect = anchor
@@ -41,6 +56,8 @@ final class DashboardPresentationController {
             panel.setContentSize(size)
             panel.setFrameOrigin(Self.origin(contentSize: size, anchor: anchor, visibleFrame: visibleFrame))
             panel.alphaValue = 1
+            shownAt = ProcessInfo.processInfo.systemUptime
+            hiddenAt = nil
             if activate {
                 NSApp.activate(ignoringOtherApps: true)
                 panel.makeKeyAndOrderFront(nil)
@@ -75,6 +92,7 @@ final class DashboardPresentationController {
         if let root = panel.contentView { deactivateColorWells(in: root) }
         if NSColorPanel.sharedColorPanelExists { NSColorPanel.shared.orderOut(nil) }
         panel.orderOut(nil)
+        hiddenAt = ProcessInfo.processInfo.systemUptime
         onClose?()
     }
 
@@ -83,6 +101,13 @@ final class DashboardPresentationController {
     func handleMouseDown(at point: NSPoint, inAppWindow: Bool) {
         guard isShown, !anchorRect.contains(point), !panel.frame.contains(point), !inAppWindow else { return }
         close()
+    }
+
+    /// Shared adapter for AppKit's local/global mouse monitors.
+    func handleMouseDown(_ event: NSEvent, inAppWindow: Bool) {
+        guard isShown, event.timestamp >= (shownAt ?? 0) else { return }
+        let point = event.window?.convertPoint(toScreen: event.locationInWindow) ?? event.locationInWindow
+        handleMouseDown(at: point, inAppWindow: inAppWindow)
     }
 
     func handleAppDeactivation(duringStatusClick: Bool) {
@@ -131,7 +156,7 @@ final class DashboardPresentationController {
         let mask: NSEvent.EventTypeMask = [.leftMouseDown, .rightMouseDown, .otherMouseDown]
         localMonitor = NSEvent.addLocalMonitorForEvents(matching: mask) { [weak self] event in
             MainActor.assumeIsolated {
-                self?.handleMouseDown(at: NSEvent.mouseLocation, inAppWindow: event.window != nil)
+                self?.handleMouseDown(event, inAppWindow: event.window != nil)
             }
             return event
         }
@@ -141,9 +166,9 @@ final class DashboardPresentationController {
             }
             return consumed ? nil : event
         }
-        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: mask) { [weak self] _ in
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: mask) { [weak self] event in
             MainActor.assumeIsolated {
-                self?.handleMouseDown(at: NSEvent.mouseLocation, inAppWindow: false)
+                self?.handleMouseDown(event, inAppWindow: false)
             }
         }
         deactivationObserver = NotificationCenter.default.addObserver(forName: NSApplication.didResignActiveNotification,

@@ -43,7 +43,7 @@ struct LayoutVerification {
         controller.updateLoginItem(status: .enabled, error: nil)
         controller.updateDiskHistory(store: store, nextRecordingDate: start.addingTimeInterval(2700), error: nil)
         let fields = descendants(controller.view).compactMap { $0 as? NSTextField }
-        fields.first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.7 (12)"
+        fields.first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.8 (13)"
         let scroll = descendants(controller.view).compactMap { $0 as? NSScrollView }.first!
         let document = scroll.documentView!
         var states: [[String: Any]] = []
@@ -95,10 +95,18 @@ struct LayoutVerification {
             presentation.close()
             let anchor = NSRect(x: 100, y: 700, width: 107, height: 24)
             let area = NSRect(x: 30, y: 80, width: 1440, height: 700)
-            for click in 1...100 {
-                presentation.handleMouseDown(at: NSPoint(x: anchor.midX, y: anchor.midY), inAppWindow: false)
-                presentation.handleAppDeactivation(duringStatusClick: true)
-                presentation.toggle(anchor: anchor, visibleFrame: area, activate: false)
+            for click in 1...500 {
+                let stale = NSEvent.mouseEvent(with: .leftMouseDown, location: NSPoint(x: 0, y: 0), modifierFlags: [],
+                    timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: 0, context: nil,
+                    eventNumber: -click, clickCount: 1, pressure: 1)!
+                let event = NSEvent.mouseEvent(with: .leftMouseDown, location: NSPoint(x: anchor.midX, y: anchor.midY), modifierFlags: [],
+                    timestamp: ProcessInfo.processInfo.systemUptime, windowNumber: 0, context: nil,
+                    eventNumber: click, clickCount: 1, pressure: 1)!
+                presentation.handleMouseDown(event, inAppWindow: false)
+                if click % 4 == 0 { presentation.handleAppDeactivation(duringStatusClick: false) }
+                presentation.toggle(anchor: anchor, visibleFrame: area, activate: false, event: event)
+                presentation.toggle(anchor: anchor, visibleFrame: area, activate: false, event: event)
+                presentation.handleMouseDown(stale, inAppWindow: false)
                 precondition(presentation.isShown == (click % 2 == 1))
                 precondition(!window.isKeyWindow && !window.isMainWindow)
             }
@@ -111,7 +119,10 @@ struct LayoutVerification {
             return ["text": field.stringValue, "frame": NSStringFromRect(field.frame),
                     "natural": NSStringFromSize(cell.cellSize), "needed": NSStringFromSize(needed)]
         }
-        let result: [String: Any] = ["states": states, "text_measurements": measurements, "fixture": true, "posted_input_events": false, "arrowless_panel": true, "rapid_toggles": 200, "delayed_reopen": false]
+        let result: [String: Any] = ["states": states, "text_measurements": measurements, "fixture": true,
+            "posted_input_events": false, "constructed_event_values": true, "arrowless_panel": true,
+            "rapid_toggles": 1000, "duplicate_deliveries": 1000, "interleaved_deactivations": 250,
+            "stale_mouse_events": 1000, "delayed_reopen": false]
         try JSONSerialization.data(withJSONObject: result, options: [.prettyPrinted, .sortedKeys]).write(to: output.appendingPathComponent("result.json"))
     }
 

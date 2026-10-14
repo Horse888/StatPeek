@@ -113,16 +113,14 @@ final class StatusBarController: NSObject {
 
     @objc private func togglePopover() {
         guard let button = statusItem.button else { return }
-        if presentation.isShown { presentation.close() }
-        else {
+        guard let window = button.window, let screen = window.screen ?? NSScreen.main else { return }
+        if !presentation.isShown {
             updateLoginItem()
-            let screen = button.window?.screen ?? NSScreen.main
-            settings.prepareToShow(availableHeight: (screen?.visibleFrame.height ?? 900) - 32)
+            settings.prepareToShow(availableHeight: screen.visibleFrame.height - 32)
             if !selection.selected.contains(.cpu) { sampler.resetCPU() }
-            guard let window = button.window, let screen else { return }
-            let anchor = window.convertToScreen(button.convert(button.bounds, to: nil))
-            presentation.toggle(anchor: anchor, visibleFrame: screen.visibleFrame)
-            refresh()
         }
+        let anchor = window.convertToScreen(button.convert(button.bounds, to: nil))
+        presentation.toggle(anchor: anchor, visibleFrame: screen.visibleFrame, event: NSApp.currentEvent)
+        if presentation.isShown { refresh() }
     }
 }
