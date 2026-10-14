@@ -1,13 +1,13 @@
 import AppKit
 
 @MainActor
-final class StatusBarController: NSObject, NSPopoverDelegate {
+final class StatusBarController: NSObject {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let selection = MetricSelection(legacyDefaults: UserDefaults.standard.persistentDomain(forName: "local.StatPeek"))
     private let sampler = SystemSampler()
     private let strip = StatusStripView()
-    private let popover = NSPopover()
     private let settings = SettingsViewController()
+    private lazy var presentation = DashboardPresentationController(contentViewController: settings)
     private let loginItem = LoginItemController()
     private var diskRecording: DiskRecordingController?
     private var snapshot = MetricSnapshot()
@@ -19,20 +19,19 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
         if let button = statusItem.button {
             button.target = self
             button.action = #selector(togglePopover)
+            button.sendAction(on: .leftMouseDown)
             button.setAccessibilityIdentifier("status-toggle")
             button.addSubview(strip)
         }
-        // Keep settings visible when a window of this app (the color panel) gains focus.
-        popover.behavior = .semitransient
-        popover.animates = false
-        popover.delegate = self
-        popover.contentViewController = settings
-        NotificationCenter.default.addObserver(self, selector: #selector(closeOnDeactivation),
-                                               name: NSApplication.didResignActiveNotification, object: NSApp)
+        presentation.onClose = { [weak self] in
+            guard let self else { return }
+            self.settings.stopSymbolMotion()
+            if !self.selection.selected.contains(.cpu) { self.sampler.resetCPU() }
+        }
         settings.onToggle = { [weak self] metric in
             guard let self else { return }
             self.selection.toggle(metric)
-            if metric == .cpu, !self.popover.isShown { self.sampler.resetCPU() }
+            if metric == .cpu, !self.presentation.isShown { self.sampler.resetCPU() }
             self.refresh()
         }
         settings.onColor = { [weak self] metric, color in
@@ -83,7 +82,7 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
     }
 
     private func refresh() {
-        snapshot = sampler.sample(popover.isShown ? Set(Metric.allCases) : selection.selected)
+        snapshot = sampler.sample(presentation.isShown ? Set(Metric.allCases) : selection.selected)
         render()
     }
 
@@ -99,34 +98,30 @@ final class StatusBarController: NSObject, NSPopoverDelegate {
             button.toolTip = "StatPeek · 状态一瞥\n" + (summary.isEmpty ? "点击选择显示信息" : summary)
             button.setAccessibilityLabel("StatPeek · " + (summary.isEmpty ? "未选择信息项" : summary))
             button.setAccessibilityValue(summary)
+            if let window = button.window, let screen = window.screen {
+                let anchor = window.convertToScreen(button.convert(button.bounds, to: nil))
+                presentation.updateAnchor(anchor, visibleFrame: screen.visibleFrame)
+            }
         }
         settings.update(snapshot: snapshot, selection: selection)
-        if popover.isShown { updateLoginItem() }
+        if presentation.isShown { updateLoginItem() }
     }
 
     private func updateLoginItem() {
         settings.updateLoginItem(status: loginItem.status, error: loginItem.errorMessage)
     }
 
-    func popoverDidClose(_ notification: Notification) {
-        if !selection.selected.contains(.cpu) { sampler.resetCPU() }
-    }
-
-    @objc private func closeOnDeactivation() {
-        if popover.isShown { popover.performClose(nil) }
-    }
-
     @objc private func togglePopover() {
         guard let button = statusItem.button else { return }
-        if popover.isShown { popover.performClose(nil) }
+        if presentation.isShown { presentation.close() }
         else {
             updateLoginItem()
             let screen = button.window?.screen ?? NSScreen.main
             settings.prepareToShow(availableHeight: (screen?.visibleFrame.height ?? 900) - 32)
-            popover.contentSize = settings.view.frame.size
-            NSApp.activate(ignoringOtherApps: true)
             if !selection.selected.contains(.cpu) { sampler.resetCPU() }
-            popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+            guard let window = button.window, let screen else { return }
+            let anchor = window.convertToScreen(button.convert(button.bounds, to: nil))
+            presentation.toggle(anchor: anchor, visibleFrame: screen.visibleFrame)
             refresh()
         }
     }

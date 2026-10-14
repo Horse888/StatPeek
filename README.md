@@ -16,7 +16,7 @@ A compact macOS menu bar monitor. Selected metrics appear in two rows of colored
 - 四项各有紧凑淡色卡片，百分比只在进度条右侧显示；磁盘显示总容量、已用、剩余，进度代表已用比例。采样中或不可用不画虚假的零进度。
 - 浮层宽 288 点、高度自适应内容，仅屏幕可用高度不足时纵向滚动；勾选框在每项最前；未勾选呈灰色，仍预览实时读数。页脚左侧版本与右侧开机启动、退出保持水平对齐。
 - 装饰图标使用彩色填充 SF Symbol，不加背景，与标题居中对齐、间隔 4 点；GPU 使用 cube.fill 表达 3D 图形渲染。macOS 14+ 出现时播放一次原生 Bounce，读数刷新不重播；macOS 13 静态，未选中、隐藏或减少动态效果时停止。状态栏仍使用 D/C/M/G 字母。
-- macOS 26+ 主浮层使用系统液态玻璃；可点击颜色入口使用圆形玻璃，退出及历史范围按钮使用胶囊玻璃，旧系统使用原生磨砂材质。退出为 24 点高、红色纯文字；开机启动为无背景勾选项。
+- 主浮层采用无箭头的一体玻璃面板，状态栏按下立即切换，再按立即关闭；点击其他应用、切走应用或 Escape 可关闭，颜色选择器保留主面板。macOS 26+ 使用系统液态玻璃；可点击颜色入口使用圆形玻璃，退出及历史范围按钮使用胶囊玻璃，旧系统使用原生磨砂材质。退出为 24 点高、红色纯文字；开机启动为无背景勾选项。
 - 行尾淡色小圆点默认打开 macOS 原生颜色 Popover，主浮层保持显示，配色即时更新；系统“更多颜色”入口仍可用。读数刷新不覆盖正在编辑的颜色；任意 RGB 配色重启后恢复，单项修改不影响其他项。
 - 固定页脚右侧的「开机自动启动」使用 macOS 原生登录启动项；勾选后在当前用户登录时启动，取消即注销。默认关闭，需要系统批准或设置失败时明确提示。
 - 磁盘保留一位小数，单位使用单字母，例如 `320.8G`。
@@ -54,7 +54,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.3.4 / 9 |
+| Version / Build | 0.3.5 / 10 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |
@@ -79,4 +79,4 @@ xcodegen generate
 python3 scripts/verify-layout.py --output work/verification/layout-new-run
 ```
 
-脚本沿用 Xcode 配置的构建位置，创建不获取焦点、不接收鼠标事件的独立窗口，以临时偏好和临时数据库检查浅/深色、四档可用高度及顶部/中段/底部。只截取自己的测试窗口，不发送鼠标或键盘事件；输出目录必须为新目录。截图使用合成数据，见 [独立布局验收记录](docs/independent-layout-acceptance.json)。
+脚本沿用 Xcode 配置的构建位置，创建不获取焦点、不接收鼠标事件的独立窗口，以临时偏好和临时数据库检查浅/深色、四档可用高度及顶部/中段/底部，并执行 200 次快速开关，检查关闭后无延迟重开。只截取自己的测试窗口，不发送鼠标或键盘事件；输出目录必须为新目录。截图使用合成数据，见 [浮层开关验收记录](docs/presentation-acceptance.json) 和 [独立布局验收记录](docs/independent-layout-acceptance.json)。

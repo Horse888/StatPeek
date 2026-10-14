@@ -1,5 +1,24 @@
 # 验证记录
 
+## 0.3.5 / Build 10 · 2026-10-14
+
+- 最终 Release **49 项 XCTest 通过，0 失败**。新增真实 NSPanel 上的状态栏按下/失活/按钮动作顺序、100 次快速开关奇偶性及延迟重开、颜色窗口保留、外部关闭/重复关闭、cancelOperation 和多屏边界回归。其余布局、采样、存储和颜色测试保留，版本标签更新为两位 build 检查宽度。
+- 最小原生回放模拟了 semi-transient 先关闭、按钮动作随后执行的事件顺序，输出 first_click_shown=true、second_click_remains_open=true，退出 1。这证明该顺序会触发原 toggle 按 isShown 再打开的模式；并非对用户真实桌面事件的捕获，不声称已取得现场轨迹。
+- 试验 hasFullSizeContent 可以将背景延伸到箭头，但会改变内容安全区域，出现位置偏移。本次采用用户允许的无箭头方案：borderless NSPanel 上的单层 NSGlassEffectView，未使用私有 API 隐藏系统箭头。
+- 状态栏动作改为鼠标按下即切换，展示控制器直接 orderOut 关闭，禁用窗口动画。鼠标监测与失活处理排除当前状态栏点击，应用内颜色窗口保持父面板；关闭会清理监听、颜色窗口和图标动画。位置随锚点更新并限制在可用屏幕内。
+- 独立工具使用与生产相同的展示控制器及完整设置视图，浅/深色分别 100 次，共 **200 次快速开关**，偶数次后保持隐藏，运行循环后未延迟重开。**20 个实际面板截图状态**保留自适应、滚动和固定页脚，已查看完整和最短屏截图，背景无箭头接缝。
+- 全程未发送鼠标/键盘事件；测试面板不接收点击、不成为 key/main，截图时测试进程未成为前台应用。隔离窗口关闭环境事件监听，以直接路由调用检查事件顺序；实际菜单栏物理点击及颜色 Popover 点击未自动化，留待自然使用确认。合成数据只写临时数据库。
+- 最终 `/Applications/StatPeek.app` 为 **0.3.5 (10)**，唯一进程来自固定安装路径；arm64/x86_64，严格签名通过；有效 LSUIElement=true、ITSAppUsesNonExemptEncryption=false 为布尔值。构建、验证及安装可执行文件 SHA-256 一致：`da405c59d34a10d161b6edf8a13b0fec2fcc2b7cbd356d6640247e91baf22242`。
+- 更新前的选择和配色保持，603 条原磁盘记录逐行未变，安装时 603 条。最终替换通过进程终止及后台启动完成，没有操作桌面输入；构建重复 App、暂存与旧备份已移除。macOS 13 / Intel 实机未单独运行。
+
+下面是同一展示控制器的独立测试面板（合成数据，非本机指标）：
+
+<img src="assets/arrowless-fixture-full.png" width="288" alt="Arrowless system glass dashboard fixture">
+<img src="assets/arrowless-fixture-small-top.png" width="288" alt="Arrowless dashboard on a short screen, top">
+<img src="assets/arrowless-fixture-small-bottom.png" width="288" alt="Arrowless dashboard on a short screen, bottom">
+
+结构化证据见 [presentation-acceptance.json](presentation-acceptance.json)。以下为历史版本证据。
+
 ## 0.3.4 / Build 9 · 2026-10-13
 
 - 最终 Release **45 项 XCTest 通过，0 失败**，覆盖窗口挂载/缩放后的滚动区边界、刷新保持偏移、固定页脚、正常/采样中/不可用/空历史文字尺寸、同层文本不重叠、指标图标居中及 4 点间距。

@@ -21,7 +21,7 @@ def main():
     runner = Path(build['TARGET_BUILD_DIR']) / 'StatPeekLayoutVerification'
     runner.parent.mkdir(parents=True, exist_ok=True)
     sources = ['SettingsViewController', 'GlassSurfaceView', 'ModuleSymbolView', 'Metrics', 'MetricSelection',
-               'StatusStripLayout', 'StatusStripView', 'SystemSampler', 'LoginItemController',
+               'StatusStripLayout', 'StatusStripView', 'SystemSampler', 'LoginItemController', 'DashboardPresentationController',
                'DiskHistory', 'DiskHistoryStore', 'DiskHistoryViewController']
     command = ['swiftc', '-swift-version', '6', '-parse-as-library', str(repo / 'scripts/verify-layout.swift')]
     command += [str(repo / 'StatPeek' / (name + '.swift')) for name in sources]
@@ -52,6 +52,7 @@ def main():
                     process.wait()
         result = json.loads((output / 'result.json').read_text())
         assert len(result['states']) == 20 and len(seen) == 20
+        assert result['arrowless_panel'] and result['rapid_toggles'] == 200 and not result['delayed_reopen']
         for state in result['states']:
             assert not state['is_key'] and not state['is_main'] and state['ignores_mouse']
             assert not state['app_in_foreground']

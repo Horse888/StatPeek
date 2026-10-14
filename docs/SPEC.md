@@ -140,3 +140,13 @@ Stat 表示系统状态，Peek 表示点开看一眼。产品、主 Target、共
 - 显式设置滚动区高度，仅宽度自动调整；避免玻璃内容层在窗口挂载后再调整尺寸时，滚动区重复应用高度变化。标题和页脚仍固定。
 - 使用独立测试窗口检查浅/深色、1378/736/568/448 点可用高度与短屏顶部/中段/底部；窗口不成为 key/main，测试进程不替代用户前台应用，不发送鼠标或键盘事件。
 - 自动检查文字容纳尺寸、同层标签不重叠、刷新不改变滚动位置、最大滚动能抵达末尾；既有采样、偏好、记录与登录项逻辑保持。测试截图明确为合成数据。
+
+## 0.3.5 稳定开关与无箭头浮层
+
+- 用户允许统一背景无法稳定衔接时去掉箭头。本次使用无箭头 borderless NSPanel，保留单层原生玻璃、原布局和自适应高度。试验过 NSPopover.hasFullSizeContent；它会改变内容安全区域，采用用户允许的无箭头方案避免引入布局偏移。
+- 状态栏只在 leftMouseDown 派发动作，由同一个展示控制器同步切换可见性；关闭使用 orderOut，window animationBehavior 为 none，无退出淡出。
+- 状态栏区域的鼠标按下和相关失活事件不先行当作外部关闭；普通外部点击和应用失活关闭，Escape 经 responder cancelOperation 关闭。应用内颜色窗口的点击保持父面板。
+- 面板位置跟随实际状态栏锚点，约束在当前屏幕可用区域；取消选择 CPU 时关闭后恢复采样基准。显隐过程中不更改指标选择、配色、登录项或磁盘记录。关闭时停掉图标动画并收回颜色窗口；监听器不重复累积。
+- 独立窗口按生产展示路径运行，关闭桌面输入监听和激活，直接调用自己的事件路由；验证 200 次开关、20 个浅深/高度/滚动状态，并检查偶数次点击后保持关闭。保留事件回放与物理桌面事件的证据边界。
+
+参考：[Apple NSPopover 行为](https://developer.apple.com/documentation/appkit/nspopover)、[hasFullSizeContent 与安全区域](https://developer.apple.com/documentation/appkit/nspopover/hasfullsizecontent)、[NSWindow.animationBehavior](https://developer.apple.com/documentation/appkit/nswindow/animationbehavior-swift.property)。

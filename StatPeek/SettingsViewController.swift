@@ -103,8 +103,12 @@ final class SettingsViewController: NSViewController {
     }
 
     override func viewWillDisappear() {
-        moduleSymbols.forEach { $0.setAnimating(false) }
+        stopSymbolMotion()
         super.viewWillDisappear()
+    }
+
+    func stopSymbolMotion() {
+        moduleSymbols.forEach { $0.setAnimating(false) }
     }
 
     @objc private func updateSymbolMotion() {

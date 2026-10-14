@@ -43,24 +43,25 @@ struct LayoutVerification {
         controller.updateLoginItem(status: .enabled, error: nil)
         controller.updateDiskHistory(store: store, nextRecordingDate: start.addingTimeInterval(2700), error: nil)
         let fields = descendants(controller.view).compactMap { $0 as? NSTextField }
-        fields.first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.4 (9)"
+        fields.first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.5 (10)"
         let scroll = descendants(controller.view).compactMap { $0 as? NSScrollView }.first!
         let document = scroll.documentView!
         var states: [[String: Any]] = []
         var sequence = 0
         for appearance in [NSAppearance.Name.aqua, .darkAqua] {
-            let window = NSWindow(contentRect: controller.view.bounds, styleMask: .borderless, backing: .buffered, defer: false)
-            window.isReleasedWhenClosed = false
+            let presentation = DashboardPresentationController(contentViewController: controller, observesOutsideEvents: false)
+            presentation.onClose = { controller.stopSymbolMotion() }
+            let window = presentation.panel
             window.ignoresMouseEvents = true
             window.animationBehavior = .none
             window.appearance = NSAppearance(named: appearance)
-            window.contentView = controller.view
-            defer { window.contentView = nil; window.close() }
+            defer { presentation.close(); window.contentViewController = nil; window.close() }
             for limit: CGFloat in [1378, 736, 568, 448] {
+                presentation.close()
                 controller.prepareToShow(availableHeight: limit)
-                window.setContentSize(controller.view.frame.size)
-                window.setFrameOrigin(NSPoint(x: 30, y: 80))
-                window.orderFront(nil)
+                let area = NSRect(x: 30, y: 80, width: 320, height: controller.view.frame.height + 12)
+                let anchor = NSRect(x: 100, y: area.maxY, width: 107, height: 24)
+                presentation.toggle(anchor: anchor, visibleFrame: area, activate: false)
                 let maximumOffset = max(0, document.frame.height - scroll.contentView.bounds.height)
                 for (position, offset) in [("top", CGFloat.zero), ("middle", maximumOffset / 2), ("bottom", maximumOffset)] {
                     if maximumOffset == 0 && position != "top" { continue }
@@ -91,6 +92,18 @@ struct LayoutVerification {
                     states.append(state)
                 }
             }
+            presentation.close()
+            let anchor = NSRect(x: 100, y: 700, width: 107, height: 24)
+            let area = NSRect(x: 30, y: 80, width: 1440, height: 700)
+            for click in 1...100 {
+                presentation.handleMouseDown(at: NSPoint(x: anchor.midX, y: anchor.midY), inAppWindow: false)
+                presentation.handleAppDeactivation(duringStatusClick: true)
+                presentation.toggle(anchor: anchor, visibleFrame: area, activate: false)
+                precondition(presentation.isShown == (click % 2 == 1))
+                precondition(!window.isKeyWindow && !window.isMainWindow)
+            }
+            RunLoop.main.run(until: Date().addingTimeInterval(0.15))
+            precondition(!presentation.isShown)
         }
         let measurements: [[String: Any]] = fields.compactMap { field in
             guard !field.stringValue.isEmpty, let cell = field.cell else { return nil }
@@ -98,7 +111,7 @@ struct LayoutVerification {
             return ["text": field.stringValue, "frame": NSStringFromRect(field.frame),
                     "natural": NSStringFromSize(cell.cellSize), "needed": NSStringFromSize(needed)]
         }
-        let result: [String: Any] = ["states": states, "text_measurements": measurements, "fixture": true, "posted_input_events": false]
+        let result: [String: Any] = ["states": states, "text_measurements": measurements, "fixture": true, "posted_input_events": false, "arrowless_panel": true, "rapid_toggles": 200, "delayed_reopen": false]
         try JSONSerialization.data(withJSONObject: result, options: [.prettyPrinted, .sortedKeys]).write(to: output.appendingPathComponent("result.json"))
     }
 
