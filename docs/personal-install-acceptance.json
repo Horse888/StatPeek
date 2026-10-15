@@ -23,5 +23,7 @@
   "future_delivery_policy": "Build and verify Release, replace ~/Applications/StatPeek.app, launch the new app in the background, then remove verified duplicate bundles. Preserve preferences and disk history.",
   "policy_document": "AGENTS.md",
   "login_startup_acceptance": "No reboot or physical login was performed; background task registration-path query is separate from app installation verification.",
-  "background_task_path_query": "No complete matching record returned within the bounded read; login item path was not confirmed."
+  "background_task_path_query": "No complete matching record returned within the bounded read; login item path was not confirmed.",
+  "status": "Superseded by 0.3.9 after a real status-strip drawing crash during the final runtime recheck.",
+  "later_crash_report": "StatPeek-2026-10-15-235426.ips"
 }

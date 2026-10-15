@@ -24,12 +24,12 @@ def main():
     runner = Path(build['TARGET_BUILD_DIR']) / 'StatPeekLayoutVerification'
     runner.parent.mkdir(parents=True, exist_ok=True)
     sources = ['SettingsViewController', 'GlassSurfaceView', 'ModuleSymbolView', 'Metrics', 'MetricSelection',
-               'StatusStripLayout', 'StatusStripView', 'SystemSampler', 'LoginItemController', 'DashboardPresentationController',
+               'StatusStripLayout', 'StatusStripText', 'StatusStripView', 'SystemSampler', 'LoginItemController', 'DashboardPresentationController',
                'DiskHistory', 'DiskHistoryStore', 'DiskHistoryViewController']
     fixture = 'verify-color-lifecycle.swift' if args.color_picker or args.layered_dismissal else 'verify-layout.swift'
     command = ['swiftc', '-swift-version', '6', '-parse-as-library', str(repo / 'scripts' / fixture)]
     command += [str(repo / 'StatPeek' / (name + '.swift')) for name in sources]
-    for framework in ['AppKit', 'Charts', 'SwiftUI', 'IOKit', 'ServiceManagement']:
+    for framework in ['AppKit', 'CoreText', 'Charts', 'SwiftUI', 'IOKit', 'ServiceManagement']:
         command += ['-framework', framework]
     command += ['-l', 'sqlite3', '-o', str(runner)]
     try:

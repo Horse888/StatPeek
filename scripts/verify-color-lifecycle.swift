@@ -38,7 +38,7 @@ struct ColorLifecycleVerification {
         settings.update(snapshot: snapshot, selection: selection)
         settings.prepareToShow(availableHeight: 736)
         descendants(settings.view).compactMap { $0 as? NSTextField }
-            .first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.8 (13)"
+            .first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.9 (14)"
         let host = DashboardPresentationController(contentViewController: settings, observesOutsideEvents: false)
         host.panel.ignoresMouseEvents = true
         host.panel.appearance = NSAppearance(named: .darkAqua)

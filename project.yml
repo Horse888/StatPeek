@@ -9,8 +9,8 @@ settings:
     GENERATE_INFOPLIST_FILE: YES
     CODE_SIGN_STYLE: Automatic
     CODE_SIGN_IDENTITY: '-'
-    MARKETING_VERSION: '0.3.8'
-    CURRENT_PROJECT_VERSION: 13
+    MARKETING_VERSION: '0.3.9'
+    CURRENT_PROJECT_VERSION: 14
 targets:
   StatPeek:
     type: application
@@ -49,6 +49,7 @@ targets:
       - path: StatPeek/StatusStripView.swift
       - path: StatPeek/SystemSampler.swift
       - path: StatPeek/StatusStripLayout.swift
+      - path: StatPeek/StatusStripText.swift
       - path: StatPeek/LoginItemController.swift
       - path: StatPeek/DiskHistory.swift
       - path: StatPeek/DiskHistoryStore.swift

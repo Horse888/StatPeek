@@ -2,7 +2,6 @@ import AppKit
 
 /// Aligns the two rows while reserving room for full utilization and disk unit changes.
 struct StatusStripLayout {
-    static var font: NSFont { .monospacedDigitSystemFont(ofSize: 9, weight: .semibold) }
     static let sidePadding: CGFloat = 2
     static let labelWidth: CGFloat = 10
     static let labelGap: CGFloat = 2
@@ -37,6 +36,6 @@ struct StatusStripLayout {
     }
 
     static func textWidth(_ text: String) -> CGFloat {
-        NSAttributedString(string: text, attributes: [.font: font]).size().width
+        StatusStripText.width(text)
     }
 }

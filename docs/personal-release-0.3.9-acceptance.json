@@ -1,0 +1,205 @@
+{
+  "date": "2026-10-16",
+  "configuration": "Release",
+  "version": "0.3.9",
+  "build": "14",
+  "app": "/Users/zy/Applications/StatPeek.app",
+  "pid": 69855,
+  "process": "/Users/zy/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+  "sha256": "a5196418ad1d07e8defbc0bdc15d15af700aff93b498c1b1d14718949c8a8491",
+  "architectures": "x86_64 arm64",
+  "strict_signature_verified": true,
+  "LSUIElement": true,
+  "ITSAppUsesNonExemptEncryption": false,
+  "preferences_preserved": true,
+  "original_history_rows_unchanged": 976,
+  "current_history_rows": 977,
+  "source_base_revision": "675b8f38be98b86ef18cbfdf813632aa09665fc1",
+  "tests": 59,
+  "test_failures": 0,
+  "input_events_posted": false,
+  "launch": "open -g",
+  "legacy_system_copy_removed": true,
+  "application_source_sha256": {
+    "StatPeek/DashboardPresentationController.swift": "cba157f7295ad6ea60793649e46b5cc8c43c2bee865bc9c0888fc02ce36af089",
+    "StatPeek/DiskHistory.swift": "b23ba041683a4236b21fda4fdf291e06d4fa462c2ff44a7e3f6631a1d3dab589",
+    "StatPeek/DiskHistoryStore.swift": "e3494ed3e186c04ef7979edb8fd5cc62fabadb1c03761dbbb72af1a7b13411f4",
+    "StatPeek/DiskHistoryViewController.swift": "409debb19a92a6d27359e9f0e1ccb674a1f7fa10e44bdffafda3513296ca1113",
+    "StatPeek/DiskRecordingController.swift": "b384e6927d61592e0ca2440b200be525947ec8ec6fb2510cf8538cb69fa0c9c0",
+    "StatPeek/GlassSurfaceView.swift": "891f0c74e3fbb3e1454998a718a5c504bde9b5a9e73d49be4629fc0c08ff65fb",
+    "StatPeek/LoginItemController.swift": "77bc35a619e7fd4bc01a526e0e7859a3b91433472e5c736d0bdb65a1a3ac586f",
+    "StatPeek/MetricSelection.swift": "ae17c0cdba662fc192be4156a786036b7ebc0d758303cf57b2ac8e69b7025023",
+    "StatPeek/Metrics.swift": "ea70ff1605ba8a72d57a754e536ec70f4128af23332a49fa3c83b54c93ae513b",
+    "StatPeek/ModuleSymbolView.swift": "04456671486ead9149e87a113a68f9db082bed5ea5ce35156996f3a701a04123",
+    "StatPeek/SettingsViewController.swift": "712ef4661fa49cb94ed8affb1ce1c8bfbaa4c6ba66307e986c402ff8d9cec782",
+    "StatPeek/StatPeekApp.swift": "f2df64aa7dc1a99a41bb6d6e06a22faa6d7e58135483953ce945d131b58751a0",
+    "StatPeek/StatusBarController.swift": "2a990a11c9f7f9d6da9b916dba8f5ab1597210ebefe950a04abc8d7dd2d5eefd",
+    "StatPeek/StatusStripLayout.swift": "815faf8ec9180d3997eec872ea49bb0cc17b5412e90dd589d5a956ca8b4811dc",
+    "StatPeek/StatusStripText.swift": "be6e0ad3adc7b97e68afbf37bde6ebc677a4061ad94d3c717c66aa10192181f1",
+    "StatPeek/StatusStripView.swift": "5778719f17c6910a9d2884775d63f56c4315bb8b2ae33279de6f9693bd2c61c7",
+    "StatPeek/SystemSampler.swift": "de3401de1bf6a69bf36a316e845616eff8142590c3acafdb65fc26951eec5c89"
+  },
+  "observed_continuous_runtime_seconds": 188.9,
+  "captured_previous_crashes": [
+    {
+      "report": "StatPeek-2026-10-15-235426.ips",
+      "capture_time": "2026-10-15 23:54:26.2641 +0800",
+      "version": "0.3.8",
+      "build": "13",
+      "exception": {
+        "codes": "0x0000000000000000, 0x0000000000000000",
+        "rawCodes": [
+          0,
+          0
+        ],
+        "type": "EXC_CRASH",
+        "signal": "SIGABRT"
+      },
+      "reason": {
+        "arguments": [
+          "-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]",
+          "0"
+        ],
+        "format_string": "*** %s: attempt to insert nil object from objects[%lu]",
+        "name": "NSInvalidArgumentException",
+        "type": "objc-exception",
+        "composed_message": "*** -[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[0]",
+        "class": "NSException"
+      },
+      "application_frames": [
+        {
+          "imageOffset": 165888,
+          "sourceLine": 67,
+          "sourceFile": "StatusStripView.swift",
+          "symbol": "specialized StatusStripView.draw(_:)",
+          "imageIndex": 0,
+          "symbolLocation": 1572
+        },
+        {
+          "imageOffset": 153008,
+          "sourceFile": "/<compiler-generated>",
+          "symbol": "@objc StatusStripView.draw(_:)",
+          "symbolLocation": 160,
+          "imageIndex": 0
+        },
+        {
+          "imageOffset": 129516,
+          "sourceFile": "/<compiler-generated>",
+          "symbol": "specialized static StatPeekApp.main()",
+          "symbolLocation": 184,
+          "imageIndex": 0
+        },
+        {
+          "imageOffset": 129320,
+          "sourceFile": "StatPeekApp.swift",
+          "symbol": "main",
+          "symbolLocation": 12,
+          "imageIndex": 0
+        }
+      ],
+      "top_exception_symbols": [
+        "__exceptionPreprocess",
+        "objc_exception_throw",
+        "-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]",
+        "-[NSDictionary initWithDictionary:copyItems:]",
+        "-[__NSPlaceholderDictionary initWithDictionary:copyItems:]",
+        "TAttributes::ApplyFont(__CFDictionary const*, __CTFont const*, TCharStream const*, CFRange, void const**)",
+        "TAttributes::TAttributes(__CFDictionary const*, TCharStream const*, CFRange, bool)",
+        "TTypesetterAttrString::Initialize(__CFAttributedString const*, bool)",
+        "TTypesetterAttrString::TTypesetterAttrString(__CFAttributedString const*, __CFDictionary const*, bool)",
+        "CTLineCreateWithAttributedString",
+        "__NSCoreTypesetterCreateBaseLineFromAttributedString",
+        "-[NSCoreTypesetter _stringDrawingCoreTextEngineWithOriginalString:rect:padding:graphicsContext:forceClipping:attributes:stringDrawingOptions:drawingContext:stringDrawingInterface:]",
+        "__NSStringDrawingEngine",
+        "specialized StatusStripView.draw(_:)"
+      ]
+    },
+    {
+      "report": "StatPeek-2026-10-15-211143.ips",
+      "capture_time": "2026-10-15 21:11:42.4589 +0800",
+      "version": "0.3.8",
+      "build": "13",
+      "exception": {
+        "codes": "0x0000000000000000, 0x0000000000000000",
+        "rawCodes": [
+          0,
+          0
+        ],
+        "type": "EXC_CRASH",
+        "signal": "SIGABRT"
+      },
+      "reason": {
+        "arguments": [
+          "-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]",
+          "0"
+        ],
+        "format_string": "*** %s: attempt to insert nil object from objects[%lu]",
+        "name": "NSInvalidArgumentException",
+        "type": "objc-exception",
+        "composed_message": "*** -[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[0]",
+        "class": "NSException"
+      },
+      "application_frames": [
+        {
+          "imageOffset": 165888,
+          "sourceLine": 67,
+          "sourceFile": "StatusStripView.swift",
+          "symbol": "specialized StatusStripView.draw(_:)",
+          "imageIndex": 0,
+          "symbolLocation": 1572
+        },
+        {
+          "imageOffset": 153008,
+          "sourceFile": "/<compiler-generated>",
+          "symbol": "@objc StatusStripView.draw(_:)",
+          "symbolLocation": 160,
+          "imageIndex": 0
+        },
+        {
+          "imageOffset": 129516,
+          "sourceFile": "/<compiler-generated>",
+          "symbol": "specialized static StatPeekApp.main()",
+          "symbolLocation": 184,
+          "imageIndex": 0
+        },
+        {
+          "imageOffset": 129320,
+          "sourceFile": "StatPeekApp.swift",
+          "symbol": "main",
+          "symbolLocation": 12,
+          "imageIndex": 0
+        }
+      ],
+      "top_exception_symbols": [
+        "__exceptionPreprocess",
+        "objc_exception_throw",
+        "-[__NSPlaceholderDictionary initWithObjects:forKeys:count:]",
+        "-[NSDictionary initWithDictionary:copyItems:]",
+        "-[__NSPlaceholderDictionary initWithDictionary:copyItems:]",
+        "TAttributes::ApplyFont(__CFDictionary const*, __CTFont const*, TCharStream const*, CFRange, void const**)",
+        "TAttributes::TAttributes(__CFDictionary const*, TCharStream const*, CFRange, bool)",
+        "TTypesetterAttrString::Initialize(__CFAttributedString const*, bool)",
+        "TTypesetterAttrString::TTypesetterAttrString(__CFAttributedString const*, __CFDictionary const*, bool)",
+        "CTLineCreateWithAttributedString",
+        "__NSCoreTypesetterCreateBaseLineFromAttributedString",
+        "-[NSCoreTypesetter _stringDrawingCoreTextEngineWithOriginalString:rect:padding:graphicsContext:forceClipping:attributes:stringDrawingOptions:drawingContext:stringDrawingInterface:]",
+        "__NSStringDrawingEngine",
+        "specialized StatusStripView.draw(_:)"
+      ]
+    }
+  ],
+  "native_bitmap_frames": 448,
+  "native_bitmap_dimensions_points": [
+    97,
+    24
+  ],
+  "reboot_or_real_login_tested": false,
+  "background_task_path_query": "No complete matching record returned within the bounded read; login item path was not confirmed.",
+  "future_delivery_policy": "Build and verify Release, replace ~/Applications/StatPeek.app, launch the new app in the background, verify process and preserved data, remove known duplicate bundles.",
+  "native_color_lifecycle": {
+    "scenarios": 12,
+    "all_parent_and_picker_closes_passed": true,
+    "posted_input_events": false
+  },
+  "new_version_crash_reports_at_final_check": []
+}

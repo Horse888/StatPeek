@@ -1,5 +1,20 @@
 # 验证记录
 
+## 0.3.9 / Build 14 · 2026-10-16 · 个人目录最终交付
+
+- 首次迁移的 0.3.8 在最终运行复核时已退出，发现真实 SIGABRT / NSInvalidArgumentException 崩溃。23:54 的报告指向 `StatusStripView.draw` 的字母绘制；迁移前 21:11 的旧副本报告也有同一调用栈。异常来自 CoreText ApplyFont 经 Cocoa 字典复制时插入 nil，不能仅据堆栈断言是哪一个属性对象复制失败。此前 0.3.8 的个人目录记录只证明当时启动和数据保留，现已标记为被此版本替代。
+- 状态栏文字改为直接使用 CTFont/CGColor 属性及 CTLineDraw，避开 NSAttributedString.draw 的 AppKit 属性归一化路径。Menlo-Bold 9 点字体的测量与绘制一致，仍为两行 D/C/M/G、自选颜色；四项最坏读数占 97 × 24 点。
+- 最终 Release **59 项 XCTest 通过，0 失败**；新增 448 帧原生位图绘制检查，覆盖 16 种勾选组合、7 种颜色、浅深色、1x/2x，验证实际可见像素、两行存在和彩色像素，并检查数字等宽和字母容纳尺寸。独立工具另通过 12 个真实颜色 Popover 关闭、重开及保存流程。另导出并查看浅/深色状态栏位图（合成数据，不是用户桌面截图）。
+- 最终 `/Users/zy/Applications/StatPeek.app` 为 **0.3.9 (14)**，唯一进程来自该路径。安装后持续监测 **188.9 秒**，进程未退出，未发现该版本的新崩溃报告；这是有限时长的运行观察，不等同于长期零崩溃保证。全程无桌面输入或前台激活。
+- arm64/x86_64、严格签名通过；有效 LSUIElement=true、ITSAppUsesNonExemptEncryption=false（布尔值）。本次测试构建和安装可执行文件 SHA-256 一致：`a5196418ad1d07e8defbc0bdc15d15af700aff93b498c1b1d14718949c8a8491`。同时保存全部应用 Swift 源文件哈希，区分源码基线提交与本次构建输入。
+- 最终替换前的配色和勾选保持，976 条原磁盘记录逐行未变，观察结束时正常记录共 977 条。系统 Applications 旧副本、本次旧版备份、暂存与构建重复 App 均已移除，只保留个人目录固定副本。后续沿用 [AGENTS.md](../AGENTS.md) 的 Release 替换与运行流程。
+- macOS 13 / Intel 实机、真实重新登录启动未单独验收；系统后台任务登记路径查询没有在限定时间内返回完整结果，未将其计为已通过。
+
+<img src="assets/coretext-status-strip-light.png" width="194" alt="Core Text status strip in light appearance, synthetic values">
+<img src="assets/coretext-status-strip-dark.png" width="194" alt="Core Text status strip in dark appearance, synthetic values">
+
+结构化证据及崩溃摘要见 [personal-release-0.3.9-acceptance.json](personal-release-0.3.9-acceptance.json)。以下为历史版本证据。
+
 ## 2026-10-15 · Release 迁移到个人 Applications
 
 - 按用户要求重新构建当前 **0.3.8 (13)** Release，保持 Xcode 配置的 Derived Data；完整 **57 项 XCTest 通过，0 失败**。应用源码未更改，版本不递增。

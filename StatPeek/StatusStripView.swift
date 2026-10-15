@@ -33,6 +33,7 @@ final class StatusStripView: NSView {
     private var readings: [Metric: String] = [:]
     private var colors: [Metric: MetricColor] = [:]
     private var layout = StatusStripLayout(rows: [], readings: [:])
+    private let textFont = StatusStripText.makeFont()
     override var isFlipped: Bool { true }
     var requiredWidth: CGFloat { layout.width }
 
@@ -54,22 +55,18 @@ final class StatusStripView: NSView {
             return
         }
         let rowHeight: CGFloat = 11
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
         let top = (bounds.height - CGFloat(rows.count) * rowHeight) / 2
         for (rowIndex, metrics) in rows.enumerated() {
             for (columnIndex, metric) in metrics.enumerated() {
-                let color = (colors[metric] ?? .neutral).nsColor
+                let color = ((colors[metric] ?? .neutral).nsColor.usingColorSpace(.sRGB) ?? .black).cgColor
                 let x = layout.origin(of: columnIndex)
                 let y = top + CGFloat(rowIndex) * rowHeight
-                let label = NSAttributedString(string: metric.abbreviation, attributes: [
-                    .font: NSFont.monospacedSystemFont(ofSize: 9, weight: .bold),
-                    .foregroundColor: color
-                ])
-                label.draw(at: NSPoint(x: x, y: y - 0.5))
-                let text = NSAttributedString(string: metric.compact(readings[metric]), attributes: [
-                    .font: StatusStripLayout.font,
-                    .foregroundColor: color
-                ])
-                text.draw(at: NSPoint(x: x + StatusStripLayout.labelWidth + StatusStripLayout.labelGap, y: y - 0.5))
+                StatusStripText.draw(metric.abbreviation, at: NSPoint(x: x, y: y - 0.5),
+                                     font: textFont, color: color, in: context)
+                StatusStripText.draw(metric.compact(readings[metric]),
+                                     at: NSPoint(x: x + StatusStripLayout.labelWidth + StatusStripLayout.labelGap, y: y - 0.5),
+                                     font: textFont, color: color, in: context)
             }
         }
     }

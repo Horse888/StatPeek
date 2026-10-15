@@ -22,6 +22,7 @@
 		477F523A837ECD236B6C04DF /* GlassSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CE439434C307BD64C8F720 /* GlassSurfaceView.swift */; };
 		4E718466048363E2AC84CA10 /* DashboardPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6ED15196F2C5A2FC6ADC174 /* DashboardPresentationController.swift */; };
 		4F5A9464DB54B6A0BF934851 /* CompactLayoutAndLoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA41ED99CD1127309D1DFDDB /* CompactLayoutAndLoginTests.swift */; };
+		555A68CE7543331ED9FFA959 /* StatusStripRenderingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8ED9BD8612CDCB73899397 /* StatusStripRenderingTests.swift */; };
 		568A7916D99820D4B347948A /* DiskHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5B5B08DD09C8E43512239F /* DiskHistoryTests.swift */; };
 		5F0328C4BFE82FD2E4A95412 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C8B3C0CA4BEDA467302EFF /* Metrics.swift */; };
 		6AB40EC47EDE2C56E6F74BBA /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2575D6FDEC2236B9E18BE03F /* Charts.framework */; };
@@ -33,11 +34,13 @@
 		779CB14E8565FF7342BF414F /* StatPeekTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEEFE6286F25CE5FD679FA24 /* StatPeekTests.swift */; };
 		7C6764E096FCF7C58273CD8B /* DiskRecordingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2514D72B2626DF5FBC1EE47D /* DiskRecordingController.swift */; };
 		7EEC50A81A5FCEAD2E3A6C6B /* DiskHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96900E040F12D6F67BE7F01A /* DiskHistoryViewController.swift */; };
+		8E2A5ACF36A2158AF1A23727 /* StatusStripText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628C413274D2CDDCBC313E1C /* StatusStripText.swift */; };
 		8F0F08765F2E6E5DB2231D3E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1E825A590F2CD477E4024CD /* SwiftUI.framework */; };
 		90FEA1D3A8592659CD57EC25 /* SystemSampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06949D180EDCD56C44FC9B5 /* SystemSampler.swift */; };
 		91CB1DD5E6A819BB1A7E3D10 /* MetricSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D23165BEAD66738A4218DB /* MetricSelection.swift */; };
 		9261E6464E4B52A0A09FD0EE /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2575D6FDEC2236B9E18BE03F /* Charts.framework */; };
 		973E5998A2EAAE66EC49CFFF /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C8B3C0CA4BEDA467302EFF /* Metrics.swift */; };
+		9C52BBFA23FC20503B04ED26 /* StatusStripText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 628C413274D2CDDCBC313E1C /* StatusStripText.swift */; };
 		9E9AD4DAF41B9A9A57456FBA /* MetricSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D23165BEAD66738A4218DB /* MetricSelection.swift */; };
 		9FFA710C34C25A5F859E449B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7487870B95D0E5DFBB501822 /* SettingsViewController.swift */; };
 		A18E1D33121E0A7EFFF144EA /* GlassSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CE439434C307BD64C8F720 /* GlassSurfaceView.swift */; };
@@ -66,10 +69,12 @@
 		518F85A4F59D0BDCBCE23035 /* LoginItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemController.swift; sourceTree = "<group>"; };
 		5DF977832BE116A2F0B5F6B0 /* StatusStripLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusStripLayout.swift; sourceTree = "<group>"; };
 		5E983AC4CDEA3CA5600ADA70 /* StatPeekTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StatPeekTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		628C413274D2CDDCBC313E1C /* StatusStripText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusStripText.swift; sourceTree = "<group>"; };
 		6EE572E265312F47A5C974CD /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		7487870B95D0E5DFBB501822 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		84D12301FD047A7AF74DC7C3 /* PresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationTests.swift; sourceTree = "<group>"; };
 		88811A181DE61639A06B5176 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
+		8C8ED9BD8612CDCB73899397 /* StatusStripRenderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusStripRenderingTests.swift; sourceTree = "<group>"; };
 		96900E040F12D6F67BE7F01A /* DiskHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskHistoryViewController.swift; sourceTree = "<group>"; };
 		9819FBF4274EAB7E70C6797F /* ModuleSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleSymbolView.swift; sourceTree = "<group>"; };
 		A2AFC7B743FB841FAEA3DFDF /* DiskHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskHistoryStore.swift; sourceTree = "<group>"; };
@@ -156,6 +161,7 @@
 				AC5B5B08DD09C8E43512239F /* DiskHistoryTests.swift */,
 				84D12301FD047A7AF74DC7C3 /* PresentationTests.swift */,
 				EEEFE6286F25CE5FD679FA24 /* StatPeekTests.swift */,
+				8C8ED9BD8612CDCB73899397 /* StatusStripRenderingTests.swift */,
 			);
 			path = StatPeekTests;
 			sourceTree = "<group>";
@@ -178,6 +184,7 @@
 				2BB1B52DA18F0AE5306E6645 /* StatPeekApp.swift */,
 				88811A181DE61639A06B5176 /* StatusBarController.swift */,
 				5DF977832BE116A2F0B5F6B0 /* StatusStripLayout.swift */,
+				628C413274D2CDDCBC313E1C /* StatusStripText.swift */,
 				E6D8F607A7BBFBB45DFE0FC1 /* StatusStripView.swift */,
 				B06949D180EDCD56C44FC9B5 /* SystemSampler.swift */,
 			);
@@ -294,6 +301,8 @@
 				17F85B26F0E93BCCA1E62387 /* SettingsViewController.swift in Sources */,
 				779CB14E8565FF7342BF414F /* StatPeekTests.swift in Sources */,
 				2071D6C0204480A2D2889831 /* StatusStripLayout.swift in Sources */,
+				555A68CE7543331ED9FFA959 /* StatusStripRenderingTests.swift in Sources */,
+				9C52BBFA23FC20503B04ED26 /* StatusStripText.swift in Sources */,
 				08741CA30674786E236D1B81 /* StatusStripView.swift in Sources */,
 				BCE0FD98DBEDA33E32679E9B /* SystemSampler.swift in Sources */,
 			);
@@ -317,6 +326,7 @@
 				E021DA127E9ECF916F0A49ED /* StatPeekApp.swift in Sources */,
 				6FFB1D32E2E38D7777DB0791 /* StatusBarController.swift in Sources */,
 				0455109641CA3F3339E816FA /* StatusStripLayout.swift in Sources */,
+				8E2A5ACF36A2158AF1A23727 /* StatusStripText.swift in Sources */,
 				DB01BDF97BB8E5D6ABCBF2CD /* StatusStripView.swift in Sources */,
 				90FEA1D3A8592659CD57EC25 /* SystemSampler.swift in Sources */,
 			);
@@ -433,7 +443,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -453,7 +463,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.3.8;
+				MARKETING_VERSION = 0.3.9;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -501,7 +511,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -515,7 +525,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 0.3.8;
+				MARKETING_VERSION = 0.3.9;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

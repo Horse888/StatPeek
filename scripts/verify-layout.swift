@@ -43,7 +43,7 @@ struct LayoutVerification {
         controller.updateLoginItem(status: .enabled, error: nil)
         controller.updateDiskHistory(store: store, nextRecordingDate: start.addingTimeInterval(2700), error: nil)
         let fields = descendants(controller.view).compactMap { $0 as? NSTextField }
-        fields.first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.8 (13)"
+        fields.first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = "v0.3.9 (14)"
         let scroll = descendants(controller.view).compactMap { $0 as? NSScrollView }.first!
         let document = scroll.documentView!
         var states: [[String: Any]] = []
