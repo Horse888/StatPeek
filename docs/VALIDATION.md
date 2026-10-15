@@ -1,5 +1,16 @@
 # 验证记录
 
+## 2026-10-15 · Release 迁移到个人 Applications
+
+- 按用户要求重新构建当前 **0.3.8 (13)** Release，保持 Xcode 配置的 Derived Data；完整 **57 项 XCTest 通过，0 失败**。应用源码未更改，版本不递增。
+- 固定交付位置改为 `/Users/zy/Applications/StatPeek.app`。完成暂存、签名与元数据检查后替换旧副本，以 `open -g` 后台启动；核对唯一进程来自该个人目录。原 `/Applications/StatPeek.app`、本次旧版备份、暂存和构建重复 App 均已移除。
+- arm64/x86_64，严格签名校验通过；有效 LSUIElement=true、ITSAppUsesNonExemptEncryption=false（布尔值）。本次 Release 构建与安装可执行文件 SHA-256 一致：`b40914b85983c815367883e38d567e56eac8bfec633dc9043c6ec76c68d65997`。
+- 原选择与配色保持，973 条已有磁盘记录按 ID 逐行未变；启动后正常新增一条，共 974 条。全程没有发送桌面输入或操作用户鼠标、键盘。
+- 后续每次更新均执行「验证 Release → 替换个人 Applications 中的旧版 → 后台运行新版 → 核对唯一进程及数据保留 → 清理已确认的重复 App」，已写入工程 [AGENTS.md](../AGENTS.md)。历史版本中 `/Applications` 的记录保留为当时的交付证据。
+- 目录迁移与应用运行已验证；系统后台任务登记路径查询在限定时间内未完成，未据此确认登录项路径，也未重启电脑进行真实登录启动验收。
+
+结构化证据见 [personal-install-acceptance.json](personal-install-acceptance.json)。以下为历史版本证据。
+
 ## 0.3.8 / Build 13 · 2026-10-14
 
 - 用户确认问题主要是「已展开时点击关不掉」。在生产鼠标监测入口回放一条点击位置仍在状态栏、但处理时鼠标已移开的事件，旧版把它当成外部点击先关闭，随后的按钮动作又打开；失败回归 1 项、1 个断言。改用事件自己的屏幕坐标后该测试通过。

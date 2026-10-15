@@ -40,7 +40,7 @@ xcodebuild -project StatPeek.xcodeproj -scheme StatPeek -configuration Release -
 xcodebuild -project StatPeek.xcodeproj -scheme StatPeek -configuration Release -destination 'platform=macOS' build
 ```
 
-构建保持 Xcode 配置的 Derived Data 位置。用 `xcodebuild -showBuildSettings` 查看 `TARGET_BUILD_DIR`，再将完成验证的 Release `.app` 安装到 Applications。不要同时运行开发副本和安装副本。
+构建保持 Xcode 配置的 Derived Data 位置。用 `xcodebuild -showBuildSettings` 查看 `TARGET_BUILD_DIR`，将验证通过的 Release `.app` 安装到个人应用目录 `~/Applications/StatPeek.app`。每次更新均停止旧版、替换该固定副本并后台启动新版，核对唯一运行进程及版本后清理本次旧副本和构建重复 App；用户设置和磁盘历史保留。工程交付约定见 [AGENTS.md](AGENTS.md)。
 
 项目已包含生成后的 Xcode 工程。只有修改 `project.yml` 时才需要 [XcodeGen](https://github.com/yonaskolb/XcodeGen)：
 
