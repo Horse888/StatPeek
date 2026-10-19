@@ -1,5 +1,7 @@
 # StatPeek 可滚动进度仪表盘
 
+> 历史设计与验收计划：以下版本、安装位置和 GUI 验证步骤保留作为当时记录，不作为当前操作指令。现行本机交付以 [项目 AGENTS](../AGENTS.md) 为准，固定安装位置为 `~/Applications/StatPeek.app`；验证使用独立窗口，不操作用户鼠标键盘。旧生成证据按[全局产物规则](/Users/zy/.codex/development-guidelines/artifacts.md)核查必要性后处理，不要求永久保留。当前任务的明确限制优先。
+
 Written against: 5099ddd01318cf40ade2a07405b3ffe2520d6b7f
 
 ## Evidence chain

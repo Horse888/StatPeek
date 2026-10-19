@@ -1,5 +1,7 @@
 # App icon
 
+> Current source policy: follow the [global Apple icon contract](/Users/zy/.codex/development-guidelines/apple-platform.md#flutter-apple-target-与图标): Apple Icon Composer `.icon` is the maintained source. The asset-catalog export below records the historical workflow, not an instruction to recreate `.appiconset`. This documentation update does not claim the project's icon migration or a build has been verified.
+
 The app icon uses a dark navy tile and two rows of colorful status indicators, reflecting StatPeek's compact two-row menu bar layout. It is separate from the tiny SF Symbols used beside live metrics.
 
 Generated with the built-in imagegen tool. The master image is exported into the macOS AppIcon asset catalog at all required resolutions.
