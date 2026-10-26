@@ -19,31 +19,31 @@ final class DiskHistoryViewController: NSViewController {
     private var rangeSurfaces: [GlassSurfaceView] = []
 
     override func loadView() {
-        let innerWidth = contentWidth - 32
+        let innerWidth = contentWidth - 28
         view = NSView(frame: NSRect(x: 0, y: 0, width: contentWidth, height: 304))
         let heading = NSTextField(labelWithString: "最近记录的剩余空间")
         heading.font = .systemFont(ofSize: 10)
-        heading.textColor = .secondaryLabelColor
-        heading.frame = NSRect(x: 16, y: 284, width: innerWidth, height: 16)
+        heading.textColor = .dashboardSecondaryLabel
+        heading.frame = NSRect(x: 14, y: 284, width: innerWidth, height: 16)
         view.addSubview(heading)
-        amount.font = .monospacedDigitSystemFont(ofSize: 20, weight: .semibold)
-        amount.frame = NSRect(x: 16, y: 252, width: innerWidth, height: 28)
+        amount.font = .monospacedDigitSystemFont(ofSize: 22, weight: .semibold)
+        amount.frame = NSRect(x: 14, y: 252, width: innerWidth, height: 30)
         amount.textColor = .systemTeal
         amount.setAccessibilityIdentifier("disk-history-amount")
         view.addSubview(amount)
         change.font = .systemFont(ofSize: 11, weight: .medium)
-        change.frame = NSRect(x: 16, y: 232, width: innerWidth, height: 18)
+        change.frame = NSRect(x: 14, y: 232, width: innerWidth, height: 18)
         change.setAccessibilityIdentifier("disk-history-change")
         view.addSubview(change)
         timestamp.font = .systemFont(ofSize: 10)
-        timestamp.textColor = .secondaryLabelColor
+        timestamp.textColor = .dashboardSecondaryLabel
         timestamp.lineBreakMode = .byWordWrapping
         timestamp.maximumNumberOfLines = 2
-        timestamp.frame = NSRect(x: 16, y: 206, width: innerWidth, height: 24)
+        timestamp.frame = NSRect(x: 14, y: 206, width: innerWidth, height: 24)
         view.addSubview(timestamp)
         for (index, label) in ["24 小时", "7 天", "全部"].enumerated() {
             let width = (innerWidth - 12) / 3
-            let surface = GlassSurfaceView(frame: NSRect(x: 16 + CGFloat(index) * (width + 6), y: 178, width: width, height: 24))
+            let surface = GlassSurfaceView(frame: NSRect(x: 14 + CGFloat(index) * (width + 6), y: 178, width: width, height: 24))
             let button = NSButton(title: label, target: self, action: #selector(changeRange(_:)))
             button.isBordered = false
             button.tag = index
@@ -57,23 +57,23 @@ final class DiskHistoryViewController: NSViewController {
         updateRangeControls()
         let unit = NSTextField(labelWithString: "剩余空间（G）")
         unit.font = .systemFont(ofSize: 10)
-        unit.textColor = .secondaryLabelColor
-        unit.frame = NSRect(x: 16, y: 160, width: innerWidth, height: 16)
+        unit.textColor = .dashboardSecondaryLabel
+        unit.frame = NSRect(x: 14, y: 160, width: innerWidth, height: 16)
         view.addSubview(unit)
         let hosting = NSHostingView(rootView: DiskHistoryChart(samples: [], range: range, now: Date()))
-        hosting.frame = NSRect(x: 16, y: 48, width: innerWidth, height: 110)
+        hosting.frame = NSRect(x: 14, y: 54, width: innerWidth, height: 104)
         hosting.setAccessibilityIdentifier("disk-history-chart")
         view.addSubview(hosting)
         chart = hosting
-        footer.font = .systemFont(ofSize: 9)
-        footer.textColor = .secondaryLabelColor
+        footer.font = .monospacedDigitSystemFont(ofSize: 10, weight: .regular)
+        footer.textColor = .dashboardSecondaryLabel
         footer.lineBreakMode = .byWordWrapping
         footer.maximumNumberOfLines = 2
-        footer.frame = NSRect(x: 16, y: 24, width: innerWidth, height: 20)
+        footer.frame = NSRect(x: 14, y: 28, width: innerWidth, height: 22)
         footer.setAccessibilityIdentifier("disk-history-schedule")
         view.addSubview(footer)
-        note.font = .systemFont(ofSize: 9)
-        note.frame = NSRect(x: 16, y: 0, width: innerWidth, height: 22)
+        note.font = .systemFont(ofSize: 10)
+        note.frame = NSRect(x: 14, y: 0, width: innerWidth, height: 26)
         note.setAccessibilityIdentifier("disk-history-note")
         view.addSubview(note)
     }
@@ -102,7 +102,7 @@ final class DiskHistoryViewController: NSViewController {
             let next = nextRecordingDate.map { " · 下次 " + time($0) } ?? ""
             footer.stringValue = "累计 \(count) 条记录" + next
             note.stringValue = recordingError ?? "每 5 分钟记录 · 只保存在本机，不自动弹出提示"
-            note.textColor = recordingError == nil ? .secondaryLabelColor : .systemRed
+            note.textColor = recordingError == nil ? .dashboardSecondaryLabel : .systemRed
             note.toolTip = note.stringValue
         } catch {
             note.stringValue = error.localizedDescription

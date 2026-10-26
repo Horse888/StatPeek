@@ -1,5 +1,20 @@
 import AppKit
 
+extension NSColor {
+    /// Resolve inside the drawing appearance. Applying alpha to labelColor while
+    /// constructing a view can otherwise freeze its light-mode color on glass.
+    static var dashboardSecondaryLabel: NSColor {
+        NSColor(name: nil) { appearance in
+            var resolved = NSColor.secondaryLabelColor
+            appearance.performAsCurrentDrawingAppearance {
+                resolved = (NSColor.labelColor.usingColorSpace(.sRGB) ?? .labelColor)
+                    .withAlphaComponent(0.68)
+            }
+            return resolved
+        }
+    }
+}
+
 @MainActor
 final class GlassSurfaceView: NSView {
     let content = NSView()

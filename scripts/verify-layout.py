@@ -2,6 +2,7 @@
 """Render only independent fixture windows; never send desktop input or activate an app."""
 import argparse
 import json
+import os
 from pathlib import Path
 import subprocess
 import time
@@ -36,7 +37,8 @@ def main():
         subprocess.run(command, check=True, cwd=repo)
         with (output / 'runner.log').open('w') as log:
             fixture_args = ['--layered-dismissal'] if args.layered_dismissal else []
-            process = subprocess.Popen([str(runner), str(output), *fixture_args], stdout=log, stderr=subprocess.STDOUT)
+            environment = dict(os.environ, STATPEEK_FIXTURE_VERSION=f"v{build['MARKETING_VERSION']} ({build['CURRENT_PROJECT_VERSION']})")
+            process = subprocess.Popen([str(runner), str(output), *fixture_args], stdout=log, stderr=subprocess.STDOUT, env=environment)
             seen = set()
             try:
                 while process.poll() is None:

@@ -21,7 +21,7 @@ final class SettingsViewController: NSViewController {
         view = surface
         dashboardContent = surface.content
         let heading = text("StatPeek", frame: NSRect(x: 14, y: 654, width: 260, height: 24), size: 18, weight: .semibold)
-        let subtitle = text("勾选显示在状态栏 · 每 2 秒更新", frame: NSRect(x: 14, y: 632, width: 260, height: 18), size: 11, color: .secondaryLabelColor)
+        let subtitle = text("勾选显示在状态栏 · 每 2 秒更新", frame: NSRect(x: 14, y: 632, width: 260, height: 18), size: 11, color: .dashboardSecondaryLabel)
         heading.autoresizingMask = .minYMargin
         subtitle.autoresizingMask = .minYMargin
         scrollView.frame = NSRect(x: 0, y: 48, width: 288, height: 574)
@@ -39,7 +39,7 @@ final class SettingsViewController: NSViewController {
         dashboardContent.addSubview(scrollView)
         var y: CGFloat = 8
         for (index, metric) in Metric.allCases.enumerated() {
-            let height: CGFloat = metric == .disk ? 108 : 80
+            let height: CGFloat = metric == .disk ? 100 : 80
             let card = MetricCardView(metric: metric, frame: NSRect(x: 14, y: y, width: 260, height: height))
             card.toggle.tag = index
             card.toggle.target = self
@@ -78,7 +78,7 @@ final class SettingsViewController: NSViewController {
         dashboardContent.addSubview(loginToggle)
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
         let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "—"
-        let versionLabel = text("v\(version) (\(build))", frame: NSRect(x: 14, y: 15, width: 66, height: 18), size: 10, color: .secondaryLabelColor)
+        let versionLabel = text("v\(version) (\(build))", frame: NSRect(x: 14, y: 15, width: 66, height: 18), size: 10, color: .dashboardSecondaryLabel)
         versionLabel.setAccessibilityIdentifier("app-version")
         let quitPill = glassPill(frame: NSRect(x: 220, y: 12, width: 54, height: 24))
         let quit = NSButton(title: "退出", target: self, action: #selector(quitApp))
@@ -214,9 +214,9 @@ private class DashboardCardView: NSView {
     var tint: NSColor = .labelColor { didSet { needsDisplay = true } }
     override func draw(_ dirtyRect: NSRect) {
         let shape = NSBezierPath(roundedRect: bounds.insetBy(dx: 0.5, dy: 0.5), xRadius: 12, yRadius: 12)
-        tint.withAlphaComponent(0.075).setFill()
+        tint.withAlphaComponent(0.045).setFill()
         shape.fill()
-        tint.withAlphaComponent(0.13).setStroke()
+        NSColor.labelColor.withAlphaComponent(0.055).setStroke()
         shape.lineWidth = 1
         shape.stroke()
     }
@@ -282,8 +282,8 @@ private final class MetricCardView: DashboardCardView {
         percentage.setAccessibilityIdentifier(metric == .disk ? "usage-disk" : "reading-\(metric.rawValue)")
         addSubview(percentage)
         detail.font = .systemFont(ofSize: 10)
-        detail.textColor = .secondaryLabelColor
-        detail.frame = NSRect(x: 14, y: 6, width: 232, height: metric == .disk ? 34 : 17)
+        detail.textColor = .dashboardSecondaryLabel
+        detail.frame = NSRect(x: 14, y: metric == .disk ? 10 : 6, width: 232, height: metric == .disk ? 28 : 17)
         detail.maximumNumberOfLines = 2
         detail.setAccessibilityIdentifier("detail-\(metric.rawValue)")
         addSubview(detail)
@@ -335,7 +335,7 @@ final class MetricColorButton: NSColorWell {
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     override func draw(_ dirtyRect: NSRect) {
-        let dot = NSBezierPath(ovalIn: NSRect(x: bounds.midX - 7, y: bounds.midY - 7, width: 14, height: 14))
+        let dot = NSBezierPath(ovalIn: NSRect(x: bounds.midX - 6, y: bounds.midY - 6, width: 12, height: 12))
         NSGraphicsContext.saveGraphicsState()
         dot.addClip()
         super.draw(dirtyRect)
@@ -371,18 +371,16 @@ final class MetricProgressView: NSView {
     override func accessibilityRole() -> NSAccessibility.Role? { .progressIndicator }
     override func draw(_ dirtyRect: NSRect) {
         guard let value = validPercentage else { return }
-        let track = NSBezierPath(roundedRect: bounds.insetBy(dx: 0.5, dy: 0.5), xRadius: 3, yRadius: 3)
+        let track = NSBezierPath(roundedRect: bounds.insetBy(dx: 0.5, dy: 1), xRadius: 3, yRadius: 3)
         NSColor.labelColor.withAlphaComponent(0.08).setFill()
         track.fill()
-        NSColor.labelColor.withAlphaComponent(0.18).setStroke()
-        track.lineWidth = 0.75
-        track.stroke()
         guard value > 0 else { return }
-        let fill = NSBezierPath(roundedRect: NSRect(x: 0.5, y: 0.5, width: max(0, (bounds.width - 1) * value / 100), height: bounds.height - 1), xRadius: 3, yRadius: 3)
+        let fill = NSBezierPath(roundedRect: NSRect(x: 0.5, y: 1, width: max(0, (bounds.width - 1) * value / 100), height: bounds.height - 2), xRadius: 3, yRadius: 3)
         color.withAlphaComponent(0.85).setFill()
         fill.fill()
-        NSColor.labelColor.withAlphaComponent(0.22).setStroke()
-        fill.lineWidth = 0.75
+        // A quiet neutral edge keeps white/black custom colors visible, too.
+        NSColor.labelColor.withAlphaComponent(0.12).setStroke()
+        fill.lineWidth = 0.5
         fill.stroke()
     }
 }

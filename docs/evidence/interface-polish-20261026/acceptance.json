@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-26",
+  "version": "0.3.9",
+  "build": "17",
+  "bundle_identifier": "com.zyapps.StatPeek",
+  "executable_sha256": "2b7460b435e6a0fea94cb2545822219682c09c88d92a1a87ca0311024c4ef6c0",
+  "installed_path": "/Users/zy/Applications/StatPeek.app",
+  "process": "41184 /Users/zy/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+  "signature": "ad hoc; codesign --verify --deep --strict passed",
+  "LSUIElement": true,
+  "ITSAppUsesNonExemptEncryption": false,
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "builds": [
+    {
+      "build": 15,
+      "result": "layout overlap assertions failed; not installed"
+    },
+    {
+      "build": 16,
+      "result": "59 tests passed; visual dark text issue caught; not installed"
+    },
+    {
+      "build": 17,
+      "result": "59 tests passed; final visual inspection passed"
+    }
+  ],
+  "historical_rows_preserved": 3969,
+  "current_rows": 3970,
+  "database_integrity": "ok",
+  "selection_and_colors_preserved": true,
+  "login_item_changed": false,
+  "redundant_apps_removed": true,
+  "unique_running_process": true,
+  "process_observation": "Still running after data verification and cleanup; limited observation, not long-term stability acceptance",
+  "release_tests": {
+    "executed": 59,
+    "failures": 0
+  },
+  "independent_native_windows": {
+    "states": 20,
+    "appearances": [
+      "aqua",
+      "darkAqua"
+    ],
+    "height_limits": [
+      1378,
+      736,
+      568,
+      448
+    ],
+    "posted_input_events": false,
+    "fixture_data": true
+  },
+  "native_color_popover_flows": 12,
+  "visual_review": [
+    "light and dark full-height",
+    "short-screen top/middle/bottom",
+    "native color Popover reopened",
+    "secondary text appearance resolution"
+  ],
+  "remaining_limits": [
+    "macOS 13 and Intel hardware not run",
+    "No manual physical mouse/keyboard interaction",
+    "No reboot/login acceptance; login registration unchanged"
+  ],
+  "source_sha256": {
+    "StatPeek/DashboardPresentationController.swift": "cba157f7295ad6ea60793649e46b5cc8c43c2bee865bc9c0888fc02ce36af089",
+    "StatPeek/DiskHistory.swift": "b23ba041683a4236b21fda4fdf291e06d4fa462c2ff44a7e3f6631a1d3dab589",
+    "StatPeek/DiskHistoryStore.swift": "e3494ed3e186c04ef7979edb8fd5cc62fabadb1c03761dbbb72af1a7b13411f4",
+    "StatPeek/DiskHistoryViewController.swift": "98490b1080c0bf176adaa66aef8aabd7c0789771e1ebbdd1bb8446247d9eca84",
+    "StatPeek/DiskRecordingController.swift": "b384e6927d61592e0ca2440b200be525947ec8ec6fb2510cf8538cb69fa0c9c0",
+    "StatPeek/GlassSurfaceView.swift": "48149a9bc8fcf12e66f7336c58fda57edc1d82c77fc15f324c8131cc686b146c",
+    "StatPeek/LoginItemController.swift": "77bc35a619e7fd4bc01a526e0e7859a3b91433472e5c736d0bdb65a1a3ac586f",
+    "StatPeek/MetricSelection.swift": "ae17c0cdba662fc192be4156a786036b7ebc0d758303cf57b2ac8e69b7025023",
+    "StatPeek/Metrics.swift": "ea70ff1605ba8a72d57a754e536ec70f4128af23332a49fa3c83b54c93ae513b",
+    "StatPeek/ModuleSymbolView.swift": "04456671486ead9149e87a113a68f9db082bed5ea5ce35156996f3a701a04123",
+    "StatPeek/SettingsViewController.swift": "3e2203d8052a4f2439fbc549f3cc147681ca881b9ce082fe642464e2728d52fa",
+    "StatPeek/StatPeekApp.swift": "f2df64aa7dc1a99a41bb6d6e06a22faa6d7e58135483953ce945d131b58751a0",
+    "StatPeek/StatusBarController.swift": "2a990a11c9f7f9d6da9b916dba8f5ab1597210ebefe950a04abc8d7dd2d5eefd",
+    "StatPeek/StatusStripLayout.swift": "815faf8ec9180d3997eec872ea49bb0cc17b5412e90dd589d5a956ca8b4811dc",
+    "StatPeek/StatusStripText.swift": "be6e0ad3adc7b97e68afbf37bde6ebc677a4061ad94d3c717c66aa10192181f1",
+    "StatPeek/StatusStripView.swift": "5778719f17c6910a9d2884775d63f56c4315bb8b2ae33279de6f9693bd2c61c7",
+    "StatPeek/SystemSampler.swift": "de3401de1bf6a69bf36a316e845616eff8142590c3acafdb65fc26951eec5c89"
+  }
+}
