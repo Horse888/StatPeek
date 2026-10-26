@@ -12,13 +12,15 @@ final class DashboardPresentationController {
     private var escapeMonitor: Any?
     private var globalMonitor: Any?
     private var deactivationObserver: NSObjectProtocol?
+    private var workspaceActivationObserver: NSObjectProtocol?
     private var shownAt: TimeInterval?
     private var hiddenAt: TimeInterval?
     private var lastStatusClick: (timestamp: TimeInterval, number: Int)?
+    private var pendingStatusPress: (timestamp: TimeInterval, number: Int)?
 
     init(contentViewController: NSViewController, observesOutsideEvents: Bool = true) {
         self.observesOutsideEvents = observesOutsideEvents
-        let window = DashboardPanel(contentRect: contentViewController.view.bounds, styleMask: .borderless,
+        let window = DashboardPanel(contentRect: contentViewController.view.bounds, styleMask: [.borderless, .nonactivatingPanel],
                                     backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
         window.isOpaque = false
@@ -36,8 +38,10 @@ final class DashboardPresentationController {
     }
 
     func toggle(anchor: NSRect, visibleFrame: NSRect, activate: Bool = true, event: NSEvent? = nil) {
-        var shouldClose = isShown
-        if let event, event.type == .leftMouseDown {
+        // The monitor sees the original press before AppKit forwards the button
+        // action. Preserve that intent even if currentEvent is nil or replaced.
+        var shouldClose = pendingStatusPress != nil || isShown
+        if pendingStatusPress == nil, let event, event.type == .leftMouseDown {
             if let lastStatusClick,
                event.timestamp < lastStatusClick.timestamp
                 || (event.timestamp == lastStatusClick.timestamp && event.eventNumber == lastStatusClick.number) { return }
@@ -48,6 +52,13 @@ final class DashboardPresentationController {
                 shouldClose = true
             }
         }
+        if let pendingStatusPress {
+            lastStatusClick = pendingStatusPress
+            if let event, event.type == .leftMouseDown, event.timestamp >= pendingStatusPress.timestamp {
+                lastStatusClick = (event.timestamp, event.eventNumber)
+            }
+        }
+        pendingStatusPress = nil
         if shouldClose {
             close()
         } else {
@@ -59,7 +70,6 @@ final class DashboardPresentationController {
             shownAt = ProcessInfo.processInfo.systemUptime
             hiddenAt = nil
             if activate {
-                NSApp.activate(ignoringOtherApps: true)
                 panel.makeKeyAndOrderFront(nil)
             } else {
                 panel.orderFront(nil)
@@ -83,6 +93,7 @@ final class DashboardPresentationController {
     }
 
     func close() {
+        pendingStatusPress = nil
         let wasShown = isShown
         removeDismissalObservers()
         guard wasShown else { return }
@@ -107,11 +118,16 @@ final class DashboardPresentationController {
     func handleMouseDown(_ event: NSEvent, inAppWindow: Bool) {
         guard isShown, event.timestamp >= (shownAt ?? 0) else { return }
         let point = event.window?.convertPoint(toScreen: event.locationInWindow) ?? event.locationInWindow
+        if event.type == .leftMouseDown, anchorRect.contains(point) {
+            if let lastStatusClick, event.timestamp <= lastStatusClick.timestamp { return }
+            pendingStatusPress = (event.timestamp, event.eventNumber)
+            return
+        }
         handleMouseDown(at: point, inAppWindow: inAppWindow)
     }
 
     func handleAppDeactivation(duringStatusClick: Bool) {
-        if !duringStatusClick { close() }
+        if !duringStatusClick && pendingStatusPress == nil { close() }
     }
 
     /// Consume Escape before the native picker can hide only its NSWindow and leave isShown stale.
@@ -137,7 +153,8 @@ final class DashboardPresentationController {
     func updateAnchor(_ anchor: NSRect, visibleFrame: NSRect) {
         anchorRect = anchor
         if isShown {
-            panel.setFrameOrigin(Self.origin(contentSize: panel.frame.size, anchor: anchor, visibleFrame: visibleFrame))
+            let origin = Self.origin(contentSize: panel.frame.size, anchor: anchor, visibleFrame: visibleFrame)
+            if panel.frame.origin != origin { panel.setFrameOrigin(origin) }
         }
     }
 
@@ -179,6 +196,16 @@ final class DashboardPresentationController {
                 self.handleAppDeactivation(duringStatusClick: statusClick)
             }
         }
+        // A nonactivating panel leaves the current app active. Cmd-Tab is thus
+        // observed at the workspace boundary rather than by activating StatPeek.
+        workspaceActivationObserver = NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main) { [weak self] note in
+                let activatedPID = (note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication)?.processIdentifier
+                MainActor.assumeIsolated {
+                    guard let activatedPID, activatedPID != ProcessInfo.processInfo.processIdentifier else { return }
+                    self?.handleAppDeactivation(duringStatusClick: false)
+                }
+            }
     }
 
     private func removeDismissalObservers() {
@@ -186,10 +213,12 @@ final class DashboardPresentationController {
         if let escapeMonitor { NSEvent.removeMonitor(escapeMonitor) }
         if let globalMonitor { NSEvent.removeMonitor(globalMonitor) }
         if let deactivationObserver { NotificationCenter.default.removeObserver(deactivationObserver) }
+        if let workspaceActivationObserver { NSWorkspace.shared.notificationCenter.removeObserver(workspaceActivationObserver) }
         localMonitor = nil
         escapeMonitor = nil
         globalMonitor = nil
         deactivationObserver = nil
+        workspaceActivationObserver = nil
     }
 
     private func deactivateColorWells(in view: NSView) {

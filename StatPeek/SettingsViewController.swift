@@ -269,10 +269,8 @@ private final class MetricCardView: DashboardCardView {
         value.frame = NSRect(x: 150, y: frame.height - 28, width: 68, height: 18)
         value.setAccessibilityIdentifier("reading-\(metric.rawValue)")
         if metric == .disk { addSubview(value) }
-        let colorGlass = GlassSurfaceView(frame: NSRect(x: 222, y: frame.height - 32, width: 28, height: 28))
-        colorButton.frame = NSRect(x: 0, y: 0, width: 28, height: 28)
-        colorGlass.content.addSubview(colorButton)
-        addSubview(colorGlass)
+        colorButton.frame = NSRect(x: 222, y: frame.height - 32, width: 28, height: 28)
+        addSubview(colorButton)
         progress.frame = NSRect(x: 14, y: frame.height - 51, width: 164, height: 6)
         progress.setAccessibilityIdentifier("progress-\(metric.rawValue)")
         addSubview(progress)
@@ -336,11 +334,7 @@ final class MetricColorButton: NSColorWell {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     override func draw(_ dirtyRect: NSRect) {
         let dot = NSBezierPath(ovalIn: NSRect(x: bounds.midX - 6, y: bounds.midY - 6, width: 12, height: 12))
-        NSGraphicsContext.saveGraphicsState()
-        dot.addClip()
-        super.draw(dirtyRect)
-        NSGraphicsContext.restoreGraphicsState()
-        displayedColor.withAlphaComponent(0.65).setFill()
+        displayedColor.withAlphaComponent(0.85).setFill()
         dot.fill()
         NSColor.labelColor.withAlphaComponent(0.18).setStroke()
         dot.lineWidth = 0.75

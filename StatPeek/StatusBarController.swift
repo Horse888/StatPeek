@@ -90,9 +90,10 @@ final class StatusBarController: NSObject {
         let rows = StatusLayout.rows(for: selection.selected)
         strip.update(rows: rows, readings: readings, selection: selection)
         let width = strip.requiredWidth
-        statusItem.length = width
+        if statusItem.length != width { statusItem.length = width }
         if let button = statusItem.button {
-            strip.frame = NSRect(x: 0, y: 0, width: width, height: button.bounds.height)
+            let frame = NSRect(x: 0, y: 0, width: width, height: button.bounds.height)
+            if strip.frame != frame { strip.frame = frame }
             let summary = Metric.allCases.filter { selection.selected.contains($0) }
                 .map { "\($0.title)：\(readings[$0] ?? "采样中…")" }.joined(separator: "；")
             button.toolTip = "StatPeek · 状态一瞥\n" + (summary.isEmpty ? "点击选择显示信息" : summary)

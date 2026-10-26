@@ -16,7 +16,7 @@ A compact macOS menu bar monitor. Selected metrics appear in two rows of colored
 - 四项各有紧凑淡色卡片，百分比只在进度条右侧显示；磁盘显示总容量、已用、剩余，进度代表已用比例。采样中或不可用不画虚假的零进度。
 - 浮层宽 288 点、高度自适应内容，仅屏幕可用高度不足时纵向滚动；勾选框在每项最前；未勾选呈灰色，仍预览实时读数。页脚左侧版本与右侧开机启动、退出保持水平对齐。
 - 装饰图标使用彩色填充 SF Symbol，不加背景，与标题居中对齐、间隔 4 点；GPU 使用 cube.fill 表达 3D 图形渲染。macOS 14+ 出现时播放一次原生 Bounce，读数刷新不重播；macOS 13 静态，未选中、隐藏或减少动态效果时停止。状态栏仍使用 D/C/M/G 字母。
-- 主浮层采用无箭头的一体玻璃面板，状态栏按下立即切换，再按立即关闭；点击其他应用、切走应用或 Escape 可关闭，颜色选择器保留主面板。macOS 26+ 使用系统液态玻璃；可点击颜色入口使用圆形玻璃，退出及历史范围按钮使用胶囊玻璃，旧系统使用原生磨砂材质。退出为 24 点高、红色纯文字；开机启动为无背景勾选项。
+- 主浮层采用无箭头的一体玻璃面板，状态栏按下立即切换，再按立即关闭；点击其他应用、切走应用或 Escape 可关闭，颜色选择器保留主面板。macOS 26+ 使用系统液态玻璃；颜色入口仅显示小圆点，不加按钮背景，退出及历史范围按钮使用胶囊玻璃，旧系统使用原生磨砂材质。退出为 24 点高、红色纯文字；开机启动为无背景勾选项。
 - 行尾淡色小圆点默认打开 macOS 原生颜色 Popover，主浮层保持显示，配色即时更新；系统“更多颜色”入口仍可用。关闭主浮层会同步结束颜色 Popover，重开后可继续选色；读数刷新不覆盖正在编辑的颜色；任意 RGB 配色重启后恢复，单项修改不影响其他项。
 - 固定页脚右侧的「开机自动启动」使用 macOS 原生登录启动项；勾选后在当前用户登录时启动，取消即注销。默认关闭，需要系统批准或设置失败时明确提示。
 - 磁盘保留一位小数，单位使用单字母，例如 `320.8G`。
@@ -54,7 +54,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.3.9 / 17 |
+| Version / Build | 0.3.9 / 20 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |
@@ -88,6 +88,14 @@ python3 scripts/verify-layout.py --color-picker --output work/verification/color
 ```
 
 四项各运行选色关闭、取消关闭、重开选色三阶段。打开实际系统 Popover，通过系统颜色模型触发真实颜色回调；最后阶段交错失活再处理关闭动作，并重复派发同一点击，确认不会重开。不向桌面发送输入、不切换前台应用。当前证据见 [状态栏点击验收记录](docs/status-toggle-acceptance.json)，此前记录见 [颜色浮层验收记录](docs/color-lifecycle-acceptance.json)。
+
+原生状态栏按钮的独立窗口回归：
+
+```sh
+python3 scripts/verify-layout.py --status-gesture --output work/verification/status-gesture-new-run
+```
+
+在自己的非激活测试窗口中驱动真正的 NSStatusBarButton 类，检查 500 次手势、每次只有一个动作、失活交错不闪回，以及动作没有当前事件或转发另一事件时的关闭意图。释放事件只进入本测试进程自己的队列，不进入系统输入队列；这不等同于物理点击用户桌面的状态栏。最新对比及验证边界见 [纯色点与关闭修复](docs/evidence/status-dot-20261026/comparison.html)。
 
 分层 Esc 与外部关闭检查：
 

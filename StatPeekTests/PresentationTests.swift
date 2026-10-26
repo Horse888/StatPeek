@@ -6,6 +6,45 @@ final class PresentationTests: XCTestCase {
     private let anchor = NSRect(x: 1200, y: 870, width: 107, height: 24)
 
     @MainActor
+    func testObservedStatusPressClosesWhenButtonActionHasNoCurrentMouseEvent() throws {
+        try assertObservedStatusPressCloses(forwardsNewEvent: false)
+    }
+
+    @MainActor
+    func testObservedStatusPressClosesWhenButtonActionForwardsAnotherEvent() throws {
+        try assertObservedStatusPressCloses(forwardsNewEvent: true)
+    }
+
+    @MainActor
+    func testObservedPressTakesPrecedenceOverAStaleCurrentEvent() throws {
+        let presenter = fixture()
+        defer { presenter.close() }
+        let stale = try mouseEvent(at: NSPoint(x: anchor.midX, y: anchor.midY), number: 1)
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: stale)
+        let down = try mouseEvent(at: stale.locationInWindow, number: 2)
+        presenter.handleMouseDown(down, inAppWindow: false)
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: stale)
+        XCTAssertFalse(presenter.isShown, "The original monitored press is authoritative over NSApp.currentEvent")
+    }
+
+    @MainActor
+    private func assertObservedStatusPressCloses(forwardsNewEvent: Bool) throws {
+        let presenter = fixture()
+        defer { presenter.close() }
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false)
+        let down = try mouseEvent(at: NSPoint(x: anchor.midX, y: anchor.midY), number: 1)
+        presenter.handleMouseDown(down, inAppWindow: false)
+        presenter.handleAppDeactivation(duringStatusClick: false)
+        XCTAssertTrue(presenter.isShown, "The pending status action owns this transition; deactivation must not cause a flash")
+        // Native action forwarding need not preserve NSApp.currentEvent's identity.
+        let forwarded = forwardsNewEvent ? try mouseEvent(at: down.locationInWindow, number: 2) : nil
+        presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: forwarded)
+        XCTAssertFalse(presenter.isShown, "One status press must close, even across deactivation and action forwarding")
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
+        XCTAssertFalse(presenter.isShown, "The completed close must not flash back open")
+    }
+
+    @MainActor
     func testFreshClickOpensAfterOutsideCloseAndOldOutsideEventCannotCloseNewSession() throws {
         let presenter = fixture()
         defer { presenter.close() }
@@ -61,7 +100,7 @@ final class PresentationTests: XCTestCase {
             if observedMouseDown { presenter.handleMouseDown(event, inAppWindow: false) }
             // Deactivation can be delivered after button release but before its action.
             presenter.handleAppDeactivation(duringStatusClick: false)
-            XCTAssertFalse(presenter.isShown)
+            XCTAssertEqual(presenter.isShown, observedMouseDown, "An observed status press waits for its single toggle action")
             presenter.toggle(anchor: anchor, visibleFrame: screen, activate: false, event: event)
             XCTAssertFalse(presenter.isShown, "A click that began with a visible panel must finish closed")
             presenter.close()
@@ -324,7 +363,7 @@ final class PresentationTests: XCTestCase {
                 let target = NSRect(x: x, y: visible.maxY, width: 20, height: 24)
                 presenter.toggle(anchor: target, visibleFrame: visible, activate: false)
                 XCTAssertTrue(visible.contains(presenter.panel.frame))
-                XCTAssertEqual(presenter.panel.styleMask, .borderless)
+                XCTAssertEqual(presenter.panel.styleMask, [.borderless, .nonactivatingPanel])
                 XCTAssertEqual(presenter.panel.animationBehavior, .none)
                 XCTAssertFalse(presenter.panel.isOpaque)
                 presenter.close()
