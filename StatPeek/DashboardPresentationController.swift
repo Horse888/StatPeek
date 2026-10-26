@@ -25,7 +25,10 @@ final class DashboardPresentationController {
         window.isReleasedWhenClosed = false
         window.isOpaque = false
         window.backgroundColor = .clear
-        window.hasShadow = true
+        // Liquid Glass owns its silhouette. A second WindowServer shadow can
+        // expose another contour outside the glass's rounded corners.
+        if #available(macOS 26.0, *) { window.hasShadow = false }
+        else { window.hasShadow = true }
         window.hidesOnDeactivate = false
         window.animationBehavior = .none
         window.level = .floating
