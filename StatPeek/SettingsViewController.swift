@@ -240,7 +240,7 @@ private class DashboardCardView: NSBox {
     }
     private func updateFill() {
         effectiveAppearance.performAsCurrentDrawingAppearance {
-            fillColor = tint.withAlphaComponent(0.12)
+            fillColor = tint.withAlphaComponent(0.22)
         }
     }
 }
