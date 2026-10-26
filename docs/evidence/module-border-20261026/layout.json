@@ -1,0 +1,480 @@
+{
+  "arrowless_panel" : true,
+  "chrome_height" : 108,
+  "constructed_event_values" : true,
+  "delayed_reopen" : false,
+  "duplicate_deliveries" : 1000,
+  "fixture" : true,
+  "interleaved_deactivations" : 250,
+  "posted_input_events" : false,
+  "rapid_toggles" : 1000,
+  "stale_mouse_events" : 1000,
+  "states" : [
+    {
+      "actual_height" : 766,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 0,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 1378,
+      "name" : "light-1378-top",
+      "offset" : 0,
+      "scrolling" : false,
+      "sequence" : 1,
+      "viewport_height" : 658,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 736,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 0,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 736,
+      "name" : "light-736-top",
+      "offset" : 0,
+      "scrolling" : true,
+      "sequence" : 2,
+      "viewport_height" : 628,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 736,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 1,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 736,
+      "name" : "light-736-middle",
+      "offset" : 15,
+      "scrolling" : true,
+      "sequence" : 3,
+      "viewport_height" : 628,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 736,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 2,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 736,
+      "name" : "light-736-bottom",
+      "offset" : 30,
+      "scrolling" : true,
+      "sequence" : 4,
+      "viewport_height" : 628,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 568,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 0,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 568,
+      "name" : "light-568-top",
+      "offset" : 0,
+      "scrolling" : true,
+      "sequence" : 5,
+      "viewport_height" : 460,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 568,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 1,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 568,
+      "name" : "light-568-middle",
+      "offset" : 99,
+      "scrolling" : true,
+      "sequence" : 6,
+      "viewport_height" : 460,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 568,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 2,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 568,
+      "name" : "light-568-bottom",
+      "offset" : 198,
+      "scrolling" : true,
+      "sequence" : 7,
+      "viewport_height" : 460,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 448,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 0,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 448,
+      "name" : "light-448-top",
+      "offset" : 0,
+      "scrolling" : true,
+      "sequence" : 8,
+      "viewport_height" : 340,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 448,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 1,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 448,
+      "name" : "light-448-middle",
+      "offset" : 159,
+      "scrolling" : true,
+      "sequence" : 9,
+      "viewport_height" : 340,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 448,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 2,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 448,
+      "name" : "light-448-bottom",
+      "offset" : 318,
+      "scrolling" : true,
+      "sequence" : 10,
+      "viewport_height" : 340,
+      "window" : 10700
+    },
+    {
+      "actual_height" : 766,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 0,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 1378,
+      "name" : "dark-1378-top",
+      "offset" : 0,
+      "scrolling" : false,
+      "sequence" : 11,
+      "viewport_height" : 658,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 736,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 0,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 736,
+      "name" : "dark-736-top",
+      "offset" : 0,
+      "scrolling" : true,
+      "sequence" : 12,
+      "viewport_height" : 628,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 736,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 1,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 736,
+      "name" : "dark-736-middle",
+      "offset" : 15,
+      "scrolling" : true,
+      "sequence" : 13,
+      "viewport_height" : 628,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 736,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 2,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 736,
+      "name" : "dark-736-bottom",
+      "offset" : 30,
+      "scrolling" : true,
+      "sequence" : 14,
+      "viewport_height" : 628,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 568,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 0,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 568,
+      "name" : "dark-568-top",
+      "offset" : 0,
+      "scrolling" : true,
+      "sequence" : 15,
+      "viewport_height" : 460,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 568,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 1,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 568,
+      "name" : "dark-568-middle",
+      "offset" : 99,
+      "scrolling" : true,
+      "sequence" : 16,
+      "viewport_height" : 460,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 568,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 2,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 568,
+      "name" : "dark-568-bottom",
+      "offset" : 198,
+      "scrolling" : true,
+      "sequence" : 17,
+      "viewport_height" : 460,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 448,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 0,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 448,
+      "name" : "dark-448-top",
+      "offset" : 0,
+      "scrolling" : true,
+      "sequence" : 18,
+      "viewport_height" : 340,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 448,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 1,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 448,
+      "name" : "dark-448-middle",
+      "offset" : 159,
+      "scrolling" : true,
+      "sequence" : 19,
+      "viewport_height" : 340,
+      "window" : 10706
+    },
+    {
+      "actual_height" : 448,
+      "app_in_foreground" : false,
+      "document_height" : 658,
+      "history_range_index" : 2,
+      "ignores_mouse" : true,
+      "is_key" : false,
+      "is_main" : false,
+      "limit" : 448,
+      "name" : "dark-448-bottom",
+      "offset" : 318,
+      "scrolling" : true,
+      "sequence" : 20,
+      "viewport_height" : 340,
+      "window" : 10706
+    }
+  ],
+  "text_measurements" : [
+    {
+      "frame" : "{{50, 410}, {224, 24}}",
+      "natural" : "{79.878367024706677, 21}",
+      "needed" : "{79.878367024706677, 21}",
+      "text" : "StatPeek"
+    },
+    {
+      "frame" : "{{14, 388}, {260, 16}}",
+      "natural" : "{157.89558760943581, 14}",
+      "needed" : "{157.89558760943581, 14}",
+      "text" : "勾选显示在状态栏 · 每 2 秒更新"
+    },
+    {
+      "frame" : "{{56, 60}, {94, 18}}",
+      "natural" : "{75.509727626459139, 15}",
+      "needed" : "{75.509727626459139, 15}",
+      "text" : "磁盘剩余空间"
+    },
+    {
+      "frame" : "{{150, 60}, {68, 18}}",
+      "natural" : "{48.507331848144531, 15}",
+      "needed" : "{48.507331848144531, 15}",
+      "text" : "311.0G"
+    },
+    {
+      "frame" : "{{188, 41}, {58, 17}}",
+      "natural" : "{40.542134046554565, 14}",
+      "needed" : "{40.542134046554565, 14}",
+      "text" : "37.8%"
+    },
+    {
+      "frame" : "{{14, 8}, {232, 28}}",
+      "natural" : "{137.99528058122567, 26}",
+      "needed" : "{137.99528058122567, 26}",
+      "text" : "总容量 500.0G · 已用 189.0G\n剩余 311.0G · 进度为已用比例"
+    },
+    {
+      "frame" : "{{56, 42}, {158, 18}}",
+      "natural" : "{68.468658044644371, 15}",
+      "needed" : "{68.468658044644371, 15}",
+      "text" : "CPU 使用率"
+    },
+    {
+      "frame" : "{{188, 23}, {58, 17}}",
+      "natural" : "{47.824427127838135, 14}",
+      "needed" : "{47.824427127838135, 14}",
+      "text" : "100.0%"
+    },
+    {
+      "frame" : "{{14, 6}, {232, 17}}",
+      "natural" : "{133.24124513618679, 13}",
+      "needed" : "{133.24124513618679, 13}",
+      "text" : "两次采样之间的处理器使用率"
+    },
+    {
+      "frame" : "{{56, 42}, {158, 18}}",
+      "natural" : "{103.10894941634241, 15}",
+      "needed" : "{103.10894941634241, 15}",
+      "text" : "内存使用率（估算）"
+    },
+    {
+      "frame" : "{{188, 23}, {58, 17}}",
+      "natural" : "{47.824427127838135, 14}",
+      "needed" : "{47.824427127838135, 14}",
+      "text" : "100.0%"
+    },
+    {
+      "frame" : "{{14, 6}, {232, 17}}",
+      "natural" : "{132.24492339494165, 13}",
+      "needed" : "{132.24492339494165, 13}",
+      "text" : "估算使用量 · 不含可清除内存"
+    },
+    {
+      "frame" : "{{56, 42}, {158, 18}}",
+      "natural" : "{68.786231592007653, 15}",
+      "needed" : "{68.786231592007653, 15}",
+      "text" : "GPU 使用率"
+    },
+    {
+      "frame" : "{{188, 23}, {58, 17}}",
+      "natural" : "{47.824427127838135, 14}",
+      "needed" : "{47.824427127838135, 14}",
+      "text" : "100.0%"
+    },
+    {
+      "frame" : "{{14, 6}, {232, 17}}",
+      "natural" : "{132.24492339494165, 13}",
+      "needed" : "{132.24492339494165, 13}",
+      "text" : "设备使用率 · 取决于驱动支持"
+    },
+    {
+      "frame" : "{{39, 318}, {235, 22}}",
+      "natural" : "{63.533073929961091, 19}",
+      "needed" : "{63.533073929961091, 19}",
+      "text" : "磁盘记录"
+    },
+    {
+      "frame" : "{{14, 268}, {232, 16}}",
+      "natural" : "{93.474708171206245, 13}",
+      "needed" : "{93.474708171206245, 13}",
+      "text" : "最近记录的剩余空间"
+    },
+    {
+      "frame" : "{{14, 236}, {232, 30}}",
+      "natural" : "{81.349890158875496, 26}",
+      "needed" : "{81.349890158875496, 26}",
+      "text" : "311.0G"
+    },
+    {
+      "frame" : "{{14, 218}, {232, 16}}",
+      "natural" : "{96.381500565124398, 14}",
+      "needed" : "{96.381500565124398, 14}",
+      "text" : "剩余空间增加 1.0G"
+    },
+    {
+      "frame" : "{{14, 198}, {232, 16}}",
+      "natural" : "{185.75406964372567, 13}",
+      "needed" : "{185.75406964372567, 13}",
+      "text" : "记录于 10-26 20:01 · 对比 10-26 19:56"
+    },
+    {
+      "frame" : "{{14, 150}, {232, 16}}",
+      "natural" : "{64.115433234030476, 13}",
+      "needed" : "{64.115433234030476, 13}",
+      "text" : "剩余空间（G）"
+    },
+    {
+      "frame" : "{{14, 24}, {232, 18}}",
+      "natural" : "{159.91956468871595, 13}",
+      "needed" : "{159.91956468871595, 13}",
+      "text" : "累计 8 条记录 · 下次 10-26 20:11"
+    },
+    {
+      "frame" : "{{14, 0}, {232, 24}}",
+      "natural" : "{214.13075297908563, 13}",
+      "needed" : "{214.13075297908563, 13}",
+      "text" : "每 5 分钟记录 · 只保存在本机，不自动弹出提示"
+    },
+    {
+      "frame" : "{{14, 13}, {66, 18}}",
+      "natural" : "{56.919921875, 13}",
+      "needed" : "{56.919921875, 13}",
+      "text" : "v0.3.9 (29)"
+    }
+  ]
+}

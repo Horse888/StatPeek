@@ -222,7 +222,7 @@ private final class FlippedDashboardView: NSView { override var isFlipped: Bool 
 
 @MainActor
 private class DashboardCardView: NSBox {
-    var tint: NSColor = .labelColor { didSet { updateFill() } }
+    var tint: NSColor = .labelColor { didSet { updateColors() } }
     override init(frame: NSRect) {
         super.init(frame: frame)
         boxType = .custom
@@ -230,16 +230,16 @@ private class DashboardCardView: NSBox {
         contentViewMargins = .zero
         cornerRadius = 12
         borderWidth = 0.5
-        borderColor = .separatorColor
-        updateFill()
+        updateColors()
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     override func viewDidChangeEffectiveAppearance() {
         super.viewDidChangeEffectiveAppearance()
-        updateFill()
+        updateColors()
     }
-    private func updateFill() {
+    private func updateColors() {
         effectiveAppearance.performAsCurrentDrawingAppearance {
+            borderColor = tint
             fillColor = tint.withAlphaComponent(0.22)
         }
     }
