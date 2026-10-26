@@ -47,8 +47,8 @@ final class DashboardTests: XCTestCase {
                     XCTAssertFalse(window.isMainWindow)
                     settings.view.layoutSubtreeIfNeeded()
                     RunLoop.main.run(until: Date().addingTimeInterval(0.04))
-                    XCTAssertEqual(scroll.frame.minY, 48, accuracy: 0.5)
-                    XCTAssertEqual(scroll.frame.maxY, settings.view.bounds.height - 78, accuracy: 0.5,
+                    XCTAssertEqual(scroll.frame.minY, SettingsViewController.footerHeight, accuracy: 0.5)
+                    XCTAssertEqual(scroll.frame.maxY, settings.view.bounds.height - SettingsViewController.headerHeight, accuracy: 0.5,
                                    "Window attachment must not resize the explicit scroll viewport a second time")
                     XCTAssertLessThanOrEqual(settings.view.frame.height, height)
                     XCTAssertEqual(scroll.hasVerticalScroller, document.frame.height > scroll.contentView.bounds.height + 0.5)

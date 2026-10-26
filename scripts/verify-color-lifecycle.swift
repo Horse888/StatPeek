@@ -28,6 +28,9 @@ struct ColorLifecycleVerification {
         defer { defaults.removePersistentDomain(forName: suite) }
         let selection = MetricSelection(defaults: defaults)
         let settings = SettingsViewController()
+        if let path = ProcessInfo.processInfo.environment["STATPEEK_FIXTURE_APP_PATH"] {
+            settings.applicationIcon = NSWorkspace.shared.icon(forFile: path)
+        }
         let snapshot = MetricSnapshot(readings: [.disk: "311.0G", .cpu: "25.0%", .memory: "50.0%", .gpu: "12.0%"],
                                       percentages: [.disk: 37.8, .cpu: 25, .memory: 50, .gpu: 12],
                                       disk: DiskCapacity(totalBytes: 500_000_000_000, availableBytes: 311_000_000_000))

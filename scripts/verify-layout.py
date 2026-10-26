@@ -42,6 +42,11 @@ def main():
         with (output / 'runner.log').open('w') as log:
             fixture_args = ['--layered-dismissal'] if args.layered_dismissal else []
             environment = dict(os.environ, STATPEEK_FIXTURE_VERSION=f"v{build['MARKETING_VERSION']} ({build['CURRENT_PROJECT_VERSION']})")
+            icon_app = Path(build['TARGET_BUILD_DIR']) / 'StatPeek.app'
+            if not icon_app.is_dir():
+                icon_app = Path.home() / 'Applications' / 'StatPeek.app'
+            if icon_app.is_dir():
+                environment['STATPEEK_FIXTURE_APP_PATH'] = str(icon_app)
             process = subprocess.Popen([str(runner), str(output), *fixture_args], stdout=log, stderr=subprocess.STDOUT, env=environment)
             seen = set()
             try:
@@ -94,7 +99,7 @@ def main():
         for state in result['states']:
             assert not state['is_key'] and not state['is_main'] and state['ignores_mouse']
             assert not state['app_in_foreground']
-            assert abs(state['viewport_height'] - (state['actual_height'] - 126)) < .5
+            assert abs(state['viewport_height'] - (state['actual_height'] - result['chrome_height'])) < .5
             assert state['scrolling'] == (state['document_height'] > state['viewport_height'] + .5)
             assert state['actual_height'] <= state['limit']
             if state['name'].endswith('bottom'):

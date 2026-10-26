@@ -1,5 +1,14 @@
 # 验证记录
 
+## 0.3.9 / Build 26 · 2026-10-26 · 加深模块底色、紧凑布局与 App 图标
+
+- 原生 NSBox 底色透明度参数由 0.045 提高到 0.12；磁盘卡片 88 点、其他卡片 70 点，间距 4 点。整页理想高度由 **862 点降至 766 点**，减少 96 点；原字号、图表高度和文案保留。抬头使用原生 NSImageView 显示应用包的真实 App 图标，未修改图标资产。
+- Release **62 项 XCTest 通过，0 失败**，包含 448 帧状态栏原生渲染回归。独立非激活实窗 **20 状态**、1,000 次展示切换、**12 个选色流程**及 **12 个分层 Esc 流程**通过；已查看浅深色整页及短屏底部，文字尺寸与滚动检查通过。本次未重跑单独的 500 次 NSStatusBarButton 手势工具。
+- [前后对比](evidence/compact-icon-20261026/comparison.html) 使用 Build 25 已保存原生截图及本次生产视图夹具实窗截图；均为合成数据，原图未加滤镜。夹具从实际 App 包注入图标，未操作用户鼠标键盘、未激活测试应用。保持原生控件、Segment 与系统等宽状态栏字体。
+- 同一 Release 已后台替换 `/Users/zy/Applications/StatPeek.app` 为 **0.3.9 (26)**，唯一进程来自个人固定路径。arm64/x86_64、严格 ad hoc 签名及布尔 LSUIElement/加密声明通过；构建和安装可执行文件 SHA-256 一致：`55c075b6b07b041dd8b7e0963433383f2bdeaa205bfe665d1b47db09b46e1696`。
+- 原 **4009 条**历史逐行未变，安装核对时共 **4010 条**，SQLite 完整性 ok；勾选与配色保留，未修改登录项。核验后移除本次旧 App、暂存及构建重复 App，保留个人 Applications 固定副本。
+- 当前实窗系统 macOS **27.0.1**；未新增 macOS 13 / Intel 实机、物理状态栏完整派发链或真实重新登录验收。结构化回执及源码哈希见 [acceptance.json](evidence/compact-icon-20261026/acceptance.json)。
+
 ## 0.3.9 / Build 25 · 2026-10-26 · 系统原生组件与状态栏等宽设计
 
 - 移除卡片、进度、色点与状态栏的手工 draw / NSBezierPath / CTLineDraw 路径。卡片使用 NSBox；进度使用线性 ProgressView；色点使用小尺寸 NSColorWell.minimal；退出使用 NSButton.glass；图表、图标、文字和滚动分别继续使用 Swift Charts、NSImageView、NSTextField、NSScrollView。主面板仍为系统 NSGlassEffectView。Segment 使用 automatic + capsule，以及 macOS 27 的 tabs 角色，由系统负责新设计和交互材质。

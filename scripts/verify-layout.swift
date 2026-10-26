@@ -31,6 +31,9 @@ struct LayoutVerification {
                                         availableBytes: Int64(free) * 1_000_000_000, volumeID: "synthetic-independent-layout"))
         }
         let controller = SettingsViewController()
+        if let path = ProcessInfo.processInfo.environment["STATPEEK_FIXTURE_APP_PATH"] {
+            controller.applicationIcon = NSWorkspace.shared.icon(forFile: path)
+        }
         defer {
             controller.updateDiskHistory(store: nil, nextRecordingDate: nil, error: nil)
             store = nil
@@ -127,6 +130,7 @@ struct LayoutVerification {
                     "natural": NSStringFromSize(cell.cellSize), "needed": NSStringFromSize(needed)]
         }
         let result: [String: Any] = ["states": states, "text_measurements": measurements, "fixture": true,
+            "chrome_height": SettingsViewController.chromeHeight,
             "posted_input_events": false, "constructed_event_values": true, "arrowless_panel": true,
             "rapid_toggles": 1000, "duplicate_deliveries": 1000, "interleaved_deactivations": 250,
             "stale_mouse_events": 1000, "delayed_reopen": false]

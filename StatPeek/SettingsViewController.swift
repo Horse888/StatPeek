@@ -3,6 +3,10 @@ import SwiftUI
 
 @MainActor
 final class SettingsViewController: NSViewController {
+    static let headerHeight: CGFloat = 64
+    static let footerHeight: CGFloat = 44
+    static var chromeHeight: CGFloat { headerHeight + footerHeight }
+    var applicationIcon: NSImage?
     var onToggle: ((Metric) -> Void)?
     var onColor: ((Metric, MetricColor) -> Void)?
     var onLoginToggle: ((Bool) -> Void)?
@@ -21,11 +25,19 @@ final class SettingsViewController: NSViewController {
                                        interactive: false)
         view = surface
         dashboardContent = surface.content
-        let heading = text("StatPeek", frame: NSRect(x: 14, y: 654, width: 260, height: 24), size: 18, weight: .semibold)
-        let subtitle = text("勾选显示在状态栏 · 每 2 秒更新", frame: NSRect(x: 14, y: 632, width: 260, height: 18), size: 11, color: .dashboardSecondaryLabel)
+        let icon = NSImageView(image: applicationIcon ?? NSImage(named: NSImage.applicationIconName)
+                               ?? NSWorkspace.shared.icon(forFile: Bundle.main.bundlePath))
+        icon.frame = NSRect(x: 14, y: 660, width: 28, height: 28)
+        icon.imageScaling = .scaleProportionallyDown
+        icon.autoresizingMask = .minYMargin
+        icon.setAccessibilityElement(false)
+        icon.setAccessibilityIdentifier("app-icon")
+        dashboardContent.addSubview(icon)
+        let heading = text("StatPeek", frame: NSRect(x: 50, y: 662, width: 224, height: 24), size: 18, weight: .semibold)
+        let subtitle = text("勾选显示在状态栏 · 每 2 秒更新", frame: NSRect(x: 14, y: 640, width: 260, height: 16), size: 11, color: .dashboardSecondaryLabel)
         heading.autoresizingMask = .minYMargin
         subtitle.autoresizingMask = .minYMargin
-        scrollView.frame = NSRect(x: 0, y: 48, width: 288, height: 574)
+        scrollView.frame = NSRect(x: 0, y: Self.footerHeight, width: 288, height: 700 - Self.chromeHeight)
         // Its height is set explicitly below. Glass content can resize again after
         // window attachment; autoresizing the height would apply the delta twice.
         scrollView.autoresizingMask = .width
@@ -38,9 +50,9 @@ final class SettingsViewController: NSViewController {
         let document = FlippedDashboardView(frame: NSRect(x: 0, y: 0, width: 288, height: 1010))
         scrollView.documentView = document
         dashboardContent.addSubview(scrollView)
-        var y: CGFloat = 8
+        var y: CGFloat = 4
         for (index, metric) in Metric.allCases.enumerated() {
-            let height: CGFloat = metric == .disk ? 100 : 80
+            let height: CGFloat = metric == .disk ? 88 : 70
             let card = MetricCardView(metric: metric, frame: NSRect(x: 14, y: y, width: 260, height: height))
             card.toggle.tag = index
             card.toggle.target = self
@@ -50,25 +62,25 @@ final class SettingsViewController: NSViewController {
             document.addSubview(card)
             cards[metric] = card
             moduleSymbols.append(card.symbol)
-            y += height + 6
+            y += height + 4
         }
         let historySymbol = ModuleSymbolView(name: "chart.xyaxis.line", color: .systemBlue,
                                              frame: NSRect(x: 17, y: y + 3, width: 18, height: 18))
         document.addSubview(historySymbol)
         moduleSymbols.append(historySymbol)
-        text("磁盘记录", frame: NSRect(x: 39, y: y, width: 235, height: 24), size: 15, weight: .semibold, in: document)
-        y += 28
-        let historyCard = DashboardCardView(frame: NSRect(x: 14, y: y, width: 260, height: 320))
+        text("磁盘记录", frame: NSRect(x: 39, y: y, width: 235, height: 22), size: 15, weight: .semibold, in: document)
+        y += 24
+        let historyCard = DashboardCardView(frame: NSRect(x: 14, y: y, width: 260, height: 304))
         document.addSubview(historyCard)
         addChild(historyController)
         historyController.contentWidth = 260
-        historyController.view.frame = NSRect(x: 0, y: 8, width: 260, height: 304)
+        historyController.view.frame = NSRect(x: 0, y: 8, width: 260, height: 288)
         historyCard.contentView?.addSubview(historyController.view)
-        y += 328
-        document.setFrameSize(NSSize(width: 288, height: y + 8))
+        y += 312
+        document.setFrameSize(NSSize(width: 288, height: y + 4))
         loginToggle = NSButton(checkboxWithTitle: "开机自动启动", target: self, action: #selector(toggleLoginItem(_:)))
         loginToggle.font = .systemFont(ofSize: 10)
-        loginToggle.frame = NSRect(x: 96, y: 11, width: 108, height: 26)
+        loginToggle.frame = NSRect(x: 96, y: 9, width: 108, height: 26)
         loginToggle.allowsMixedState = true
         loginToggle.setAccessibilityIdentifier("launch-at-login")
         let loginMenu = NSMenu()
@@ -79,7 +91,7 @@ final class SettingsViewController: NSViewController {
         dashboardContent.addSubview(loginToggle)
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
         let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "—"
-        let versionLabel = text("v\(version) (\(build))", frame: NSRect(x: 14, y: 15, width: 66, height: 18), size: 10, color: .dashboardSecondaryLabel)
+        let versionLabel = text("v\(version) (\(build))", frame: NSRect(x: 14, y: 13, width: 66, height: 18), size: 10, color: .dashboardSecondaryLabel)
         versionLabel.setAccessibilityIdentifier("app-version")
         let quit = NSButton(title: "退出", target: self, action: #selector(quitApp))
         quit.bezelStyle = .rounded
@@ -91,7 +103,7 @@ final class SettingsViewController: NSViewController {
         quit.font = .systemFont(ofSize: 11, weight: .medium)
         quit.attributedTitle = NSAttributedString(string: "退出", attributes: [
             .foregroundColor: NSColor.systemRed, .font: NSFont.systemFont(ofSize: 11, weight: .medium)])
-        quit.frame = NSRect(x: 220, y: 12, width: 54, height: 24)
+        quit.frame = NSRect(x: 220, y: 10, width: 54, height: 24)
         quit.setAccessibilityIdentifier("quit-app")
         dashboardContent.addSubview(quit)
         NotificationCenter.default.addObserver(self, selector: #selector(updateSymbolMotion),
@@ -139,11 +151,11 @@ final class SettingsViewController: NSViewController {
 
     func fitToAvailableHeight(_ availableHeight: CGFloat) {
         guard let document = scrollView.documentView else { return }
-        let fixedHeight: CGFloat = 126 // Header and footer remain visible on short screens.
+        let fixedHeight = Self.chromeHeight // Header and footer remain visible on short screens.
         let desiredHeight = document.frame.height + fixedHeight
         let height = min(desiredHeight, max(fixedHeight + 1, availableHeight))
         view.setFrameSize(NSSize(width: 288, height: height))
-        scrollView.frame = NSRect(x: 0, y: 48, width: 288, height: height - fixedHeight)
+        scrollView.frame = NSRect(x: 0, y: Self.footerHeight, width: 288, height: height - fixedHeight)
         let needsScrolling = document.frame.height > scrollView.frame.height + 0.5
         scrollView.hasVerticalScroller = needsScrolling
         scrollView.verticalScrollElasticity = needsScrolling ? .allowed : .none
@@ -228,7 +240,7 @@ private class DashboardCardView: NSBox {
     }
     private func updateFill() {
         effectiveAppearance.performAsCurrentDrawingAppearance {
-            fillColor = tint.withAlphaComponent(0.045)
+            fillColor = tint.withAlphaComponent(0.12)
         }
     }
 }
@@ -278,17 +290,17 @@ private final class MetricCardView: DashboardCardView {
         if metric == .disk { contentView?.addSubview(value) }
         colorButton.frame = NSRect(x: 226, y: frame.height - 28, width: 20, height: 20)
         contentView?.addSubview(colorButton)
-        progress.frame = NSRect(x: 14, y: frame.height - 51, width: 164, height: 6)
+        progress.frame = NSRect(x: 14, y: frame.height - 42, width: 164, height: 6)
         progress.setAccessibilityIdentifier("progress-\(metric.rawValue)")
         contentView?.addSubview(progress)
         percentage.font = .monospacedDigitSystemFont(ofSize: 11, weight: .semibold)
         percentage.alignment = .right
-        percentage.frame = NSRect(x: 188, y: frame.height - 56, width: 58, height: 17)
+        percentage.frame = NSRect(x: 188, y: frame.height - 47, width: 58, height: 17)
         percentage.setAccessibilityIdentifier(metric == .disk ? "usage-disk" : "reading-\(metric.rawValue)")
         contentView?.addSubview(percentage)
         detail.font = .systemFont(ofSize: 10)
         detail.textColor = .dashboardSecondaryLabel
-        detail.frame = NSRect(x: 14, y: metric == .disk ? 10 : 6, width: 232, height: metric == .disk ? 28 : 17)
+        detail.frame = NSRect(x: 14, y: metric == .disk ? 8 : 6, width: 232, height: metric == .disk ? 28 : 17)
         detail.maximumNumberOfLines = 2
         detail.setAccessibilityIdentifier("detail-\(metric.rawValue)")
         contentView?.addSubview(detail)

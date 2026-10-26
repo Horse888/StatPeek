@@ -20,26 +20,26 @@ final class DiskHistoryViewController: NSViewController {
 
     override func loadView() {
         let innerWidth = contentWidth - 28
-        view = NSView(frame: NSRect(x: 0, y: 0, width: contentWidth, height: 304))
+        view = NSView(frame: NSRect(x: 0, y: 0, width: contentWidth, height: 288))
         let heading = NSTextField(labelWithString: "最近记录的剩余空间")
         heading.font = .systemFont(ofSize: 10)
         heading.textColor = .dashboardSecondaryLabel
-        heading.frame = NSRect(x: 14, y: 284, width: innerWidth, height: 16)
+        heading.frame = NSRect(x: 14, y: 268, width: innerWidth, height: 16)
         view.addSubview(heading)
         amount.font = .monospacedDigitSystemFont(ofSize: 22, weight: .semibold)
-        amount.frame = NSRect(x: 14, y: 252, width: innerWidth, height: 30)
+        amount.frame = NSRect(x: 14, y: 236, width: innerWidth, height: 30)
         amount.textColor = .systemTeal
         amount.setAccessibilityIdentifier("disk-history-amount")
         view.addSubview(amount)
         change.font = .systemFont(ofSize: 11, weight: .medium)
-        change.frame = NSRect(x: 14, y: 232, width: innerWidth, height: 18)
+        change.frame = NSRect(x: 14, y: 218, width: innerWidth, height: 16)
         change.setAccessibilityIdentifier("disk-history-change")
         view.addSubview(change)
         timestamp.font = .systemFont(ofSize: 10)
         timestamp.textColor = .dashboardSecondaryLabel
         timestamp.lineBreakMode = .byWordWrapping
         timestamp.maximumNumberOfLines = 2
-        timestamp.frame = NSRect(x: 14, y: 206, width: innerWidth, height: 24)
+        timestamp.frame = NSRect(x: 14, y: 198, width: innerWidth, height: 16)
         view.addSubview(timestamp)
         rangeControl.target = self
         rangeControl.action = #selector(changeRange(_:))
@@ -48,7 +48,7 @@ final class DiskHistoryViewController: NSViewController {
         if #available(macOS 27.0, *) { rangeControl.role = .tabs }
         rangeControl.segmentDistribution = .fillEqually
         rangeControl.font = .systemFont(ofSize: 11)
-        rangeControl.frame = NSRect(x: 14, y: 178, width: innerWidth, height: 24)
+        rangeControl.frame = NSRect(x: 14, y: 168, width: innerWidth, height: 24)
         rangeControl.selectedSegment = range.rawValue
         rangeControl.setAccessibilityIdentifier("history-range")
         rangeControl.setAccessibilityLabel("磁盘记录时间范围")
@@ -56,10 +56,10 @@ final class DiskHistoryViewController: NSViewController {
         let unit = NSTextField(labelWithString: "剩余空间（G）")
         unit.font = .systemFont(ofSize: 10)
         unit.textColor = .dashboardSecondaryLabel
-        unit.frame = NSRect(x: 14, y: 160, width: innerWidth, height: 16)
+        unit.frame = NSRect(x: 14, y: 150, width: innerWidth, height: 16)
         view.addSubview(unit)
         let hosting = NSHostingView(rootView: DiskHistoryChart(samples: [], range: range, now: Date()))
-        hosting.frame = NSRect(x: 14, y: 54, width: innerWidth, height: 104)
+        hosting.frame = NSRect(x: 14, y: 44, width: innerWidth, height: 104)
         hosting.setAccessibilityIdentifier("disk-history-chart")
         view.addSubview(hosting)
         chart = hosting
@@ -67,11 +67,11 @@ final class DiskHistoryViewController: NSViewController {
         footer.textColor = .dashboardSecondaryLabel
         footer.lineBreakMode = .byWordWrapping
         footer.maximumNumberOfLines = 2
-        footer.frame = NSRect(x: 14, y: 28, width: innerWidth, height: 22)
+        footer.frame = NSRect(x: 14, y: 24, width: innerWidth, height: 18)
         footer.setAccessibilityIdentifier("disk-history-schedule")
         view.addSubview(footer)
         note.font = .systemFont(ofSize: 10)
-        note.frame = NSRect(x: 14, y: 0, width: innerWidth, height: 26)
+        note.frame = NSRect(x: 14, y: 0, width: innerWidth, height: 24)
         note.setAccessibilityIdentifier("disk-history-note")
         view.addSubview(note)
     }
