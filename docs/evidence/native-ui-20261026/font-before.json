@@ -1,0 +1,26 @@
+{
+  "fixture" : true,
+  "posted_input_events" : false,
+  "states" : [
+    {
+      "app_activated" : false,
+      "font" : "Menlo-Bold",
+      "height" : 24,
+      "name" : "status-light",
+      "native_label_count" : 0,
+      "sequence" : 1,
+      "width" : 97,
+      "window" : 3864
+    },
+    {
+      "app_activated" : false,
+      "font" : "Menlo-Bold",
+      "height" : 24,
+      "name" : "status-dark",
+      "native_label_count" : 0,
+      "sequence" : 2,
+      "width" : 97,
+      "window" : 3864
+    }
+  ]
+}

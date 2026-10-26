@@ -1,5 +1,13 @@
 # StatPeek · 状态一瞥
 
+## 2026-10-26 原生组件与系统等宽字体 · 0.3.9 (25)
+
+- UI 的渲染由 AppKit / SwiftUI 系统组件负责，不再覆盖 draw 绘制卡片、进度、色点或状态栏文字。卡片为 NSBox，进度为线性 ProgressView，色点为原生 NSColorWell.minimal，退出为 macOS 26+ NSButton.glass；外层使用现有 NSGlassEffectView。旧系统使用可用的原生控件样式。
+- Segment 使用 automatic、系统 capsule 边框与 macOS 27+ tabs 角色，由当前系统的新设计绘制选中材质与交互。选项、单选和筛选逻辑保留。
+- 状态栏使用 NSTextField / NSImageView；字体为系统 monospaced design、Regular 9 点，宽度测量使用同一系统字体并保留原生 cell 内边距。当前四项最坏读数占 107 点，保留两行布局与配色。
+- 原生颜色井使用小尺寸并在取消显示时降低强调程度，保持实际颜色及编辑中的值；系统进度/按钮遵循系统对窗口活跃状态的显示，不手绘仿制系统材质。
+- 实施与验收见 [原生组件计划](../design-plans/native-controls-20261026.md)。使用独立非激活窗口验证，不操作用户桌面鼠标键盘。
+
 ## 2026-10-26 历史范围分段控件 · 0.3.9 (21)
 
 - 「24 小时 / 7 天 / 全部」合并为一个等宽三段、单选的原生 NSSegmentedControl，替代三个独立玻璃按钮；保持原位置、宽度、文案与默认 24 小时选择。

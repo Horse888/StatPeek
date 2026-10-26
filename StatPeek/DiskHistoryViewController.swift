@@ -43,7 +43,9 @@ final class DiskHistoryViewController: NSViewController {
         view.addSubview(timestamp)
         rangeControl.target = self
         rangeControl.action = #selector(changeRange(_:))
-        rangeControl.segmentStyle = .rounded
+        rangeControl.segmentStyle = .automatic
+        if #available(macOS 26.0, *) { rangeControl.borderShape = .capsule }
+        if #available(macOS 27.0, *) { rangeControl.role = .tabs }
         rangeControl.segmentDistribution = .fillEqually
         rangeControl.font = .systemFont(ofSize: 11)
         rangeControl.frame = NSRect(x: 14, y: 178, width: innerWidth, height: 24)

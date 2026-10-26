@@ -1,5 +1,15 @@
 # 验证记录
 
+## 0.3.9 / Build 25 · 2026-10-26 · 系统原生组件与状态栏等宽设计
+
+- 移除卡片、进度、色点与状态栏的手工 draw / NSBezierPath / CTLineDraw 路径。卡片使用 NSBox；进度使用线性 ProgressView；色点使用小尺寸 NSColorWell.minimal；退出使用 NSButton.glass；图表、图标、文字和滚动分别继续使用 Swift Charts、NSImageView、NSTextField、NSScrollView。主面板仍为系统 NSGlassEffectView。Segment 使用 automatic + capsule，以及 macOS 27 的 tabs 角色，由系统负责新设计和交互材质。
+- 状态栏使用系统 monospaced design、Regular 9 点，未指定固定字体族；当前系统解析为 `.AppleSystemUIFontMonospaced-Regular`。原生标签共 8 个，四项最坏读数宽 **107 点**，数字等宽且刷新稳定。浅/深色真实独立窗口已检查；前图用未修改的 Build 21 源码制作独立夹具（不是旧 App 安装截图）。见 [组件及字体前后对比](evidence/native-ui-20261026/comparison.html)。
+- 最终 Release **62 项 XCTest 通过，0 失败**，包含 **448 帧**状态栏 16 种勾选/7 种颜色/浅深/1x 与 2x 原生像素检查；原生颜色井的初始化/编辑保留/单项保存、进度有效及未知状态、宽度与滚动回归通过。Build 22 因 layout() 名称冲突编译失败，Build 23 仅两条进度像素断言失败：旧检查 50ms 取图早于原生过渡结束。独立探针确认 300ms 后数值像素差异正常；等待原生过渡稳定后 Build 24 通过；Build 25 补上 NSBox 随有效外观更新底色，再次完整通过全部测试及原生窗口流程。失败编号不复用。
+- **20 个**浅深色/高度/滚动/三段范围状态、**2 个**状态栏窗口、**12 个**原生选色流程、**12 个**分层 Esc 流程及 **500 次**独立 NSStatusBarButton 手势通过。已查看完整浅深色、短屏底部、原生选色后的界面与两种字体。全部合成数据，不模拟系统输入、不移动用户鼠标键盘、不激活测试应用。进度截图如实保留系统灰色显示，不伪装激活外观；代码仍传入所选 tint。
+- 同一 Release 已后台替换 `/Users/zy/Applications/StatPeek.app` 为 **0.3.9 (25)**，唯一进程来自固定路径；arm64/x86_64、严格 ad hoc 签名、布尔 LSUIElement / 加密声明通过。构建和安装可执行文件 SHA-256：`2fb25867974b994cf2625841dd0c874df7a3a80f93b27625bec60c0aafecca24`。
+- 原 **4001 条**历史逐行未变，核对时共 **4001 条**，SQLite 完整性 ok；勾选与配色保持，未修改登录项。验证后已移除本次暂存、旧/构建重复 App 与诊断原型，只保留个人 Applications 固定副本。
+- 当前实窗系统为 macOS **27.0.1**。未物理点击用户桌面状态栏、未验收 macOS 13 / Intel 实机或真实重新登录；同一安装进程已观察 365.3 秒，未发现本次新崩溃报告；有限进程观察不等同于长期稳定性保证。结构化回执含源码哈希、字体、组件清单与运行观察，见 [acceptance.json](evidence/native-ui-20261026/acceptance.json)。
+
 ## 0.3.9 / Build 21 · 2026-10-26 · 历史范围 Segment
 
 - 「24 小时 / 7 天 / 全部」合并为单个等宽、单选的原生 NSSegmentedControl，保留文案、原位置及现有 DiskHistoryRange 筛选与重载路径。去除三个独立玻璃按钮。

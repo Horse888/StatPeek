@@ -1,0 +1,26 @@
+{
+  "fixture" : true,
+  "posted_input_events" : false,
+  "states" : [
+    {
+      "app_activated" : false,
+      "font" : ".AppleSystemUIFontMonospaced-Regular",
+      "height" : 24,
+      "name" : "status-light",
+      "native_label_count" : 8,
+      "sequence" : 1,
+      "width" : 107,
+      "window" : 4190
+    },
+    {
+      "app_activated" : false,
+      "font" : ".AppleSystemUIFontMonospaced-Regular",
+      "height" : 24,
+      "name" : "status-dark",
+      "native_label_count" : 8,
+      "sequence" : 2,
+      "width" : 107,
+      "window" : 4190
+    }
+  ]
+}

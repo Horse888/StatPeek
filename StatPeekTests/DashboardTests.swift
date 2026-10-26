@@ -175,8 +175,8 @@ final class DashboardTests: XCTestCase {
             XCTAssertEqual(selection.color(for: .cpu).rawValue, "#336699")
             selection.toggle(.cpu)
             settings.update(snapshot: MetricSnapshot(), selection: selection)
-            XCTAssertEqual(cpu.displayedColor, .systemGray)
-            XCTAssertEqual(MetricColor(nsColor: cpu.color)?.rawValue, "#336699", "Gray presentation must not replace the stored or picker color")
+            XCTAssertLessThan(cpu.alphaValue, 1)
+            XCTAssertEqual(MetricColor(nsColor: cpu.color)?.rawValue, "#336699", "Deemphasizing the native well must not replace the stored or picker color")
             XCTAssertEqual(changes, [.cpu])
             gpu.color = NSColor(srgbRed: 1, green: 0, blue: 0.5, alpha: 1)
             XCTAssertTrue(gpu.sendAction(gpu.action, to: gpu.target))
@@ -184,7 +184,7 @@ final class DashboardTests: XCTestCase {
             XCTAssertEqual(selection.color(for: .cpu).rawValue, "#336699")
             selection.toggle(.cpu)
             settings.update(snapshot: MetricSnapshot(), selection: selection)
-            XCTAssertEqual(cpu.displayedColor, selection.color(for: .cpu).nsColor)
+            XCTAssertEqual(cpu.alphaValue, 1)
             XCTAssertEqual(changes, [.cpu, .gpu])
         }
     }
@@ -223,21 +223,26 @@ final class DashboardTests: XCTestCase {
             let appearance = try XCTUnwrap(NSAppearance(named: appearanceName))
             let progress = MetricProgressView(frame: NSRect(x: 0, y: 0, width: 120, height: 8))
             progress.color = chosen
+            let window = NSWindow(contentRect: progress.bounds, styleMask: .borderless, backing: .buffered, defer: false)
+            window.isReleasedWhenClosed = false
+            window.appearance = appearance
+            window.contentView = progress
+            defer { window.contentView = nil; window.close() }
             func pixels(_ percentage: Double?) throws -> [Double] {
                 progress.percentage = percentage
-                let bitmap = try XCTUnwrap(NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: 120, pixelsHigh: 8,
-                                                            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true,
-                                                            isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0))
-                let context = try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap))
-                NSGraphicsContext.saveGraphicsState()
-                defer { NSGraphicsContext.restoreGraphicsState() }
-                NSGraphicsContext.current = context
+                progress.layoutSubtreeIfNeeded()
+                // The native progress view transitions between values; unlike the
+                // former immediate painter, its final pixels settle after tracking.
+                RunLoop.main.run(until: Date().addingTimeInterval(0.35))
+                let bitmap = try XCTUnwrap(progress.bitmapImageRepForCachingDisplay(in: progress.bounds))
                 appearance.performAsCurrentDrawingAppearance {
-                    background.setFill()
-                    NSBezierPath(rect: progress.bounds).fill()
-                    progress.draw(progress.bounds)
+                    progress.cacheDisplay(in: progress.bounds, to: bitmap)
                 }
-                return (0..<8).flatMap { y in (0..<120).map { x in Double(bitmap.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!.redComponent) } }
+                let base = background.usingColorSpace(.deviceRGB)!.redComponent
+                return (0..<bitmap.pixelsHigh).flatMap { y in (0..<bitmap.pixelsWide).map { x in
+                    let pixel = bitmap.colorAt(x: x, y: y)!.usingColorSpace(.deviceRGB)!
+                    return Double(pixel.redComponent * pixel.alphaComponent + base * (1 - pixel.alphaComponent))
+                } }
             }
             let unknown = try pixels(nil)
             let zero = try pixels(0)

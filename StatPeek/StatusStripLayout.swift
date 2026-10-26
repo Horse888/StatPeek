@@ -36,6 +36,6 @@ struct StatusStripLayout {
     }
 
     static func textWidth(_ text: String) -> CGFloat {
-        StatusStripText.width(text)
+        StatusStripText.width(text) + 4 // Native NSTextField cell insets.
     }
 }

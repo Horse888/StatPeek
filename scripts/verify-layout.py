@@ -15,6 +15,7 @@ def main():
     scenario.add_argument('--color-picker', action='store_true', help='Verify native color Popover close/reopen lifecycle instead of the layout matrix')
     scenario.add_argument('--layered-dismissal', action='store_true', help='Verify two-step Escape and outside dismissal with the native color Popover')
     scenario.add_argument('--status-gesture', action='store_true', help='Drive native status-button gestures in an independent nonactivating window')
+    scenario.add_argument('--status-strip', action='store_true', help='Capture native status text in light/dark independent windows')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parent.parent
     output = args.output.resolve()
@@ -28,7 +29,8 @@ def main():
     sources = ['SettingsViewController', 'GlassSurfaceView', 'ModuleSymbolView', 'Metrics', 'MetricSelection',
                'StatusStripLayout', 'StatusStripText', 'StatusStripView', 'SystemSampler', 'LoginItemController', 'DashboardPresentationController',
                'DiskHistory', 'DiskHistoryStore', 'DiskHistoryViewController']
-    fixture = ('verify-status-gesture.swift' if args.status_gesture else
+    fixture = ('verify-status-strip.swift' if args.status_strip else
+               'verify-status-gesture.swift' if args.status_gesture else
                'verify-color-lifecycle.swift' if args.color_picker or args.layered_dismissal else 'verify-layout.swift')
     command = ['swiftc', '-swift-version', '6', '-parse-as-library', str(repo / 'scripts' / fixture)]
     command += [str(repo / 'StatPeek' / (name + '.swift')) for name in sources]
@@ -60,6 +62,11 @@ def main():
                     process.terminate()
                     process.wait()
         result = json.loads((output / 'result.json').read_text())
+        if args.status_strip:
+            assert len(result['states']) == len(seen) == 2
+            assert all(not s['app_activated'] and s['native_label_count'] == 8 for s in result['states'])
+            print(f'2 native status-strip windows captured: {output}')
+            return
         if args.status_gesture:
             assert result['gestures'] == result['native_actions'] == 500
             assert not result['system_input_events_posted'] and not result['app_activated']

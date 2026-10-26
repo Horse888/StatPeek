@@ -30,50 +30,84 @@ extension MetricColor {
 @MainActor
 final class StatusStripView: NSView {
     private var rows: [[Metric]] = []
-    private var readings: [Metric: String] = [:]
-    private var colors: [Metric: MetricColor] = [:]
-    private var layout = StatusStripLayout(rows: [], readings: [:])
-    private let textFont = StatusStripText.makeFont()
+    private var stripLayout = StatusStripLayout(rows: [], readings: [:])
+    private var fields: [Metric: (label: NSTextField, value: NSTextField)] = [:]
+    private let emptySymbol = NSImageView()
     override var isFlipped: Bool { true }
-    var requiredWidth: CGFloat { layout.width }
+    var requiredWidth: CGFloat { stripLayout.width }
+
+    override init(frame: NSRect) {
+        super.init(frame: frame)
+        for metric in Metric.allCases {
+            let label = Self.textField()
+            let value = Self.textField()
+            fields[metric] = (label, value)
+            addSubview(label)
+            addSubview(value)
+        }
+        emptySymbol.image = NSImage(systemSymbolName: "chart.bar", accessibilityDescription: nil)
+        emptySymbol.contentTintColor = .labelColor
+        emptySymbol.imageScaling = .scaleProportionallyDown
+        emptySymbol.setAccessibilityElement(false)
+        addSubview(emptySymbol)
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    private static func textField() -> NSTextField {
+        let field = NSTextField(labelWithString: "")
+        field.font = StatusStripText.nativeFont()
+        field.lineBreakMode = .byClipping
+        field.maximumNumberOfLines = 1
+        field.cell?.usesSingleLineMode = true
+        field.setAccessibilityElement(false)
+        return field
+    }
 
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
     override func isAccessibilityElement() -> Bool { false }
 
     func update(rows: [[Metric]], readings: [Metric: String], selection: MetricSelection) {
         self.rows = rows
-        self.readings = readings
-        layout = StatusStripLayout(rows: rows, readings: readings)
-        self.colors = Dictionary(uniqueKeysWithValues: Metric.allCases.map { ($0, selection.color(for: $0)) })
-        needsDisplay = true
+        stripLayout = StatusStripLayout(rows: rows, readings: readings)
+        let visible = Set(rows.flatMap { $0 })
+        for metric in Metric.allCases {
+            guard let pair = fields[metric] else { continue }
+            pair.label.stringValue = metric.abbreviation
+            pair.value.stringValue = metric.compact(readings[metric])
+            pair.label.textColor = selection.color(for: metric).nsColor
+            pair.value.textColor = pair.label.textColor
+            pair.label.isHidden = !visible.contains(metric)
+            pair.value.isHidden = pair.label.isHidden
+        }
+        emptySymbol.isHidden = !rows.isEmpty
+        layoutLabels()
     }
 
-    override func draw(_ dirtyRect: NSRect) {
-        if rows.isEmpty {
-            drawSymbol("chart.bar", color: .labelColor,
-                       in: NSRect(x: (bounds.width - 14) / 2, y: (bounds.height - 14) / 2, width: 14, height: 14))
-            return
-        }
-        let rowHeight: CGFloat = 11
-        guard let context = NSGraphicsContext.current?.cgContext else { return }
+    override func setFrameSize(_ newSize: NSSize) {
+        super.setFrameSize(newSize)
+        layoutLabels()
+    }
+
+    override func layout() {
+        super.layout()
+        layoutLabels()
+    }
+
+    private func layoutLabels() {
+        emptySymbol.frame = NSRect(x: (bounds.width - 14) / 2, y: (bounds.height - 14) / 2, width: 14, height: 14)
+        let rowHeight: CGFloat = 12
         let top = (bounds.height - CGFloat(rows.count) * rowHeight) / 2
         for (rowIndex, metrics) in rows.enumerated() {
             for (columnIndex, metric) in metrics.enumerated() {
-                let color = ((colors[metric] ?? .neutral).nsColor.usingColorSpace(.sRGB) ?? .black).cgColor
-                let x = layout.origin(of: columnIndex)
+                guard let pair = fields[metric] else { continue }
+                let x = stripLayout.origin(of: columnIndex)
                 let y = top + CGFloat(rowIndex) * rowHeight
-                StatusStripText.draw(metric.abbreviation, at: NSPoint(x: x, y: y - 0.5),
-                                     font: textFont, color: color, in: context)
-                StatusStripText.draw(metric.compact(readings[metric]),
-                                     at: NSPoint(x: x + StatusStripLayout.labelWidth + StatusStripLayout.labelGap, y: y - 0.5),
-                                     font: textFont, color: color, in: context)
+                pair.label.frame = NSRect(x: x, y: y, width: StatusStripLayout.labelWidth, height: rowHeight)
+                pair.value.frame = NSRect(x: x + StatusStripLayout.labelWidth + StatusStripLayout.labelGap,
+                                         y: y, width: stripLayout.columnWidths[columnIndex] - StatusStripLayout.labelWidth - StatusStripLayout.labelGap,
+                                         height: rowHeight)
             }
         }
-    }
-
-    private func drawSymbol(_ name: String, color: NSColor, in rect: NSRect) {
-        let configuration = NSImage.SymbolConfiguration(paletteColors: [color])
-        let image = NSImage(systemSymbolName: name, accessibilityDescription: nil)?.withSymbolConfiguration(configuration)
-        image?.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
     }
 }
