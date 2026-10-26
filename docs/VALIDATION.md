@@ -1,5 +1,12 @@
 # 验证记录
 
+## 0.3.9 / Build 21 · 2026-10-26 · 历史范围 Segment
+
+- 「24 小时 / 7 天 / 全部」合并为单个等宽、单选的原生 NSSegmentedControl，保留文案、原位置及现有 DiskHistoryRange 筛选与重载路径。去除三个独立玻璃按钮。
+- Release **62 项 XCTest 通过，0 失败**。独立原生窗口 **20 个浅深色/高度/滚动状态**检查通过；直接调用原生控件动作切换全部三段，刷新后所选段保持。已查看浅/深色及短屏 7 天/全部选中效果，曲线按范围更新。检查使用合成数据、不激活应用、不操作用户鼠标键盘；见 [前后对比](evidence/history-segment-20261026/comparison.html)。
+- 同一 Release 已后台替换个人固定路径 `/Users/zy/Applications/StatPeek.app`，唯一运行实例来自该路径。arm64/x86_64、严格 ad hoc 签名、构建/安装可执行文件 SHA-256 一致：`b53097215c383dc9660dc0683ce464f1f4764cc8772c884cf8dec967fbd91e26`。原 **3991 条**历史逐行不变，勾选/配色保留，数据库完整性 ok。本次暂存、旧 App 和构建重复 App 已清理。
+- 本次未物理点击用户桌面、未新增 macOS 13/Intel 实机或真实登录验收；既有状态栏现场点击验收边界保留。结构化结果见 [acceptance.json](evidence/history-segment-20261026/acceptance.json)。
+
 ## 0.3.9 / Build 20 · 2026-10-26 · 无背景色点、状态栏关闭与闪烁
 
 - 颜色井去除外层玻璃及原生背景绘制，仅显示 12 点圆点，保留 28 点点击区、焦点环和系统 Popover。已查看浅/深整页、短屏底部及第一次 Esc 后的原生窗口，见 [前后对比](evidence/status-dot-20261026/comparison.html)。合成数据，原图不加滤镜。

@@ -46,6 +46,8 @@ struct LayoutVerification {
         fields.first { $0.accessibilityIdentifier() == "app-version" }?.stringValue = ProcessInfo.processInfo.environment["STATPEEK_FIXTURE_VERSION"] ?? "测试夹具"
         let scroll = descendants(controller.view).compactMap { $0 as? NSScrollView }.first!
         let document = scroll.documentView!
+        let historyRange = descendants(controller.view).compactMap { $0 as? NSSegmentedControl }
+            .first { $0.accessibilityIdentifier() == "history-range" }!
         var states: [[String: Any]] = []
         var sequence = 0
         for appearance in [NSAppearance.Name.aqua, .darkAqua] {
@@ -65,6 +67,9 @@ struct LayoutVerification {
                 let maximumOffset = max(0, document.frame.height - scroll.contentView.bounds.height)
                 for (position, offset) in [("top", CGFloat.zero), ("middle", maximumOffset / 2), ("bottom", maximumOffset)] {
                     if maximumOffset == 0 && position != "top" { continue }
+                    let rangeIndex = position == "middle" ? 1 : position == "bottom" ? 2 : 0
+                    historyRange.selectedSegment = rangeIndex
+                    precondition(historyRange.sendAction(historyRange.action, to: historyRange.target))
                     scroll.contentView.scroll(to: NSPoint(x: 0, y: offset))
                     scroll.reflectScrolledClipView(scroll.contentView)
                     controller.update(snapshot: snapshot, selection: selection)
@@ -74,12 +79,14 @@ struct LayoutVerification {
                     let appInForeground = NSWorkspace.shared.frontmostApplication?.processIdentifier == ProcessInfo.processInfo.processIdentifier
                     precondition(!appInForeground, "The fixture must not replace the user's foreground app")
                     precondition(abs(scroll.contentView.bounds.origin.y - offset) < 0.5)
+                    precondition(historyRange.selectedSegment == rangeIndex, "Refresh changed the selected history range")
                     sequence += 1
                     let name = "\(appearance == .aqua ? "light" : "dark")-\(Int(limit))-\(position)"
                     let state: [String: Any] = ["sequence": sequence, "name": name, "window": window.windowNumber,
                                                "limit": limit, "actual_height": controller.view.frame.height,
                                                "document_height": document.frame.height, "viewport_height": scroll.contentView.bounds.height,
                                                "scrolling": scroll.hasVerticalScroller, "offset": scroll.contentView.bounds.origin.y,
+                                               "history_range_index": historyRange.selectedSegment,
                                                "is_key": window.isKeyWindow, "is_main": window.isMainWindow,
                                                "app_in_foreground": appInForeground, "ignores_mouse": window.ignoresMouseEvents]
                     try JSONSerialization.data(withJSONObject: state).write(to: output.appendingPathComponent("state.json"), options: .atomic)

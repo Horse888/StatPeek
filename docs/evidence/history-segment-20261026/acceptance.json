@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-26",
+  "version": "0.3.9",
+  "build": 21,
+  "previous_build": 20,
+  "installed_path": "/Users/zy/Applications/StatPeek.app",
+  "process": "72506 /Users/zy/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+  "executable_sha256": "b53097215c383dc9660dc0683ce464f1f4764cc8772c884cf8dec967fbd91e26",
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "strict_signature": "ad hoc; verified",
+  "release_tests": {
+    "executed": 62,
+    "failures": 0
+  },
+  "native_window_states": 20,
+  "history_range_indices_verified": [
+    0,
+    1,
+    2
+  ],
+  "selection_persists_during_refresh": true,
+  "historical_rows_preserved": 3991,
+  "current_rows": 3991,
+  "preferences_preserved": true,
+  "database_integrity": "ok",
+  "redundant_apps_removed": true,
+  "validation": "Independent nonactivating native windows with synthetic data; no physical desktop input",
+  "source_sha256": {
+    "StatPeek/StatPeekApp.swift": "f2df64aa7dc1a99a41bb6d6e06a22faa6d7e58135483953ce945d131b58751a0",
+    "StatPeek/DiskHistoryStore.swift": "e3494ed3e186c04ef7979edb8fd5cc62fabadb1c03761dbbb72af1a7b13411f4",
+    "StatPeek/StatusStripView.swift": "5778719f17c6910a9d2884775d63f56c4315bb8b2ae33279de6f9693bd2c61c7",
+    "StatPeek/DiskHistoryViewController.swift": "46e72cc61e12f839469e992c0ac217f499a4dce4d6c23577859032f8addce21c",
+    "StatPeek/StatusStripLayout.swift": "815faf8ec9180d3997eec872ea49bb0cc17b5412e90dd589d5a956ca8b4811dc",
+    "StatPeek/StatusBarController.swift": "9fcac05e7de61ce334344d107dfcc9742247543811792849d84fc10143b6a048",
+    "StatPeek/DashboardPresentationController.swift": "a8efdd0839645506aab6290bfdea60b3d896fa9296d29c5bc37d0242fdecc3e2",
+    "StatPeek/DiskHistory.swift": "b23ba041683a4236b21fda4fdf291e06d4fa462c2ff44a7e3f6631a1d3dab589",
+    "StatPeek/MetricSelection.swift": "ae17c0cdba662fc192be4156a786036b7ebc0d758303cf57b2ac8e69b7025023",
+    "StatPeek/StatusStripText.swift": "be6e0ad3adc7b97e68afbf37bde6ebc677a4061ad94d3c717c66aa10192181f1",
+    "StatPeek/DiskRecordingController.swift": "b384e6927d61592e0ca2440b200be525947ec8ec6fb2510cf8538cb69fa0c9c0",
+    "StatPeek/Metrics.swift": "ea70ff1605ba8a72d57a754e536ec70f4128af23332a49fa3c83b54c93ae513b",
+    "StatPeek/GlassSurfaceView.swift": "48149a9bc8fcf12e66f7336c58fda57edc1d82c77fc15f324c8131cc686b146c",
+    "StatPeek/SystemSampler.swift": "de3401de1bf6a69bf36a316e845616eff8142590c3acafdb65fc26951eec5c89",
+    "StatPeek/LoginItemController.swift": "77bc35a619e7fd4bc01a526e0e7859a3b91433472e5c736d0bdb65a1a3ac586f",
+    "StatPeek/ModuleSymbolView.swift": "04456671486ead9149e87a113a68f9db082bed5ea5ce35156996f3a701a04123",
+    "StatPeek/SettingsViewController.swift": "bf93bf0f906c9472c1d3898b2b105f50734fffd39d452ded7d1cd1385428ac67"
+  }
+}

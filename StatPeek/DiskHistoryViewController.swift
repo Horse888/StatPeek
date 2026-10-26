@@ -15,8 +15,8 @@ final class DiskHistoryViewController: NSViewController {
     private let footer = NSTextField(labelWithString: "")
     private let note = NSTextField(wrappingLabelWithString: "")
     private var chart: NSHostingView<DiskHistoryChart>?
-    private var rangeButtons: [NSButton] = []
-    private var rangeSurfaces: [GlassSurfaceView] = []
+    private let rangeControl = NSSegmentedControl(labels: ["24 小时", "7 天", "全部"],
+                                                  trackingMode: .selectOne, target: nil, action: nil)
 
     override func loadView() {
         let innerWidth = contentWidth - 28
@@ -41,20 +41,16 @@ final class DiskHistoryViewController: NSViewController {
         timestamp.maximumNumberOfLines = 2
         timestamp.frame = NSRect(x: 14, y: 206, width: innerWidth, height: 24)
         view.addSubview(timestamp)
-        for (index, label) in ["24 小时", "7 天", "全部"].enumerated() {
-            let width = (innerWidth - 12) / 3
-            let surface = GlassSurfaceView(frame: NSRect(x: 14 + CGFloat(index) * (width + 6), y: 178, width: width, height: 24))
-            let button = NSButton(title: label, target: self, action: #selector(changeRange(_:)))
-            button.isBordered = false
-            button.tag = index
-            button.frame = surface.content.bounds
-            button.setAccessibilityIdentifier("history-range-\(index)")
-            surface.content.addSubview(button)
-            view.addSubview(surface)
-            rangeButtons.append(button)
-            rangeSurfaces.append(surface)
-        }
-        updateRangeControls()
+        rangeControl.target = self
+        rangeControl.action = #selector(changeRange(_:))
+        rangeControl.segmentStyle = .rounded
+        rangeControl.segmentDistribution = .fillEqually
+        rangeControl.font = .systemFont(ofSize: 11)
+        rangeControl.frame = NSRect(x: 14, y: 178, width: innerWidth, height: 24)
+        rangeControl.selectedSegment = range.rawValue
+        rangeControl.setAccessibilityIdentifier("history-range")
+        rangeControl.setAccessibilityLabel("磁盘记录时间范围")
+        view.addSubview(rangeControl)
         let unit = NSTextField(labelWithString: "剩余空间（G）")
         unit.font = .systemFont(ofSize: 10)
         unit.textColor = .dashboardSecondaryLabel
@@ -118,20 +114,9 @@ final class DiskHistoryViewController: NSViewController {
         return formatter.string(from: date)
     }
 
-    private func updateRangeControls() {
-        for (index, button) in rangeButtons.enumerated() {
-            let selected = index == range.rawValue
-            button.state = selected ? .on : .off
-            button.attributedTitle = NSAttributedString(string: button.title,
-                attributes: [.foregroundColor: selected ? NSColor.controlAccentColor : NSColor.labelColor,
-                             .font: NSFont.systemFont(ofSize: 11, weight: selected ? .semibold : .regular)])
-            rangeSurfaces[index].tintColor = selected ? NSColor.controlAccentColor.withAlphaComponent(0.12) : nil
-        }
-    }
-
-    @objc private func changeRange(_ sender: NSButton) {
-        range = DiskHistoryRange(rawValue: sender.tag) ?? .day
-        updateRangeControls()
+    @objc private func changeRange(_ sender: NSSegmentedControl) {
+        guard let selectedRange = DiskHistoryRange(rawValue: sender.selectedSegment) else { return }
+        range = selectedRange
         reload()
     }
 }
