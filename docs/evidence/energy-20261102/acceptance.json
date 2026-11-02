@@ -1,0 +1,117 @@
+{
+  "version": "0.3.9",
+  "build": 32,
+  "previous_installed_build": 31,
+  "original_installed_build": 30,
+  "pid": 85984,
+  "process_path": "/Users/zy/Applications/StatPeek.app/Contents/MacOS/StatPeek",
+  "installed_path": "/Users/zy/Applications/StatPeek.app",
+  "source_path": "/Users/zy/Library/Developer/Xcode/DerivedData/StatPeek-anhklmjworinrafslgbpzsjdncrx/Build/Products/Release/StatPeek.app",
+  "backup_paths": [
+    "/Users/zy/Applications/.StatPeek-energy-candidate31-20261102.app",
+    "/Users/zy/Applications/.StatPeek-energy-previous-20261102.app"
+  ],
+  "executable_sha256": "370cca6b2abef3e9ff4fc8dfd73b45c7da2a2b96d8f5e37a3810aa1257339e0d",
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "strict_signature_verified": true,
+  "preferences_preserved": true,
+  "baseline_history_rows_preserved": 5900,
+  "history_rows_after": 5900,
+  "sqlite_integrity": "ok",
+  "background_launch": true,
+  "login_item_modified": false,
+  "installed_at": "2026-11-02T11:55:24+0800",
+  "verified_at": "2026-11-02T12:00:42+0800",
+  "runtime_macos": "27.2",
+  "LSUIElement": true,
+  "ITSAppUsesNonExemptEncryption": false,
+  "removed_redundant_apps": [
+    "/Users/zy/Applications/.StatPeek-energy-candidate31-20261102.app",
+    "/Users/zy/Applications/.StatPeek-energy-previous-20261102.app",
+    "/Users/zy/Library/Developer/Xcode/DerivedData/StatPeek-anhklmjworinrafslgbpzsjdncrx/Build/Products/Release/StatPeek.app"
+  ],
+  "removed_measurement_helper": "/Users/zy/Library/Developer/Xcode/DerivedData/StatPeek-anhklmjworinrafslgbpzsjdncrx/Build/Products/Release/StatPeekProcessEnergy",
+  "measurements": {
+    "before": {
+      "pid": 948,
+      "ticks_to_ns": 41.666666667,
+      "duration_s": 30.147849,
+      "cpu_percent": 59.439242,
+      "interrupt_wakeups_per_s": 183.893717,
+      "package_idle_wakeups_per_s": 2.819438,
+      "physical_footprint_bytes": 49218520
+    },
+    "after": {
+      "pid": 85984,
+      "ticks_to_ns": 41.666666667,
+      "duration_s": 30.105661,
+      "cpu_percent": 0.591716,
+      "interrupt_wakeups_per_s": 5.115317,
+      "package_idle_wakeups_per_s": 0.0,
+      "physical_footprint_bytes": 36635704
+    },
+    "steady": {
+      "pid": 85984,
+      "ticks_to_ns": 41.666666667,
+      "duration_s": 60.217727,
+      "cpu_percent": 0.655143,
+      "interrupt_wakeups_per_s": 5.480114,
+      "package_idle_wakeups_per_s": 0.132851,
+      "physical_footprint_bytes": 36783160
+    },
+    "cpu_reduction_percent": 99.00450278285851,
+    "interrupt_wakeup_reduction_percent": 97.21832965070797,
+    "method": "Read-only proc_pid_rusage with Mach-timebase conversion; cross-checked with system top; panels closed; same selected metrics preserved; no physical watt measurement",
+    "powermetrics": "Not run: requires root; no elevation requested",
+    "statpeek_sleep_assertions": [],
+    "power_source": "AC Power"
+  },
+  "regressions": {
+    "xctest_count": 64,
+    "failures": 0,
+    "native_glyph_frames": 448,
+    "unchanged_layout_selection_combinations": 16,
+    "snapshot_scales": [
+      1,
+      2
+    ],
+    "native_window_appearances": 2,
+    "native_status_button_gestures": 500,
+    "physical_desktop_input": false,
+    "test_app_activated": false
+  },
+  "candidate_31": {
+    "effect": "Geometry writes eliminated but installed CPU remained high; final solution also detached source views from status-item replica hierarchy",
+    "measurement_file": "counters-after-31.json"
+  },
+  "source_sha256": {
+    "StatPeek/DashboardPresentationController.swift": "7dedfdf3bd37e7e116f9f9e73df8e6d626a9b20d44f28c14b6bd2a932bdb9ee1",
+    "StatPeek/DiskHistory.swift": "b23ba041683a4236b21fda4fdf291e06d4fa462c2ff44a7e3f6631a1d3dab589",
+    "StatPeek/DiskHistoryStore.swift": "e3494ed3e186c04ef7979edb8fd5cc62fabadb1c03761dbbb72af1a7b13411f4",
+    "StatPeek/DiskHistoryViewController.swift": "21f5afa3c584f38315cd910e1b4001c6fa077039faa6db3bcea9e7e2d4919026",
+    "StatPeek/DiskRecordingController.swift": "b384e6927d61592e0ca2440b200be525947ec8ec6fb2510cf8538cb69fa0c9c0",
+    "StatPeek/GlassSurfaceView.swift": "48149a9bc8fcf12e66f7336c58fda57edc1d82c77fc15f324c8131cc686b146c",
+    "StatPeek/LoginItemController.swift": "77bc35a619e7fd4bc01a526e0e7859a3b91433472e5c736d0bdb65a1a3ac586f",
+    "StatPeek/MetricSelection.swift": "ae17c0cdba662fc192be4156a786036b7ebc0d758303cf57b2ac8e69b7025023",
+    "StatPeek/Metrics.swift": "ea70ff1605ba8a72d57a754e536ec70f4128af23332a49fa3c83b54c93ae513b",
+    "StatPeek/ModuleSymbolView.swift": "04456671486ead9149e87a113a68f9db082bed5ea5ce35156996f3a701a04123",
+    "StatPeek/SettingsViewController.swift": "a165af3d41e64c92394c1941362153e2e882aebfc5fda29e8ca4ec4fdf658e3a",
+    "StatPeek/StatPeekApp.swift": "f2df64aa7dc1a99a41bb6d6e06a22faa6d7e58135483953ce945d131b58751a0",
+    "StatPeek/StatusBarController.swift": "3b6ea2ddcf466498f7c6bc3652bb3fc51cd5d23e1fb457993ed8f8623102b68d",
+    "StatPeek/StatusStripLayout.swift": "d44d2d2040759153bd42a4a17691b3bfdea4e4fd9665f10b4583399235442c6a",
+    "StatPeek/StatusStripText.swift": "62438cf0fcb8f8a00f6d7fb3226ddd0e76f2da386efcca85c6ff3afb4c55bdbc",
+    "StatPeek/StatusStripView.swift": "72d44421a92c92e69813a4857393d27dd26b273166aa85f4590b82b1ee346dd0",
+    "StatPeek/SystemSampler.swift": "de3401de1bf6a69bf36a316e845616eff8142590c3acafdb65fc26951eec5c89"
+  },
+  "measurement_source_sha256": "c20c29d534f2e42f9a8b303a6dbd557c865c3d9e2f9e25e06b7a151c9f3ba8d1",
+  "limits": [
+    "Finite 30-second and 60-second observation, not battery-runtime testing",
+    "Activity Monitor historical 12-hour score will lag current behavior",
+    "macOS 13 and Intel hardware not newly tested",
+    "Physical menu bar clicks not automated"
+  ],
+  "official_reference": "https://support.apple.com/en-vn/guide/activity-monitor/actmntr43697/mac"
+}

@@ -70,6 +70,7 @@ def main():
         if args.status_strip:
             assert len(result['states']) == len(seen) == 2
             assert all(not s['app_activated'] and s['native_label_count'] == 8 for s in result['states'])
+            assert all(s['native_button_image'] and not s['source_attached_to_window'] for s in result['states'])
             print(f'2 native status-strip windows captured: {output}')
             return
         if args.status_gesture:

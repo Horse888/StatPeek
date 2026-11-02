@@ -35,7 +35,18 @@ struct StatusGestureVerification {
         controls.ignoresMouseEvents = true
         controls.animationBehavior = .none
         let button = NSStatusBarButton(frame: NSRect(x: 8, y: 5, width: 144, height: 24))
-        button.title = "StatPeek fixture"
+        let suite = "StatPeekStatusGestureImage.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let strip = StatusStripView()
+        strip.update(rows: StatusLayout.rows(for: Set(Metric.allCases)),
+                     readings: [.disk: "99.9G", .cpu: "10.0%", .memory: "50.0%", .gpu: "20.0%"],
+                     selection: MetricSelection(defaults: defaults))
+        strip.frame = NSRect(x: 0, y: 0, width: strip.requiredWidth, height: 24)
+        button.imagePosition = .imageOnly
+        button.imageScaling = .scaleNone
+        button.image = strip.snapshotImage(appearance: controls.effectiveAppearance)
+        precondition(strip.window == nil)
         let action = NativeStatusAction()
         button.target = action
         button.action = #selector(NativeStatusAction.invoke(_:))

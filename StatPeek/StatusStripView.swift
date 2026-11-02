@@ -84,6 +84,24 @@ final class StatusStripView: NSView {
         layoutLabels()
     }
 
+    /// Native controls draw once per reading update. The status item displays
+    /// only this image, so AppKit replica snapshots cannot relayout these fields.
+    func snapshotImage(appearance: NSAppearance) -> NSImage {
+        self.appearance = appearance
+        let image = NSImage(size: bounds.size)
+        for scale in [1, 2] {
+            guard let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil,
+                pixelsWide: Int(bounds.width) * scale, pixelsHigh: Int(bounds.height) * scale,
+                bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0) else { continue }
+            bitmap.size = bounds.size
+            appearance.performAsCurrentDrawingAppearance { cacheDisplay(in: bounds, to: bitmap) }
+            image.addRepresentation(bitmap)
+        }
+        image.isTemplate = false
+        return image
+    }
+
     override func setFrameSize(_ newSize: NSSize) {
         super.setFrameSize(newSize)
         layoutLabels()
@@ -95,7 +113,10 @@ final class StatusStripView: NSView {
     }
 
     private func layoutLabels() {
-        emptySymbol.frame = NSRect(x: (bounds.width - 14) / 2, y: (bounds.height - 14) / 2, width: 14, height: 14)
+        // Status-item replica snapshots can invoke layout again. Reassigning an
+        // unchanged native control frame requests another replica and never idles.
+        let emptyFrame = NSRect(x: (bounds.width - 14) / 2, y: (bounds.height - 14) / 2, width: 14, height: 14)
+        if emptySymbol.frame != emptyFrame { emptySymbol.frame = emptyFrame }
         let rowHeight: CGFloat = 12
         let top = (bounds.height - CGFloat(rows.count) * rowHeight) / 2
         for (rowIndex, metrics) in rows.enumerated() {
@@ -103,10 +124,12 @@ final class StatusStripView: NSView {
                 guard let pair = fields[metric] else { continue }
                 let x = stripLayout.origin(of: columnIndex)
                 let y = top + CGFloat(rowIndex) * rowHeight
-                pair.label.frame = NSRect(x: x, y: y, width: StatusStripLayout.labelWidth, height: rowHeight)
-                pair.value.frame = NSRect(x: x + StatusStripLayout.labelWidth + StatusStripLayout.labelGap,
-                                         y: y, width: stripLayout.columnWidths[columnIndex] - StatusStripLayout.labelWidth - StatusStripLayout.labelGap,
-                                         height: rowHeight)
+                let labelFrame = NSRect(x: x, y: y, width: StatusStripLayout.labelWidth, height: rowHeight)
+                let valueFrame = NSRect(x: x + StatusStripLayout.labelWidth + StatusStripLayout.labelGap,
+                                        y: y, width: stripLayout.columnWidths[columnIndex] - StatusStripLayout.labelWidth - StatusStripLayout.labelGap,
+                                        height: rowHeight)
+                if pair.label.frame != labelFrame { pair.label.frame = labelFrame }
+                if pair.value.frame != valueFrame { pair.value.frame = valueFrame }
             }
         }
     }

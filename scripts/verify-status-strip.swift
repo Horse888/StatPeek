@@ -33,14 +33,18 @@ struct NativeStatusStripVerification {
         window.animationBehavior = .none
         window.hasShadow = false
         window.backgroundColor = .windowBackgroundColor
-        window.contentView = strip
+        let button = NSStatusBarButton(frame: strip.bounds)
+        button.imagePosition = .imageOnly
+        button.imageScaling = .scaleNone
+        window.contentView = button
         window.setFrameOrigin(NSPoint(x: 40, y: 80))
         defer { window.contentView = nil; window.close() }
         var states: [[String: Any]] = []
         for (index, appearance) in [NSAppearance.Name.aqua, .darkAqua].enumerated() {
             window.appearance = NSAppearance(named: appearance)
             window.orderFront(nil)
-            strip.layoutSubtreeIfNeeded()
+            button.image = strip.snapshotImage(appearance: window.appearance!)
+            button.layoutSubtreeIfNeeded()
             RunLoop.main.run(until: Date().addingTimeInterval(0.15))
             precondition(!window.isKeyWindow && !NSApp.isActive)
             for label in strip.subviews.compactMap({ $0 as? NSTextField }).filter({ !$0.isHidden }) {
@@ -50,7 +54,8 @@ struct NativeStatusStripVerification {
             let state: [String: Any] = ["sequence": index + 1, "name": name, "window": window.windowNumber,
                                        "font": CTFontCopyPostScriptName(StatusStripText.makeFont()) as String,
                                        "width": strip.requiredWidth, "height": 24, "app_activated": NSApp.isActive,
-                                       "native_label_count": strip.subviews.filter { $0 is NSTextField }.count]
+                                       "native_label_count": strip.subviews.filter { $0 is NSTextField }.count,
+                                       "native_button_image": button.image != nil, "source_attached_to_window": strip.window != nil]
             try JSONSerialization.data(withJSONObject: state).write(to: output.appendingPathComponent("state.json"), options: .atomic)
             let acknowledgement = output.appendingPathComponent("ack-\(index+1)")
             let timeout = Date().addingTimeInterval(15)

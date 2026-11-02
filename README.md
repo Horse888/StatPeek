@@ -4,7 +4,7 @@
 
 A compact macOS menu bar monitor. Selected metrics appear in two rows of colored D/C/M/G labels and live values. Click for a vertically scrolling dashboard with metric cards, progress, native color picking and disk history. No main window or Dock icon.
 
-一个无主窗口的 macOS 状态栏小工具。选中的设备信息直接以两行系统等宽字体的「D/C/M/G 字母 + 数值」展示，点击打开可上下滚动的仪表盘，上方设置、下方磁盘历史，左下角固定显示版本。
+一个无主窗口的 macOS 状态栏小工具。选中的设备信息直接以两行系统等宽字体的「D/C/M/G 字母 + 数值」展示，状态栏由原生控件按读数生成 1x/2x 图像交给系统按钮显示，避免状态项快照持续重绘。点击打开可上下滚动的仪表盘，上方设置、下方磁盘历史，左下角固定显示版本。
 
 ![真实状态栏截图](docs/assets/statusbar.png)
 
@@ -54,7 +54,7 @@ xcodegen generate
 | --- | --- |
 | Product / Target / Scheme | StatPeek |
 | Bundle identifier | com.zyapps.StatPeek |
-| Version / Build | 0.3.9 / 30 |
+| Version / Build | 0.3.9 / 32 |
 | Category | Utilities |
 | Minimum macOS | 13.0 |
 | App icon | 10 个标准 macOS AppIcon 资源尺寸 |
