@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-02T13:38:55+0800",
+  "version": "0.3.9",
+  "build": 32,
+  "pid": 85984,
+  "installed_path": "/Users/zy/Applications/StatPeek.app",
+  "executable_sha256": "370cca6b2abef3e9ff4fc8dfd73b45c7da2a2b96d8f5e37a3810aa1257339e0d",
+  "strict_signature_verified": true,
+  "product_code_changed": false,
+  "app_rebuilt_or_replaced": false,
+  "actual_installed_process_measured": true,
+  "opening_method": "AXPress on StatPeek only, explicitly authorized for this test; no cursor move or keyboard event",
+  "user_cooperated_during_valid_run": true,
+  "discarded_attempts": {
+    "count": 2,
+    "reason": "Popup was dismissed; incomplete samples excluded"
+  },
+  "visibility_checks": 12,
+  "all_open_visibility_checks_passed": true,
+  "warmup_before_open_measurement_s": 2,
+  "phases": {
+    "closed": {
+      "pid": 85984,
+      "ticks_to_ns": 41.666666667,
+      "duration_s": 30.112119,
+      "cpu_percent": 1.069906,
+      "interrupt_wakeups_per_s": 6.608635,
+      "package_idle_wakeups_per_s": 0.232465,
+      "physical_footprint_bytes": 209486928
+    },
+    "open": {
+      "pid": 85984,
+      "ticks_to_ns": 41.666666667,
+      "duration_s": 60.198203,
+      "cpu_percent": 1.008649,
+      "interrupt_wakeups_per_s": 4.883867,
+      "package_idle_wakeups_per_s": 0.083059,
+      "physical_footprint_bytes": 215336016
+    },
+    "closed-again": {
+      "pid": 85984,
+      "ticks_to_ns": 41.666666667,
+      "duration_s": 30.104421,
+      "cpu_percent": 1.203426,
+      "interrupt_wakeups_per_s": 6.178495,
+      "package_idle_wakeups_per_s": 0.033218,
+      "physical_footprint_bytes": 70435920
+    }
+  },
+  "open_cpu_peak_percent": 2.451396,
+  "open_cpu_p95_percent": 2.164793,
+  "activity_monitor_snapshots": {
+    "closed_before": {
+      "energy_impact": 2.4,
+      "last_12_hr_power": 769.02,
+      "preventing_sleep": false
+    },
+    "open_at_end": {
+      "energy_impact": 5.2,
+      "last_12_hr_power": 769.02,
+      "preventing_sleep": false
+    },
+    "closed_after": {
+      "energy_impact": 3.7,
+      "last_12_hr_power": 769.02,
+      "preventing_sleep": false
+    },
+    "source": "Read-only Accessibility values from Activity Monitor Energy tab; snapshots, not phase averages; scores are not watts."
+  },
+  "initial_popup_visible": false,
+  "final_popup_visible": false,
+  "physical_mouse_or_keyboard_events": false,
+  "preferences_edited": false,
+  "official_reference": "https://support.apple.com/en-vn/guide/activity-monitor/actmntr43697/mac",
+  "limits": [
+    "Finite stable-open measurement, not initial two-second animation peak",
+    "Activity Monitor energy scores are relative snapshots, not watts or measured battery runtime",
+    "Changing other windows dismisses the popup; two such incomplete runs were excluded"
+  ],
+  "measurement_source_sha256": "c20c29d534f2e42f9a8b303a6dbd557c865c3d9e2f9e25e06b7a151c9f3ba8d1"
+}

@@ -1,0 +1,18 @@
+{
+  "closed_before": {
+    "energy_impact": 2.4,
+    "last_12_hr_power": 769.02,
+    "preventing_sleep": false
+  },
+  "open_at_end": {
+    "energy_impact": 5.2,
+    "last_12_hr_power": 769.02,
+    "preventing_sleep": false
+  },
+  "closed_after": {
+    "energy_impact": 3.7,
+    "last_12_hr_power": 769.02,
+    "preventing_sleep": false
+  },
+  "source": "Read-only Accessibility values from Activity Monitor Energy tab; snapshots, not phase averages; scores are not watts."
+}
