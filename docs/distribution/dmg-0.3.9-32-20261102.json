@@ -1,0 +1,29 @@
+{
+  "created_at": "2026-11-02T14:07:12+0800",
+  "version": "0.3.9",
+  "build": 32,
+  "artifact": "/Users/zy/moon/ZYApps/StatPeek/dist/StatPeek-0.3.9-32-universal.dmg",
+  "size_bytes": 2837499,
+  "sha256": "d1838b56ebcea63273e1c8f41748138e584f872d7101b6f75c09c79d112f12e8",
+  "source_app": "/Users/zy/Applications/StatPeek.app",
+  "source_executable_sha256": "370cca6b2abef3e9ff4fc8dfd73b45c7da2a2b96d8f5e37a3810aa1257339e0d",
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "app_rebuilt": false,
+  "app_resigned": false,
+  "signing": "ad hoc; retained validated signature",
+  "notarized": false,
+  "image_format": "UDZO",
+  "filesystem": "HFS+",
+  "hdiutil_verify": true,
+  "read_only_mount_verified": true,
+  "all_bundle_files_and_modes_match": true,
+  "bundle_file_count": 6,
+  "strict_mounted_app_signature_verified": true,
+  "mount_detached": true,
+  "installation_notes": "Copy to ~/Applications; no personal settings/history included",
+  "source_git_head": "5da9260a06733b211953928388b8673c834bae96",
+  "staging_app_removed": true
+}
